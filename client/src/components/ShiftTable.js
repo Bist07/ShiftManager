@@ -11,37 +11,33 @@ import {
 } from '@mui/material';
 import EmployeeCard from './EmployeeCard';
 import ShiftComponent from './ShiftComponent/ShiftComponent';
-import { formatTime, formatWeek } from '../utils/dateUtils';
-import { getShiftDetails } from '../utils/shiftUtils';
+import { formatTime } from '../utils/dateUtils';
 import { mapWeekToDays } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
+import ShiftDetails from './ShiftDetails';
 
 const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
-    const mappedWeek = mapWeekToDays(week);
-    const { shifts, refetchShifts } = useShifts(month, year, week, filter);
+    const mappedWeek = mapWeekToDays(week); // Map week to specific dates
+    const { shifts, refetchShifts } = useShifts(month, year, filter);
     const [currentShift, setCurrentShift] = useState(null);
 
-    const handleOpenDialog = (shift, day) => {
-        const shiftDetails = shift?.shiftDays?.[day] || {};
-        const date = shiftDetails?.date || mappedWeek[day]?.[0]?.date;
-        const date_id = mappedWeek[day]?.[0]?.date_id;
+    const handleOpenDialog = (shift, date) => {
+        const shiftDetails = shift.shiftDays[date] || [];
 
         setCurrentShift({
             name: shift?.name,
             e_id: shift?.e_id,
-            shift_id: shiftDetails?.shift_id,
-            location_id: shiftDetails?.location_id,
-            location: shiftDetails?.location,
-            address: shiftDetails?.address,
-            day,
+            shift_id: shiftDetails[0]?.shift_id,
+            location_id: shiftDetails[0]?.location_id,
             date,
-            date_id,
-            start_time: shiftDetails?.start_time || 'N/A',
-            end_time: shiftDetails?.end_time || 'N/A',
+            start_time: shiftDetails[0]?.start_time || 'N/A',
+            end_time: shiftDetails[0]?.end_time || 'N/A',
             week,
             month,
-            year
+            year,
         });
+
+
     };
 
     const handleCloseDialog = () => {
@@ -58,42 +54,42 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
         handleCloseDialog();
     };
 
-    const getButtonStyle = (hasShift) => ({
-        backgroundColor: hasShift ? 'green' : 'transparent',
-        color: hasShift ? 'white' : 'black',
-    });
-
     return (
         <>
             <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="employee shift table">
+                <Table sx={{ minWidth: 650, tableLayout: 'fixed' }} aria-label="employee shift table">
                     <TableHead>
                         <TableRow>
-                            <TableCell align="center"></TableCell>
-                            {Object.keys(mappedWeek).map((day) => (
-                                <TableCell key={day} align="center">
-                                    <strong>{day}</strong> {formatWeek(new Date(mappedWeek[day][0]?.date).toLocaleDateString())}
-                                </TableCell>
-                            ))}
+                            <TableCell sx={{ width: '17%' }} align="center"></TableCell>
+                            {Object.keys(mappedWeek).map((day) => {
+                                const date = new Date(mappedWeek[day][0]?.date)
+                                const formattedDate = date.toLocaleDateString('en-US', {
+                                    month: 'short',  // Month as abbreviated (e.g., "Dec")
+                                    day: 'numeric',  // Day of the month (e.g., "16")
+                                });
+                                return (
+                                    <TableCell key={date} align="center">
+                                        <strong>{day}</strong> <br />
+                                        {formattedDate}
+                                    </TableCell>
+                                );
+                            })}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {shifts.map((shift) => (
                             <TableRow key={shift.e_id}>
-                                <TableCell component="th" scope="row">
-                                    <EmployeeCard title={shift.name} description={'Employee'} />
+                                <TableCell component="th" scope="row" sx={{ width: '18%', padding: 0 }}>
+                                    <EmployeeCard title={shift.name} description="Employee" />
                                 </TableCell>
                                 {Object.keys(mappedWeek).map((day) => {
-                                    const shiftDetails = getShiftDetails(shift, day, formatTime);
-                                    const hasShift = !!shift.shiftDays[day];
-
+                                    const date = mappedWeek[day][0]?.date;
                                     return (
-                                        <TableCell key={day} align="center">
-                                            <Button
-                                                onClick={() => handleOpenDialog(shift, day)}
-                                                sx={getButtonStyle(hasShift)}
+                                        <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
+                                            <Button sx={{ padding: 0, margin: 0 }}
+                                                onClick={() => handleOpenDialog(shift, date)}
                                             >
-                                                {shiftDetails}
+                                                <ShiftDetails shift={shift} date={date} />
                                             </Button>
                                         </TableCell>
                                     );
@@ -104,8 +100,6 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                 </Table>
             </TableContainer>
 
-
-
             {currentShift && (
                 <ShiftComponent
                     shift_id={currentShift.shift_id}
@@ -114,14 +108,9 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                     location_id={currentShift.location_id}
                     name={currentShift.name}
                     e_id={currentShift.e_id}
-                    day={currentShift.day}
                     date={currentShift.date}
-                    date_id={currentShift.date_id}
-                    week={week}
-                    month={month}
-                    year={year}
-                    open={handleOpenDialog}
                     onSave={handleSaveShift}
+                    open={handleOpenDialog}
                     onDelete={handleDeleteShift}
                     onClose={handleCloseDialog}
                 />

@@ -125,7 +125,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                     </FormControl>
                 </Box>
 
-                {repeatOptions.frequency > 0 && (
+                {repeatOptions.frequency > 1 && (
                     <Box
                         display="flex"
                         justifyContent="space-between"

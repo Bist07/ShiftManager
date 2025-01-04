@@ -5,8 +5,9 @@ import ShiftTable from './ShiftTable';
 import MonthlyShiftTable from './MonthlyShiftTable';
 import useShifts from '../hooks/useShifts'; // Import your custom hook
 
-const Shifts = ({ month, year, week, filters }) => {
-    const { shifts, loading, error } = useShifts(month, year, week, filters); // Using the custom hook
+const Shifts = ({ week, month, year, filters, viewMode }) => {
+    const { shifts, loading, error } = useShifts(month, year, filters); // Using the custom hook
+
     if (loading) return <div>Loading...</div>;
     if (error) {
         return (
@@ -27,7 +28,13 @@ const Shifts = ({ month, year, week, filters }) => {
     return (
         <Box>
             {shifts.length ? (
-                <MonthlyShiftTable shifts={shifts} week={week} month={month} year={year} filter={filters} />
+                viewMode === 'week' ? (
+                    <ShiftTable shifts={shifts} week={week} month={month} year={year} filter={filters} />
+                ) : viewMode === 'month' ? (
+                    <MonthlyShiftTable shifts={shifts} month={month} year={year} filter={filters} />
+                ) : (
+                    <Typography sx={{ p: 2 }}>Invalid view mode.</Typography>
+                )
             ) : (
                 <Typography sx={{ p: 2 }}>No shifts available.</Typography>
             )}

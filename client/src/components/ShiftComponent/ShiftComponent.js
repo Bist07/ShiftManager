@@ -12,7 +12,6 @@ import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import { isInvalid } from '../../utils/utils';
 
 const ShiftForm = ({ shift_id, e_id, day, location_id, start_time, end_time, date, onSave, onClose, onDelete, open, week, month, year }) => {
-
     let loc;
     let emp_id;
     date = new Date(date).toISOString().split('T')[0];

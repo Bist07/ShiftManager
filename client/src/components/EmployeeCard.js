@@ -8,6 +8,7 @@ const EmployeeCard = ({ title, description, image }) => {
             sx={{
                 width: '100%',
                 overflow: 'hidden',
+                padding: '0px',
             }}
         >
             <Box

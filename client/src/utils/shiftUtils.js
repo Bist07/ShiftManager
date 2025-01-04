@@ -1,16 +1,12 @@
 import { mapWeekToDays } from "./dateUtils";
 
-export const getShiftDetails = (shift, day, formatTime) => {
-    const shiftDetails = shift.shiftDays[day];
+export const getShiftDetails = (shift, date, formatTime) => {
+    const shiftDetails = shift.shiftDays[date];
     if (!shiftDetails) return 'No Shift Assigned';
-    return `${formatTime(shiftDetails.start_time)} - ${formatTime(shiftDetails.end_time)}`;
+    return `${formatTime(shiftDetails[0].start_time)} - ${formatTime(shiftDetails[0].end_time)}`;
 };
 
-export const transformShifts = (shifts, week, filters) => {
-    if (!week || Object.keys(week).length < 2) {
-        return []; // Return an empty array if the week is invalid
-    }
-
+export const transformShifts = (shifts, filters) => {
     const groupedShifts = {};
 
     // If filters are provided, apply them; otherwise, no filtering.
@@ -25,32 +21,24 @@ export const transformShifts = (shifts, week, filters) => {
         return employeeMatch && locationMatch && positionMatch;
     }) : shifts; // No filtering if filters are undefined
 
-    // Ensure the week is mapped correctly
-    week = mapWeekToDays(week);
-
-    console.log('Filters:', filters);
-
     // Iterate through each shift and group them by employee
     filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, date }) => {
         if (!groupedShifts[e_id]) {
             groupedShifts[e_id] = { e_id, name, shiftDays: {} };
         }
 
-        // Iterate through each day of the week
-        Object.keys(week).forEach((dayName) => {
-            // Ensure the date comparison is done properly by standardizing both dates
-            const weekDate = new Date(week[dayName][0].date).toLocaleDateString();
-            const shiftDate = new Date(date).toLocaleDateString();
+        // Format the shift date to a standard format for comparison (e.g., YYYY-MM-DD)
+        const shiftDate = new Date(date).toLocaleDateString();
 
-            if (weekDate === shiftDate) {
-                groupedShifts[e_id].shiftDays[dayName] = {
-                    shift_id,
-                    location_id,
-                    start_time: start_time || 'N/A',
-                    end_time: end_time || 'N/A',
-                    date: date || null,
-                };
-            }
+        // Group shifts by the date
+        groupedShifts[e_id].shiftDays[shiftDate] = groupedShifts[e_id].shiftDays[shiftDate] || [];
+
+        // Add the shift details to the respective date
+        groupedShifts[e_id].shiftDays[shiftDate].push({
+            shift_id,
+            location_id,
+            start_time: start_time || 'N/A',
+            end_time: end_time || 'N/A',
         });
     });
 

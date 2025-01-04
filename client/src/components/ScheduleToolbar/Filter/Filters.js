@@ -27,22 +27,26 @@ const Filters = ({ onFiltersChange }) => {
         setFilters((prevFilters) => {
             const updatedFilters = { ...prevFilters };
 
-            if (updatedFilters[category].includes(id)) {
-                // Remove the ID if it exists
-                updatedFilters[category] = updatedFilters[category].filter((filterId) => filterId !== id);
+            if (id === 'clear') {
+                // Clear all filters for the specified category
+                updatedFilters[category] = [];
             } else {
-                // Add the ID if it doesn't exist
-                updatedFilters[category] = [...updatedFilters[category], id];
+                // Toggle the selected filter
+                if (updatedFilters[category].includes(id)) {
+                    updatedFilters[category] = updatedFilters[category].filter((filterId) => filterId !== id);
+                } else {
+                    updatedFilters[category] = [...updatedFilters[category], id];
+                }
             }
 
-            // Notify the parent about the updated filters
             if (onFiltersChange) {
                 onFiltersChange(updatedFilters);
             }
-
+            console.log(updatedFilters);
             return updatedFilters;
         });
     };
+
 
     return (
         <Toolbar

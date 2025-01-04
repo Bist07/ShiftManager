@@ -1,11 +1,16 @@
 import React from 'react';
-import { Menu, MenuItem, Checkbox, ListItemText, IconButton } from '@mui/material';
+import { Menu, MenuItem, Checkbox, ListItemText, IconButton, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import { renderButtonText } from '../../../utils/utils';
 
 const EmployeeFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, employees }) => {
     const handleToggle = (employee) => {
         handleSelectFilter('employeeFilters', employee.e_id);
+    };
+
+    const handleClear = () => {
+        handleSelectFilter('employeeFilters', 'clear'); // Custom logic to clear all
+        setAnchorEl(null);
     };
 
     return (
@@ -15,7 +20,7 @@ const EmployeeFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, em
                 aria-haspopup="true"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 sx={{
-                    color: filters.employeeFilters.length > 0 ? '#1c74d4' : '#626262',
+                    color: filters.employeeFilters.length > 0 ? 'primary.main' : '#626262',
                     fontSize: '15px',
                     textTransform: 'none',
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -37,6 +42,15 @@ const EmployeeFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, em
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
             >
+                {/* Clear button */}
+                {filters.employeeFilters.length > 0 && (
+                    <MenuItem onClick={handleClear} sx={{ justifyContent: 'center', color: 'error.main' }}>
+                        <Button variant="text" color="error">
+                            Clear
+                        </Button>
+                    </MenuItem>
+                )}
+
                 {employees.map((employee) => (
                     <MenuItem key={employee.e_id} onClick={() => handleToggle(employee)}>
                         <Checkbox checked={filters.employeeFilters.includes(employee.e_id)} />

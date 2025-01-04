@@ -9,25 +9,33 @@ import {
     Paper,
     Button,
 } from '@mui/material';
-import ShiftComponent from './ShiftComponent/ShiftComponent';
-import { formatTime, getDaysInMonth } from '../utils/dateUtils';
-import { getShiftDetails } from '../utils/shiftUtils';
+import ShiftDetails from './ShiftDetails';
+import { getDaysInMonth } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 
 const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
-    const { shifts, refetchShifts } = useShifts(month, year, null, filter);
+    const { shifts, refetchShifts } = useShifts(month, year, filter);
     const [currentShift, setCurrentShift] = useState(null);
 
     const daysInMonth = getDaysInMonth(month, year); // Utility to get all days in the month
-    console.log('shifts', shifts);
 
     const handleOpenDialog = (shift, date) => {
-        const shiftDetails = shift?.shiftDays?.[date] || {};
-        setCurrentShift({
-            ...shift,
-            date,
-            ...shiftDetails,
-        });
+        console.log('Handling open dialog for date:', date);
+        if (!date || !shift?.shiftDays) {
+            console.error('Error: Date or shiftDays is undefined');
+            return;
+        }
+
+        const shiftDetails = shift.shiftDays[date] || [];
+        if (shiftDetails.length > 0) {
+            setCurrentShift({
+                ...shift,
+                date,
+                shiftDetails,
+            });
+        } else {
+            console.warn(`No shifts found for date: ${date}`);
+        }
     };
 
     const handleCloseDialog = () => {
@@ -54,8 +62,21 @@ const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
         let currentWeek = [];
 
         daysInMonth.forEach((date, index) => {
-            const shift = shifts.find((s) => s.shiftDays[date]);
-            const hasShift = !!shift;
+            if (!date) {
+                console.error('Invalid date:', date); // Log invalid dates
+                return;
+            }
+
+            // Check if shift.shiftDays exists and has data for the date
+            const shiftsForDay = shifts
+                .filter((s) => s.shiftDays && s.shiftDays[date]) // Ensure shiftDays exists
+                .map((s) => s.shiftDays[date]);
+
+            if (shiftsForDay.length === 0) {
+                console.warn(`No shifts available for ${date}`);
+            }
+
+            const hasShift = shiftsForDay.length > 0;
 
             const dateObject = new Date(date);
             const dayNumber = dateObject.getDate();
@@ -71,11 +92,27 @@ const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
                     }}
                 >
                     <Button
-                        onClick={() => handleOpenDialog(shift, date)}
+                        onClick={() => {
+                            console.log('Clicked on date:', date); // Log when date is clicked
+                            handleOpenDialog(shiftsForDay[0]?.[0], date);
+                        }}
                         sx={getButtonStyle(hasShift)}
                     >
                         {`${dayNumber} ${monthShort}`}
                     </Button>
+                    {hasShift && (
+                        <div>
+                            {shiftsForDay.flat().map((shiftDetail) => (
+                                <ShiftDetails
+                                    key={shiftDetail.shift_id} // Use shift_id as the key
+                                    shift={shiftDetail}
+                                    onSave={handleSaveShift}
+                                    onDelete={handleDeleteShift}
+                                    onClose={handleCloseDialog}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </TableCell>
             );
 
@@ -113,7 +150,7 @@ const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
             </TableContainer>
 
             {currentShift && (
-                <ShiftComponent
+                <ShiftDetails
                     {...currentShift}
                     onSave={handleSaveShift}
                     onDelete={handleDeleteShift}

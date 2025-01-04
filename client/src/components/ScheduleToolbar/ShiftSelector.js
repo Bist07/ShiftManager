@@ -160,7 +160,8 @@ const ShiftSelector = () => {
                             sx={{
                                 fontSize: '17px',
                                 textWeight: 'bold',
-                                color: selectedWeek ? '#1c74d4' : '#626262',
+                                fontWeight: 600,
+                                color: selectedWeek ? 'primary.main' : '#626262',
                                 textTransform: 'none',
                                 padding: '8px 16px',
                                 fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -199,7 +200,7 @@ const ShiftSelector = () => {
                     sx={{
                         borderRadius: '5px',
                         border: '1px solid #bcbcbc', // Add border to mimic outlined style
-                        color: filterOpen ? '#1c74d4' : '#626262',
+                        color: filterOpen ? 'primary.main' : '#626262',
                         transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', // Flip icon when toggled
                         '&:hover': { backgroundColor: '#f0f0f0' },
                     }}

@@ -8,8 +8,14 @@ export const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday
 export const formatTime = (time) => {
     if (!time) return 'N/A';
     const date = new Date(`1970-01-01T${time}`);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+    let formattedTime = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+
+    // Replace lowercase 'a.m.'/'p.m.' with uppercase 'AM'/'PM' and remove the period.
+    formattedTime = formattedTime.replace(/(a.m.|p.m.)/, (match) => match.toUpperCase().replace('.', '').replace('.', ''));
+
+    return formattedTime;
 };
+
 
 export const formatDate = (isoString) => {
     const date = new Date(isoString);
@@ -70,8 +76,9 @@ export const generateWeeks = (dates) => {
 
     dates.forEach((item) => {
         // Add the current date and date_id to the current week
+        const newDate = formatDate(item.date);
         week.push({
-            date: item.date,
+            date: newDate,
             date_id: item.date_id
         });
 
@@ -86,7 +93,6 @@ export const generateWeeks = (dates) => {
         newWeeks.push(week);  // Push any remaining days as the last week
     }
 
-
     return newWeeks;
 };
 
@@ -94,7 +100,6 @@ export const mapWeekToDays = (week) => {
     if (!week || week.length === 0) {
         return {}; // Return an empty object if the week is null or an empty array
     }
-
     const mappedWeek = {};
 
     week.forEach((day) => {
