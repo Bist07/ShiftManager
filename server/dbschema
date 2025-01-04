@@ -1,0 +1,82 @@
+
+shifts
++-------------+---------+------+-----+---------+----------------+
+| Field       | Type    | Null | Key | Default | Extra          |
++-------------+---------+------+-----+---------+----------------+
+| shift_id    | int(11) | NO   | PRI | NULL    | auto_increment |
+| location_id | int(11) | NO   | MUL | NULL    |                |
+| start_time  | time    | YES  |     | NULL    |                |
+| end_time    | time    | YES  |     | NULL    |                |
+| date_id     | int(11) | NO   | MUL | NULL    |                |
++-------------+---------+------+-----+---------+----------------+
+
+ assignments
++---------------+---------+------+-----+---------+----------------+
+| Field         | Type    | Null | Key | Default | Extra          |
++---------------+---------+------+-----+---------+----------------+
+| assignment_id | int(11) | NO   | PRI | NULL    | auto_increment |
+| employee_id   | int(11) | NO   | MUL | NULL    |                |
+| shift_id      | int(11) | NO   | MUL | NULL    |                |
++---------------+---------+------+-----+---------+----------------+
+
+locations;
++-------------+--------------+------+-----+---------+----------------+
+| Field       | Type         | Null | Key | Default | Extra          |
++-------------+--------------+------+-----+---------+----------------+
+| location_id | int(11)      | NO   | PRI | NULL    | auto_increment |
+| name        | varchar(255) | NO   |     | NULL    |                |
+| address     | varchar(255) | YES  |     | NULL    |                |
++-------------+--------------+------+-----+---------+----------------+
+
+dim_Date;
++-------------+------------+------+-----+---------+----------------+
+| Field       | Type       | Null | Key | Default | Extra          |
++-------------+------------+------+-----+---------+----------------+
+| date_id     | int(11)    | NO   | PRI | NULL    | auto_increment |
+| full_date   | date       | NO   |     | NULL    |                |
+| day_of_week | int(11)    | NO   |     | NULL    |                |
+| is_Holiday  | tinyint(1) | YES  |     | NULL    |                |
+| is_Weekend  | tinyint(1) | YES  |     | NULL    |                |
++-------------+------------+------+-----+---------+----------------+
+
+employee;
++------------+--------------+------+-----+---------------------+----------------+
+| Field      | Type         | Null | Key | Default             | Extra          |
++------------+--------------+------+-----+---------------------+----------------+
+| e_id       | int(11)      | NO   | PRI | NULL                | auto_increment |
+| first_name | varchar(255) | NO   |     | NULL                |                |
+| last_name  | varchar(255) | NO   |     | NULL                |                |
+| email      | varchar(255) | NO   | UNI | NULL                |                |
+| role_id    | int(11)      | NO   | MUL | NULL                |                |
+| created_at | timestamp    | YES  |     | current_timestamp() |                |
++------------+--------------+------+-----+---------------------+----------------+
+
+ notifications;
++-----------------+------------+------+-----+---------------------+----------------+
+| Field           | Type       | Null | Key | Default             | Extra          |
++-----------------+------------+------+-----+---------------------+----------------+
+| notification_id | int(11)    | NO   | PRI | NULL                | auto_increment |
+| employee_id     | int(11)    | NO   | MUL | NULL                |                |
+| message         | text       | NO   |     | NULL                |                |
+| created_at      | timestamp  | YES  |     | current_timestamp() |                |
+| is_read         | tinyint(1) | YES  |     | 0                   |                |
++-----------------+------------+------+-----+---------------------+----------------+
+
+ roles;
++-----------+-------------+------+-----+---------+----------------+
+| Field     | Type        | Null | Key | Default | Extra          |
++-----------+-------------+------+-----+---------+----------------+
+| role_id   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| role_name | varchar(50) | NO   | UNI | NULL    |                |
++-----------+-------------+------+-----+---------+----------------+
+
++-----------------+---------+------+-----+---------+----------------+
+| Field           | Type    | Null | Key | Default | Extra          |
++-----------------+---------+------+-----+---------+----------------+
+| availability_id | int(11) | NO   | PRI | NULL    | auto_increment |
+| e_id            | int(11) | NO   | MUL | NULL    |                |
+| day_of_week     | int(11) | NO   |     | NULL    |                |
+| start_time      | time    | NO   |     | NULL    |                |
+| end_time        | time    | NO   |     | NULL    |                |
++-----------------+---------+------+-----+---------+----------------+
+
