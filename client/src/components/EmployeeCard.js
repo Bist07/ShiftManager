@@ -15,8 +15,6 @@ const EmployeeCard = ({ title, description, image }) => {
         return color;
     }
 
-
-
     return (
         <Box
             sx={{
