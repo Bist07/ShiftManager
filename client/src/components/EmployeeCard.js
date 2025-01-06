@@ -1,8 +1,22 @@
 import React from 'react';
-import { Box, Card, CardMedia, Typography } from '@mui/material';
+import { Box, Typography, Avatar } from '@mui/material';
 import pfp from '../assets/images/pfp.jpg'; // Replace this with dynamic image handling if needed
 
 const EmployeeCard = ({ title, description, image }) => {
+
+    function stringToColor(name) {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+            hash = name.charCodeAt(i) + ((hash << 5) - hash); // Hash function
+        }
+
+        // Generate a color from the hash
+        const color = `#${(hash & 0xffffff).toString(16).padStart(6, '0')}`;
+        return color;
+    }
+
+
+
     return (
         <Box
             sx={{
@@ -19,25 +33,13 @@ const EmployeeCard = ({ title, description, image }) => {
                 }}
             >
                 {/* Left: Circular Image */}
-                <Card
-                    sx={{
-                        borderRadius: '50%',
-                        width: '60px',
-                        height: '60px',
-                        overflow: 'hidden',
-                        flexShrink: 0,
-                    }}
-                >
-                    <CardMedia
-                        component="img"
-                        image={/*image ||*/ pfp} // Use dynamic image or fallback
-                        sx={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                        }}
-                    />
-                </Card>
+
+                <Avatar
+                    sx={{ bgcolor: stringToColor(title), marginLeft: 2 }}
+                    alt={title}
+                    src="/broken-image.jpg"
+                />
+
 
                 {/* Right: Title and Additional Content */}
                 <Box sx={{ flex: 1 }}>
