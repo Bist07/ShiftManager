@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Table,
     TableBody,
@@ -8,34 +8,33 @@ import {
     TableRow,
     Paper,
     Button,
+    Box,
 } from '@mui/material';
 import ShiftDetails from './ShiftDetails';
-import { getDaysInMonth } from '../utils/dateUtils';
+import { getDaysInMonth, getLocalDate } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
+import AddIcon from '@mui/icons-material/Add';
+import ShiftComponent from './ShiftComponent/ShiftComponent'
 
-const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
+const MonthlyShiftTable = ({ month, year, filter }) => {
     const { shifts, refetchShifts } = useShifts(month, year, filter);
     const [currentShift, setCurrentShift] = useState(null);
+    let daysInMonth = getDaysInMonth(month, year);
 
-    const daysInMonth = getDaysInMonth(month, year); // Utility to get all days in the month
+    useEffect(() => {
+        daysInMonth = getDaysInMonth(month, year);
+    }, [month, year]);
 
     const handleOpenDialog = (shift, date) => {
-        console.log('Handling open dialog for date:', date);
-        if (!date || !shift?.shiftDays) {
-            console.error('Error: Date or shiftDays is undefined');
-            return;
-        }
-
-        const shiftDetails = shift.shiftDays[date] || [];
-        if (shiftDetails.length > 0) {
-            setCurrentShift({
-                ...shift,
-                date,
-                shiftDetails,
-            });
-        } else {
-            console.warn(`No shifts found for date: ${date}`);
-        }
+        setCurrentShift({
+            name: shift?.name,
+            e_id: shift?.e_id,
+            shift_id: shift?.shift_id,
+            location_id: shift?.location_id,
+            date,
+            start_time: shift?.start_time || 'N/A',
+            end_time: shift?.end_time || 'N/A'
+        });
     };
 
     const handleCloseDialog = () => {
@@ -52,67 +51,88 @@ const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
         handleCloseDialog();
     };
 
-    const getButtonStyle = (hasShift) => ({
-        backgroundColor: hasShift ? 'green' : 'transparent',
-        color: hasShift ? 'white' : 'black',
-    });
-
     const renderDays = () => {
         const rows = [];
         let currentWeek = [];
 
         daysInMonth.forEach((date, index) => {
-            if (!date) {
-                console.error('Invalid date:', date); // Log invalid dates
-                return;
-            }
-
-            // Check if shift.shiftDays exists and has data for the date
             const shiftsForDay = shifts
-                .filter((s) => s.shiftDays && s.shiftDays[date]) // Ensure shiftDays exists
-                .map((s) => s.shiftDays[date]);
-
-            if (shiftsForDay.length === 0) {
-                console.warn(`No shifts available for ${date}`);
-            }
+                .flatMap((shift) => {
+                    return (shift.shiftDays?.[date] || []).map((shiftDetail) => ({
+                        ...shiftDetail,
+                        e_id: shift.e_id,
+                        name: shift.name,
+                    }));
+                });
 
             const hasShift = shiftsForDay.length > 0;
-
-            const dateObject = new Date(date);
-            const dayNumber = dateObject.getDate();
-            const monthShort = dateObject.toLocaleString('default', { month: 'short' });
+            const localDate = getLocalDate(date);
+            const formattedDate = `${localDate.getDate()} ${localDate.toLocaleString('default', { month: 'short' })}`;
 
             currentWeek.push(
                 <TableCell
                     key={date}
-                    align="center"
+                    align="left"
                     sx={{
-                        border: '1px solid #ccc', // Add border
+                        borderRight: '1px solid #ccc',
                         padding: '8px',
+                        verticalAlign: 'top',
+                        position: 'relative',
+                        display: 'table-cell', // Keep table-cell display to ensure proper layout
+                        '&:hover .add-icon': {
+                            opacity: 1, // Show the icon when the cell is hovered
+                        },
                     }}
                 >
-                    <Button
-                        onClick={() => {
-                            console.log('Clicked on date:', date); // Log when date is clicked
-                            handleOpenDialog(shiftsForDay[0]?.[0], date);
+                    <Box
+                        sx={{
+                            minHeight: '100px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'flex-start',
+                            position: 'relative', // Make sure the child elements are positioned correctly
                         }}
-                        sx={getButtonStyle(hasShift)}
                     >
-                        {`${dayNumber} ${monthShort}`}
-                    </Button>
-                    {hasShift && (
-                        <div>
-                            {shiftsForDay.flat().map((shiftDetail) => (
-                                <ShiftDetails
-                                    key={shiftDetail.shift_id} // Use shift_id as the key
-                                    shift={shiftDetail}
-                                    onSave={handleSaveShift}
-                                    onDelete={handleDeleteShift}
-                                    onClose={handleCloseDialog}
-                                />
+                        <Box
+                            sx={{
+                                color: '#626262',
+                                fontSize: '12px',
+                                position: 'absolute',
+                                top: '0px',
+                                left: '8px',
+                            }}
+                        >
+                            {formattedDate}
+                        </Box>
+
+                        <Box
+                            className="add-icon"
+                            sx={{
+                                position: 'absolute',
+                                color: '#626262',
+                                top: '0px',
+                                right: '-4px',
+                                opacity: 0, // Hidden by default
+                                transition: 'opacity 0.3s ease', // Smooth transition to appear
+                                '&:hover': {
+                                    color: "primary.main",
+                                },
+                            }}
+                            onClick={() => handleOpenDialog(null, date)}
+                        >
+                            <AddIcon onClick={() => handleOpenDialog('', date)} fontSize="medium" />
+                        </Box>
+
+                        <Box sx={{ marginTop: '20px' }}>
+                            {hasShift && shiftsForDay.map((shiftDetail, idx) => (
+                                <Button onClick={() => handleOpenDialog(shiftDetail, date)} >
+                                    <Box key={idx}>
+                                        <ShiftDetails shift={shiftDetail} />
+                                    </Box>
+                                </Button>
                             ))}
-                        </div>
-                    )}
+                        </Box>
+                    </Box>
                 </TableCell>
             );
 
@@ -127,8 +147,15 @@ const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
 
     return (
         <>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="monthly shift table">
+            <TableContainer
+
+                component={Paper}
+                sx={{
+                    maxHeight: '700px', // Set a maxHeight for scrolling
+                    overflow: 'auto', // Enable scrolling
+                }}
+            >
+                <Table stickyHeader sx={{ minWidth: 650 }} aria-label="monthly shift table">
                     <TableHead>
                         <TableRow>
                             {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => (
@@ -136,8 +163,10 @@ const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
                                     key={day}
                                     align="center"
                                     sx={{
-                                        border: '1px solid #ccc', // Add border
-                                        padding: '8px',
+                                        paddingBottom: '36px',
+                                        paddingTop: '20px',
+                                        position: 'sticky', // Make it sticky
+                                        zIndex: 1, // Ensure it's on top of other content
                                     }}
                                 >
                                     <strong>{day}</strong>
@@ -149,10 +178,18 @@ const MonthlyShiftTable = ({ shifts: initialShifts, month, year, filter }) => {
                 </Table>
             </TableContainer>
 
+
             {currentShift && (
-                <ShiftDetails
-                    {...currentShift}
+                <ShiftComponent
+                    shift_id={currentShift.shift_id}
+                    start_time={currentShift.start_time}
+                    end_time={currentShift.end_time}
+                    location_id={currentShift.location_id}
+                    name={currentShift.name}
+                    e_id={currentShift.e_id}
+                    date={currentShift.date}
                     onSave={handleSaveShift}
+                    open={handleOpenDialog}
                     onDelete={handleDeleteShift}
                     onClose={handleCloseDialog}
                 />

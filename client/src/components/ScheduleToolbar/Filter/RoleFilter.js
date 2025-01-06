@@ -3,25 +3,25 @@ import { Menu, MenuItem, Checkbox, ListItemText, IconButton, Button } from '@mui
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import { renderButtonText } from '../../../utils/utils';
 
-const PositionFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, positions, clearFilters }) => {
-    const handleToggle = (position) => {
-        handleSelectFilter('positionsFilters', position.role_id);
+const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles, clearFilters }) => {
+    const handleToggle = (role) => {
+        handleSelectFilter('roleFilters', role.role_id);
     };
 
     const handleClear = () => {
-        handleSelectFilter('positionsFilters', 'clear'); // Custom logic to clear all
+        handleSelectFilter('roleFilters', 'clear'); // Custom logic to clear all
         setAnchorEl(null);
     };
 
     return (
         <>
             <IconButton
-                aria-controls="position-menu"
+                aria-controls="role-menu"
                 aria-haspopup="true"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 variant='outlined'
                 sx={{
-                    color: filters.positionsFilters.length > 0 ? 'primary.main' : '#626262',
+                    color: filters.roleFilters.length > 0 ? 'primary.main' : '#626262',
                     fontSize: '15px',
                     textTransform: 'none',
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -30,21 +30,21 @@ const PositionFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, po
                     border: '1px solid #bcbcbc',
                     borderColor: '#bcbcbc',
                     '&:hover': {
-                        borderColor: Object.keys(filters.positionsFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
+                        borderColor: Object.keys(filters.roleFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
                     },
                 }}
             >
                 <AssignmentIcon sx={{ fontSize: '20px' }} />
-                {renderButtonText(filters.positionsFilters, 'Position')}
+                {renderButtonText(filters.roleFilters, 'Role')}
             </IconButton>
             <Menu
-                id="position-menu"
+                id="role-menu"
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
             >
                 {/* Clear button */}
-                {filters.positionsFilters.length > 0 && (
+                {filters.roleFilters.length > 0 && (
                     <MenuItem onClick={handleClear} sx={{ justifyContent: 'center', color: 'error.main' }}>
                         <Button variant="text" color="error">
                             Clear
@@ -52,10 +52,10 @@ const PositionFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, po
                     </MenuItem>
                 )}
 
-                {positions.map((position) => (
-                    <MenuItem key={position.role_id} onClick={() => handleToggle(position)}>
-                        <Checkbox checked={filters.positionsFilters.includes(position.role_id)} />
-                        <ListItemText primary={position.name} />
+                {roles.map((role) => (
+                    <MenuItem key={role.role_id} onClick={() => handleToggle(role)}>
+                        <Checkbox checked={filters.roleFilters.includes(role.role_id)} />
+                        <ListItemText primary={role.name} />
                     </MenuItem>
                 ))}
             </Menu>
@@ -63,4 +63,4 @@ const PositionFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, po
     );
 };
 
-export default PositionFilter;
+export default RoleFilter;

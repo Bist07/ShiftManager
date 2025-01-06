@@ -1,9 +1,4 @@
-export const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-];
-
-export const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+import dayjs from 'dayjs';
 
 export const formatTime = (time) => {
     if (!time) return 'N/A';
@@ -16,7 +11,6 @@ export const formatTime = (time) => {
     return formattedTime;
 };
 
-
 export const formatDate = (isoString) => {
     const date = new Date(isoString);
     const year = date.getFullYear();
@@ -26,48 +20,9 @@ export const formatDate = (isoString) => {
 };
 
 export const formatWeek = (isoString) => {
-    const date = new Date(isoString);
-    const month = months[date.getMonth()].slice(0, 3); // Get first 3 letters of the month
-
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${day} ${month}`;
-};
-
-
-export const parseTime = (timeString) => {
-    const date = new Date(`1970-01-01T${timeString}Z`);
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    const seconds = date.getUTCSeconds().toString().padStart(2, '0');
-
-    return `${hours}:${minutes}:${seconds}`;
-};
-
-export const parseDate = (formattedDate) => {
-    if (!formattedDate) return null; // Handle case for undefined or null input
-
-    const [year, month, day] = formattedDate.split('-');
-
-    // Check if the parts are valid
-    if (year.length !== 4 || month.length !== 2 || day.length !== 2) {
-        throw new RangeError('Invalid date format');
-    }
-
-    const parsedDate = new Date(`${year}-${month}-${day}T00:00:00.000Z`);
-
-    // Ensure the date is valid
-    if (isNaN(parsedDate)) {
-        throw new RangeError('Invalid date');
-    }
-
-    return parsedDate.toISOString();
-};
-
-
-export const validateTimes = (start_time, end_time) => {
-    const start = new Date(`1970-01-01T${start_time}`);
-    const end = new Date(`1970-01-01T${end_time}`);
-    return start < end;
+    const localDate = getLocalDate(isoString);
+    const formattedDate = `${localDate.getDate()} ${localDate.toLocaleString('default', { month: 'short' })}`;
+    return formattedDate;
 };
 
 export const generateWeeks = (dates) => {
@@ -96,29 +51,74 @@ export const generateWeeks = (dates) => {
     return newWeeks;
 };
 
+export const getLocalDate = (date) => {
+    const [year, month, day] = (date).split('-');
+    const localDate = new Date(year, month - 1, day);
+    return localDate;
+};
+
 export const mapWeekToDays = (week) => {
     if (!week || week.length === 0) {
         return {}; // Return an empty object if the week is null or an empty array
     }
     const mappedWeek = {};
 
-    week.forEach((day) => {
-        const dayName = new Date(day.date).toLocaleString('en-us', { weekday: 'long' }); // Get day name (e.g., "Sunday")
-        if (!mappedWeek[dayName]) {
-            mappedWeek[dayName] = []; // Initialize the array if it doesn't exist
-        }
-        mappedWeek[dayName].push(day); // Add the day to the corresponding day name array
-    });
+    week.forEach((dayObj) => {
 
+        const localDate = getLocalDate(dayObj.date);
+        const dayName = new Date(localDate).toLocaleString('en-us', { weekday: 'long' }); // Get day name (e.g., "Sunday")
+
+        // Directly store the date, no need for an array
+        mappedWeek[dayName] = dayObj.date;
+    });
     return mappedWeek;
 };
 
+
 export const getDaysInMonth = (month, year) => {
-    const date = new Date(year, month - 1, 1);
+    const firstDay = dayjs(new Date(year, month - 1, 1)); // First day of the month
+    const lastDay = firstDay.endOf('month'); // Last day of the month
+
     const days = [];
-    while (date.getMonth() === month - 1) {
-        days.push(date.toISOString().split('T')[0]); // Format: YYYY-MM-DD
-        date.setDate(date.getDate() + 1);
+    const startDayOfWeek = firstDay.day(); // Day of the week (0 = Sunday)
+    const endDayOfWeek = lastDay.day(); // Day of the week (0 = Sunday)
+
+    // Add preceding days from the previous month
+    for (let i = startDayOfWeek - 1; i >= 0; i--) {
+        const prevDate = firstDay.subtract(i + 1, 'day');
+        days.push(prevDate.format('YYYY-MM-DD')); // ISO format
     }
+
+
+    // Add all days in the current month
+    for (let i = 0; i < lastDay.date(); i++) {
+        const currentDate = firstDay.add(i, 'day');
+        days.push(currentDate.format('YYYY-MM-DD'));
+    }
+
+    // Add succeeding days from the next month
+    for (let i = 1; i <= 6 - endDayOfWeek; i++) {
+        const nextDate = lastDay.add(i, 'day');
+        days.push(nextDate.format('YYYY-MM-DD'));
+    }
+
     return days;
+};
+
+export const getHours = (startTime, endTime) => {
+    const date1 = new Date(`1970-01-01T${startTime}Z`);
+    const date2 = new Date(`1970-01-01T${endTime}Z`);
+    const diffInMilliseconds = date2 - date1;
+    const diffInMinutes = diffInMilliseconds / (1000 * 60);
+    const diffHours = Math.floor(diffInMinutes / 60);
+    const diffRemainingMinutes = diffInMinutes % 60;
+
+    // Return the values for use in other functions as well as the formatted string
+    return {
+        diffHours,
+        diffRemainingMinutes,
+        formatted: diffRemainingMinutes === 0
+            ? `${diffHours}h`
+            : `${diffHours}h ${diffRemainingMinutes}min`
+    };
 };

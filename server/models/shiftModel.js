@@ -21,11 +21,14 @@ export const getShiftsByMonthAndYear = async (month, year) => {
             d.day_of_week, 
             s.location_id,
             s.start_time, 
-            s.end_time 
+            s.end_time ,
+            s.role_id,
+            r.role_name
         FROM employee e
         LEFT JOIN assignments a ON a.employee_id = e.e_id
         LEFT JOIN shifts s ON a.shift_id = s.shift_id
         LEFT JOIN dim_Date d ON s.date_id = d.date_id
+        LEFT JOIN roles r ON s.role_id = r.role_id
         WHERE YEAR(d.full_date) = ? AND MONTH(d.full_date) = ? 
             OR (s.shift_id IS NULL) -- Include employees without shifts
         ORDER BY e.e_id, d.full_date;

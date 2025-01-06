@@ -5,11 +5,11 @@ import { renderButtonText } from '../../../utils/utils';
 
 const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, locations }) => {
     const handleToggle = (location) => {
-        handleSelectFilter('locationsFilters', location.location_id);
+        handleSelectFilter('locationFilters', location.location_id);
     };
 
     const handleClear = () => {
-        handleSelectFilter('locationsFilters', 'clear'); // Custom logic to clear all
+        handleSelectFilter('locationFilters', 'clear'); // Custom logic to clear all
         setAnchorEl(null);
     };
 
@@ -21,7 +21,7 @@ const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, lo
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 variant='outlined'
                 sx={{
-                    color: Object.keys(filters.locationsFilters).length > 0 ? 'primary.main' : '#626262',
+                    color: Object.keys(filters.locationFilters).length > 0 ? 'primary.main' : '#626262',
                     fontSize: '15px',
                     textTransform: 'none',
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -30,12 +30,12 @@ const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, lo
                     border: '1px solid #bcbcbc', // Add border to mimic outlined style
                     borderColor: '#bcbcbc',
                     '&:hover': {
-                        borderColor: Object.keys(filters.locationsFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
+                        borderColor: Object.keys(filters.locationFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
                     },
                 }}
             >
                 <PlaceIcon />
-                {renderButtonText(filters.locationsFilters, 'Location')}
+                {renderButtonText(filters.locationFilters, 'Location')}
 
             </IconButton>
             <Menu
@@ -46,7 +46,7 @@ const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, lo
             >
 
                 {/* Clear button */}
-                {filters.locationsFilters.length > 0 && (
+                {filters.locationFilters.length > 0 && (
                     <MenuItem onClick={handleClear} sx={{ justifyContent: 'center', color: 'error.main' }}>
                         <Button variant="text" color="error">
                             Clear
@@ -56,7 +56,7 @@ const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, lo
 
                 {locations.map((location) => (
                     <MenuItem key={location.location_id} onClick={() => handleToggle(location)}>
-                        <Checkbox checked={filters.locationsFilters.includes(location.location_id)} />
+                        <Checkbox checked={filters.locationFilters.includes(location.location_id)} />
                         <ListItemText primary={location.name} />
                     </MenuItem>
                 ))}

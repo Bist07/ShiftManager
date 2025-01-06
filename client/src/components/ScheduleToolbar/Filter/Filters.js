@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { Box, Toolbar } from '@mui/material';
 import EmployeeFilter from './EmployeeFilter';
-import PositionFilter from './PositionFilter';
+import RoleFilter from './RoleFilter';
 import LocationFilter from './LocationFilter';
 import useEmployee from '../../../hooks/useEmployee';
 import useLocations from '../../../hooks/useLocations';
-import usePosition from '../../../hooks/usePosition';
+import useRoles from '../../../hooks/useRoles';
 
 const Filters = ({ onFiltersChange }) => {
     const { employees = [] } = useEmployee();
     const { locations = [] } = useLocations();
-    const { positions = [] } = usePosition();
+    const { roles = [] } = useRoles();
 
     // States to handle dropdown menu anchors
     const [anchorElEmployees, setAnchorElEmployees] = useState(null);
-    const [anchorElPositions, setAnchorElPosition] = useState(null);
+    const [anchorElRoles, setAnchorElRole] = useState(null);
     const [anchorElLocations, setAnchorElLocation] = useState(null);
 
     const [filters, setFilters] = useState({
         employeeFilters: [],
-        locationsFilters: [],
-        positionsFilters: [],
+        locationFilters: [],
+        roleFilters: [],
     });
 
     const handleSelectFilter = (category, id) => {
@@ -68,12 +68,12 @@ const Filters = ({ onFiltersChange }) => {
                     handleSelectFilter={handleSelectFilter}
                     employees={employees}
                 />
-                <PositionFilter
-                    anchorEl={anchorElPositions}
-                    setAnchorEl={setAnchorElPosition}
+                <RoleFilter
+                    anchorEl={anchorElRoles}
+                    setAnchorEl={setAnchorElRole}
                     filters={filters}
                     handleSelectFilter={handleSelectFilter}
-                    positions={positions}
+                    roles={roles}
                 />
                 <LocationFilter
                     anchorEl={anchorElLocations}

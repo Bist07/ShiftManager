@@ -11,8 +11,7 @@ import {
 } from '@mui/material';
 import EmployeeCard from './EmployeeCard';
 import ShiftComponent from './ShiftComponent/ShiftComponent';
-import { formatTime } from '../utils/dateUtils';
-import { mapWeekToDays } from '../utils/dateUtils';
+import { getLocalDate, mapWeekToDays } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import ShiftDetails from './ShiftDetails';
 
@@ -31,10 +30,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
             location_id: shiftDetails[0]?.location_id,
             date,
             start_time: shiftDetails[0]?.start_time || 'N/A',
-            end_time: shiftDetails[0]?.end_time || 'N/A',
-            week,
-            month,
-            year,
+            end_time: shiftDetails[0]?.end_time || 'N/A'
         });
 
 
@@ -56,19 +52,24 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
 
     return (
         <>
-            <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650, tableLayout: 'fixed' }} aria-label="employee shift table">
+            <TableContainer component={Paper}
+                sx={{
+                    maxHeight: '700px', // Set a maxHeight for scrolling
+                    overflow: 'auto', // Enable scrolling
+                }}>
+                <Table stickyHeader sx={{ minWidth: 650, tableLayout: 'fixed' }} aria-label="employee shift table">
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ width: '17%' }} align="center"></TableCell>
                             {Object.keys(mappedWeek).map((day) => {
-                                const date = new Date(mappedWeek[day][0]?.date)
-                                const formattedDate = date.toLocaleDateString('en-US', {
+                                const date = mappedWeek[day];
+                                const localDate = getLocalDate(date)
+                                const formattedDate = localDate.toLocaleDateString('en-US', {
                                     month: 'short',  // Month as abbreviated (e.g., "Dec")
                                     day: 'numeric',  // Day of the month (e.g., "16")
                                 });
                                 return (
-                                    <TableCell key={date} align="center">
+                                    <TableCell key={localDate} align="center">
                                         <strong>{day}</strong> <br />
                                         {formattedDate}
                                     </TableCell>
@@ -83,7 +84,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                                     <EmployeeCard title={shift.name} description="Employee" />
                                 </TableCell>
                                 {Object.keys(mappedWeek).map((day) => {
-                                    const date = mappedWeek[day][0]?.date;
+                                    const date = mappedWeek[day];
                                     return (
                                         <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
                                             <Button sx={{ padding: 0, margin: 0 }}

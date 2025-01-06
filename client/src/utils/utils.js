@@ -7,19 +7,17 @@ export const isInvalid = (value) =>
 
 export const renderButtonText = (filters, category) => {
     const selectedCount = Object.keys(filters).length;
-    if (selectedCount === 0) {
-        return ``;
-    } else if (selectedCount === 1) {
+    if (selectedCount === 1) {
         return (
             <>
-                {`${selectedCount}`}
+                {`${category.toLowerCase()} ${selectedCount}`}
                 <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#bcbcbc' }} />
             </>
         );
     } else if (selectedCount > 1) {
         return (
             <>
-                {`${selectedCount}`}
+                {`${category.toLowerCase()}s ${selectedCount}`}
                 <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#bcbcbc' }} />
             </>
         );

@@ -5,13 +5,13 @@ import TimePickerComponent from './TimePickerComponent';
 import RepeatOptions from './RepeatOptions';
 import LocationSelector from './LocationSelector';
 import EmployeeSelector from './EmployeeSelector';
-import { daysOfWeek } from '../../utils/dateUtils';
 import { createBulkShift, deleteShiftsAndAssignments } from '../../services/api/shiftBulkOperationsApi';
 import { updateShift } from '../../services/api/shiftApi';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import { isInvalid } from '../../utils/utils';
+import dayjs from 'dayjs';
 
-const ShiftForm = ({ shift_id, e_id, day, location_id, start_time, end_time, date, onSave, onClose, onDelete, open, week, month, year }) => {
+const ShiftForm = ({ shift_id, e_id, location_id, start_time, end_time, date, onSave, onClose, onDelete, open, }) => {
     let loc;
     let emp_id;
     date = new Date(date).toISOString().split('T')[0];
@@ -28,8 +28,7 @@ const ShiftForm = ({ shift_id, e_id, day, location_id, start_time, end_time, dat
         emp_id = [e_id];
     }
 
-    const dayValues = Object.values(daysOfWeek);
-    const dayindex = dayValues.indexOf(day);
+    const dayName = dayjs(date).format('dddd');
 
     const [formData, setFormData] = useState({
         start_time: start_time || "",
@@ -101,7 +100,7 @@ const ShiftForm = ({ shift_id, e_id, day, location_id, start_time, end_time, dat
         if (shiftData.repeat === "") {
             shiftData.repeat = {
                 frequency: '1',
-                days: [dayindex],
+                days: [dayName],
                 startDate: shiftData.date,
                 endDate: shiftData.date,
             }

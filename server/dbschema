@@ -1,4 +1,3 @@
-
 shifts
 +-------------+---------+------+-----+---------+----------------+
 | Field       | Type    | Null | Key | Default | Extra          |
@@ -8,6 +7,7 @@ shifts
 | start_time  | time    | YES  |     | NULL    |                |
 | end_time    | time    | YES  |     | NULL    |                |
 | date_id     | int(11) | NO   | MUL | NULL    |                |
+| role_id     | int(11) | NO   | MUL | NULL    |                |
 +-------------+---------+------+-----+---------+----------------+
 
  assignments

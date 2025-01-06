@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Menu, Toolbar, Button, MenuItem, CircularProgress, Alert, TextField, Collapse, IconButton } from '@mui/material';
+import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -13,6 +13,11 @@ import Shifts from '../Shifts';
 import Filter from './Filter/Filters';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import AddIcon from '@mui/icons-material/Add';
+import ShiftComponent from '../ShiftComponent/ShiftComponent';
+import useShifts from '../../hooks/useShifts';
+import dayjs from 'dayjs';
 
 const ShiftSelector = () => {
     const [weeks, setWeeks] = useState([]);
@@ -25,10 +30,12 @@ const ShiftSelector = () => {
     const [filterOpen, setFilterOpen] = useState(false); // State for collapsible filter section
     const [currentFilters, setCurrentFilters] = useState({
         employeeFilters: [],
-        locationsFilters: [],
-        positionsFilters: [],
+        locationFilters: [],
+        roleFilters: [],
     });
     const [viewMode, setViewMode] = useState('week'); // State to toggle between 'week' and 'month' view
+    const { shifts, refetchShifts } = useShifts(selectedMonth, selectedYear, currentFilters);
+    const [currentShift, setCurrentShift] = useState(null);
 
     const handleFiltersChange = (updatedFilters) => {
         setCurrentFilters(updatedFilters);
@@ -68,14 +75,26 @@ const ShiftSelector = () => {
         setFilterOpen(!filterOpen); // Toggle filter section
     };
 
-    const handlePrevWeek = () => {
-        const currentIndex = weeks.findIndex((week) => week === selectedWeek);
-        if (currentIndex > 0) {
-            setSelectedWeek(weeks[currentIndex - 1]);
+    const handlePrev = () => {
+        if (viewMode !== 'month') {
+            const currentIndex = weeks.findIndex((week) => week === selectedWeek);
+            if (currentIndex > 0) {
+                setSelectedWeek(weeks[currentIndex - 1]);
+            } else {
+                // Handle going to the previous month if needed
+                if (selectedMonth === 1) {
+                    setSelectedMonth(12);
+                    setSelectedWeek(weeks[0])
+                    setSelectedYear((prevYear) => prevYear - 1);
+                } else {
+                    setSelectedWeek(weeks[0])
+                    setSelectedMonth((prevMonth) => prevMonth - 1);
+                }
+            }
         } else {
-            // Handle going to the previous month if needed
+
             if (selectedMonth === 1) {
-                setSelectedMonth(12);
+                setSelectedMonth(12)
                 setSelectedYear((prevYear) => prevYear - 1);
             } else {
                 setSelectedMonth((prevMonth) => prevMonth - 1);
@@ -83,19 +102,48 @@ const ShiftSelector = () => {
         }
     };
 
-    const handleNextWeek = () => {
-        const currentIndex = weeks.findIndex((week) => week === selectedWeek);
-        if (currentIndex < weeks.length - 1) {
-            setSelectedWeek(weeks[currentIndex + 1]);
+    const handleNext = () => {
+        if (viewMode !== 'month') {
+            const currentIndex = weeks.findIndex((week) => week === selectedWeek);
+            if (currentIndex < weeks.length - 1) {
+                setSelectedWeek(weeks[currentIndex + 1]);
+            } else {
+                // Handle going to the next month if needed
+                if (selectedMonth === 12) {
+                    setSelectedMonth(1);
+                    setSelectedWeek(weeks[0])
+                    setSelectedYear((prevYear) => prevYear + 1);
+                } else {
+                    setSelectedWeek(weeks[0])
+                    setSelectedMonth((prevMonth) => prevMonth + 1);
+                }
+            }
         } else {
-            // Handle going to the next month if needed
             if (selectedMonth === 12) {
-                setSelectedMonth(1);
+                setSelectedMonth(1)
                 setSelectedYear((prevYear) => prevYear + 1);
             } else {
                 setSelectedMonth((prevMonth) => prevMonth + 1);
             }
+
         }
+    };
+
+
+    const handleOpenDialog = () => {
+        setCurrentShift({
+        });
+
+
+    };
+
+    const handleCloseDialog = () => {
+        setCurrentShift(null);
+    };
+
+    const handleSaveShift = () => {
+        refetchShifts();
+        handleCloseDialog();
     };
 
     return (
@@ -105,18 +153,31 @@ const ShiftSelector = () => {
                     <IconButton
                         onClick={() => setViewMode(viewMode === 'week' ? 'month' : 'week')}
                         sx={{
+                            fontSize: '15px',
+                            textTransform: 'none',
+                            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                            gap: '8px',
                             borderRadius: '5px',
                             color: '#626262',
                             border: '1px solid #bcbcbc', // Add border to mimic outlined style
                             '&:hover': { backgroundColor: '#f0f0f0' },
                         }}
                     >
-                        {viewMode === 'week' ? <CalendarViewWeekIcon /> : <CalendarMonthIcon />}
+                        {viewMode === 'week' ? (
+                            <>
+                                Week <CalendarViewWeekIcon />
+                            </>
+                        ) : (
+                            <>
+                                Month <CalendarMonthIcon />
+                            </>
+                        )}
+
                     </IconButton>
                     <Box sx={{ display: 'flex', height: '40px', borderRadius: '5px', border: '1px solid #bcbcbc' }}>
                         <Box sx={{ borderRight: '1px solid #bcbcbc' }}>
                             <IconButton
-                                onClick={handlePrevWeek}
+                                onClick={handlePrev}
                                 sx={{
                                     padding: '8px',
                                 }}
@@ -126,7 +187,7 @@ const ShiftSelector = () => {
                         </Box>
 
                         <IconButton
-                            onClick={handleNextWeek}
+                            onClick={handleNext}
                             sx={{
                                 padding: '8px',
                             }}
@@ -192,28 +253,81 @@ const ShiftSelector = () => {
                 </Box>
 
                 {/* Add a Box with flexGrow to push Tune button to the right */}
-                <Box sx={{ flexGrow: 1 }} />
-
+                <Box sx={{ display: 'flex', flexGrow: 1, gap: '16px' }} />
+                <IconButton
+                    sx={{
+                        fontSize: '15px',
+                        textTransform: 'none',
+                        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                        gap: '8px',
+                        borderRadius: '5px',
+                        border: '1px solid #bcbcbc', // Add border to mimic outlined style
+                        color: '#626262',
+                        '&:hover': { backgroundColor: '#f0f0f0' },
+                    }}
+                >
+                    <AutoFixHighIcon />
+                    Auto
+                </IconButton>
                 {/* Tune Button, flipped when filter is open */}
                 <IconButton
                     onClick={handleToggleFilter}
                     sx={{
+                        fontSize: '15px',
+                        textTransform: 'none',
+                        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                        gap: '8px',
                         borderRadius: '5px',
                         border: '1px solid #bcbcbc', // Add border to mimic outlined style
+                        marginLeft: '16px',
                         color: filterOpen ? 'primary.main' : '#626262',
-                        transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', // Flip icon when toggled
                         '&:hover': { backgroundColor: '#f0f0f0' },
                     }}
                 >
-                    <TuneIcon />
+                    Filters
+                    <TuneIcon sx={{ transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', }} />
                 </IconButton>
+                <IconButton
+                    onClick={handleOpenDialog}
+                    sx={{
+                        bgcolor: 'primary.main',
+                        fontSize: '15px',
+                        textTransform: 'none',
+                        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                        gap: '6px',
+                        borderRadius: '5px',
+                        marginLeft: '16px',
+                        color: '#fff',
+                        '&:hover': { bgcolor: '#0077e5' },
+                    }}
+                >
+                    <AddIcon />
+                    <Typography sx={{ marginRight: '4px', }}>Create shift</Typography>
+
+                </IconButton>
+                {currentShift && (
+                    <ShiftComponent
+                        date={dayjs().format('YYYY-MM-DD')}
+                        onSave={handleSaveShift}
+                        open={handleOpenDialog}
+                        onClose={handleCloseDialog}
+                    />
+                )}
             </Toolbar>
 
             <Collapse in={filterOpen}>
                 <Filter onFiltersChange={handleFiltersChange} />
             </Collapse>
+
             <Shifts week={selectedWeek} month={selectedMonth} year={selectedYear} filters={currentFilters} viewMode={viewMode} />
-        </Box>
+
+
+        </Box >
+
+
+
+
+
     );
 };
 
