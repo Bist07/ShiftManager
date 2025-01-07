@@ -34,7 +34,7 @@ const ShiftSelector = () => {
         roleFilters: [],
     });
     const [viewMode, setViewMode] = useState('week'); // State to toggle between 'week' and 'month' view
-    const { shifts, refetchShifts } = useShifts(selectedMonth, selectedYear, currentFilters);
+    const { refetchShifts } = useShifts(selectedMonth, selectedYear);
     const [currentShift, setCurrentShift] = useState(null);
 
     const handleFiltersChange = (updatedFilters) => {

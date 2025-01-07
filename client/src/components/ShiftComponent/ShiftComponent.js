@@ -16,15 +16,14 @@ import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import { isInvalid } from '../../utils/utils';
 import { validateShiftAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
 //Hooks import
-import useAvailability from '../../hooks/useAvailability'
+import useAvailability from '../../hooks/useAvailability';
 //Misc
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
 
 
-const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open, }) => {
-
-
+const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open, shifts }) => {
+    console.log(shifts)
     const [error, setError] = useState('');
     const [repeat, setRepeat] = React.useState(false);
     const { availability } = useAvailability();
@@ -112,8 +111,11 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
             };
         }
 
+        // const date_ids = await
+
         // Check availability before proceeding
         const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+        const isScheduled = ValidateShift(shiftData.e_id, date_ids, shiftData.start_time, shiftData.end_time, shifts)
         if (!isAvailable && !ignoreConflict) {
             const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
             setConflictDetails(conflicts);

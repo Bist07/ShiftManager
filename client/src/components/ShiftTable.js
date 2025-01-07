@@ -14,10 +14,12 @@ import ShiftComponent from './ShiftComponent/ShiftComponent';
 import { getLocalDate, mapWeekToDays } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import ShiftDetails from './ShiftDetails';
+import { transformShifts } from '../utils/shiftUtils';
 
 const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
     const mappedWeek = mapWeekToDays(week); // Map week to specific dates
     const { shifts, refetchShifts } = useShifts(month, year, filter);
+    const transformedShifts = transformShifts(shifts, filter);
     const [currentShift, setCurrentShift] = useState(null);
 
     const handleOpenDialog = (shift, date) => {
@@ -31,7 +33,8 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
             role_id: shiftDetails[0]?.role_id,
             date,
             start_time: shiftDetails[0]?.start_time || 'N/A',
-            end_time: shiftDetails[0]?.end_time || 'N/A'
+            end_time: shiftDetails[0]?.end_time || 'N/A',
+            transformedShifts
         });
 
 
@@ -79,7 +82,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {shifts.map((shift) => (
+                        {transformedShifts.map((shift) => (
                             <TableRow key={shift.e_id}>
                                 <TableCell component="th" scope="row" sx={{ width: '18%', padding: 0 }}>
                                     <EmployeeCard title={shift.name} description="Employee" />
@@ -112,6 +115,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                     name={currentShift.name}
                     e_id={currentShift.e_id}
                     date={currentShift.date}
+                    transformedShifts={transformedShifts}
                     onSave={handleSaveShift}
                     open={handleOpenDialog}
                     onDelete={handleDeleteShift}

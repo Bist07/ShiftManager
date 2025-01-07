@@ -1,4 +1,4 @@
-// /hooks/useShifts.js
+// /hooks/useLocations.js
 import { useState, useEffect } from 'react';
 import { fetchLocations } from '../services/api/locationApi';
 

@@ -14,10 +14,12 @@ import ShiftDetails from './ShiftDetails';
 import { getDaysInMonth, getLocalDate } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import AddIcon from '@mui/icons-material/Add';
-import ShiftComponent from './ShiftComponent/ShiftComponent'
+import ShiftComponent from './ShiftComponent/ShiftComponent';
+import { transformShifts } from '../utils/shiftUtils';
 
 const MonthlyShiftTable = ({ month, year, filter }) => {
-    const { shifts, refetchShifts } = useShifts(month, year, filter);
+    const { shifts, refetchShifts } = useShifts(month, year);
+    const transformedShifts = transformShifts(shifts, filter);
     const [currentShift, setCurrentShift] = useState(null);
     let daysInMonth = getDaysInMonth(month, year);
 
@@ -56,7 +58,7 @@ const MonthlyShiftTable = ({ month, year, filter }) => {
         let currentWeek = [];
 
         daysInMonth.forEach((date, index) => {
-            const shiftsForDay = shifts
+            const shiftsForDay = transformedShifts
                 .flatMap((shift) => {
                     return (shift.shiftDays?.[date] || []).map((shiftDetail) => ({
                         ...shiftDetail,

@@ -68,3 +68,27 @@ export const getScheduledHours = (e_id, shifts, period) => {
 
     return scheduledHours;
 }
+
+export const ValidateShift = (e_id, day, days = [], start_time, end_time, shifts) => {
+    // Ensure valid input
+    if (!e_id || !day || !start_time || !end_time || !shifts) {
+        return false;
+    }
+
+    // Ensure the day is included in the days array
+    if (!days.includes(day)) {
+        days = [...days, day];
+    }
+
+    // Get availability slots for the specified days using the helper function
+    const employeeAvailability = getEmployeeAvailabilityForDays(e_id, days, availability);
+
+    if (!employeeAvailability || employeeAvailability.length === 0) {
+        return false; // No availability found for the employee or the specific days
+    }
+
+    // Check if the shift falls within any available time slot
+    return employeeAvailability.some(({ availabilityStart, availabilityEnd }) =>
+        start_time >= availabilityStart && end_time <= availabilityEnd
+    );
+};

@@ -1,9 +1,8 @@
 // /hooks/useShifts.js
 import { useState, useEffect } from 'react';
 import { fetchShifts } from '../services/api/shiftApi';
-import { transformShifts } from '../utils/shiftUtils';
 
-const useShifts = (month, year, filters) => {
+const useShifts = (month, year) => {
     const [shifts, setShifts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,8 +13,7 @@ const useShifts = (month, year, filters) => {
         try {
 
             const data = await fetchShifts(month, year);
-            const transformedShifts = transformShifts(data, filters);
-            setShifts(transformedShifts);
+            setShifts(data);
 
         } catch (err) {
             setError('Failed to load data. Please try again later.');
@@ -29,7 +27,7 @@ const useShifts = (month, year, filters) => {
         if (month && year) {
             fetchAndTransformShifts();
         }
-    }, [month, year, filters]);
+    }, [month, year]);
 
     const refetchShifts = () => {
         fetchAndTransformShifts();
