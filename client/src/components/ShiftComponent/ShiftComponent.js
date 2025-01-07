@@ -114,7 +114,6 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
 
         // Check availability before proceeding
         const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-        console.log(isAvailable)
         if (!isAvailable && !ignoreConflict) {
             const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
             setConflictDetails(conflicts);
