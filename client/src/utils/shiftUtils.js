@@ -89,8 +89,6 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
         // Fetch shifts for the employee within the given date range
         const shifts = await fetchShiftsForValidation(e_id, date_ids);
 
-        // Log fetched shifts for debugging
-        console.log('Fetched shifts:', shifts);
 
         // Check for conflicts based on matching date_id
         for (const shift of shifts) {

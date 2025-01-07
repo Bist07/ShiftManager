@@ -32,6 +32,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
     date = new Date(date).toISOString().split('T')[0];
     const dayOfWeekIndex = dayjs(date).day();
+    const [initialData, setInitialData] = useState(null); // Store initial data
 
     let emp_id;
     if (typeof e_id === "undefined") {
@@ -54,17 +55,18 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         if (open) {
 
             // If editing, initialize the form with the shift data
-            setFormData({
+            const data = {
                 shift_id: shift_id || '',
                 start_time: start_time || '',
                 end_time: end_time || '',
                 date: date || '',
-                repeat: "",
-                location_id: location_id || "",
+                repeat: '',
+                location_id: location_id || '',
                 role_id: role_id || '',
-                e_id: emp_id || "",
-            });
-
+                e_id: emp_id || '',
+            };
+            setInitialData(data);
+            setFormData(data);
             setError('');
         }
     }, [open]);
@@ -110,6 +112,12 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
                 endDate: shiftData.date,
             };
         }
+        const changes = {};
+        for (const key in formData) {
+            if (formData[key] !== initialData[key]) {
+                changes[key] = { oldValue: initialData[key], newValue: formData[key] };
+            }
+        }
 
         // Check availability before proceeding
         const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
@@ -124,7 +132,19 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         try {
             if (shift_id) {
                 // Editing an existing shift
-                await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id);
+                if (Object.keys(changes).length > 0) {
+                    // Call different APIs based on the changes
+                    if ('start_time' in changes || 'end_time' in changes || 'location_id' in changes || 'role_id' in changes) {
+                        // Update shift timing
+                        await updateShift(shift_id, formData.start_time, formData.end_time, formData.location_id, formData.role_id);
+                    }
+                    if ('e_id' in changes || 'date' in changes) {
+
+
+                    }
+
+                }
+
             } else {
                 // Creating a new shift
                 await createBulkShift(
