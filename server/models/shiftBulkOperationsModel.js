@@ -4,7 +4,7 @@ import { getDatesForShift } from '../controllers/dateController.js';
 import { query } from '../config/db.js'; // Import the query function
 
 // Function to create shifts in bulk and assign them to employees with a transaction
-export const createAndAssignShiftsInBulk = async (day, repeat, e_id, location_id, start_time, end_time) => {
+export const createAndAssignShiftsInBulk = async (day, repeat, e_id, role_id, location_id, start_time, end_time) => {
     const conn = await query('BEGIN'); // Start the transaction
     try {
         // Step 1: Get date IDs based on the given parameters (daysOfWeek, startDate, endDate, and frequency)
@@ -15,7 +15,7 @@ export const createAndAssignShiftsInBulk = async (day, repeat, e_id, location_id
         }
 
         // Step 2: Create shifts in bulk for the fetched date IDs
-        const shiftIds = await createShiftsForDatesBulk(location_id, start_time, end_time, dateIds);
+        const shiftIds = await createShiftsForDatesBulk(location_id, role_id, start_time, end_time, dateIds);
 
         if (shiftIds.length === 0) {
             throw new Error('No valid shifts found for the given parameters.');

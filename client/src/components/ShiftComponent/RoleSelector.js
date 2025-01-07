@@ -9,22 +9,22 @@ const RoleSelector = ({ formData, handleChange }) => {
 
     useEffect(() => {
         if (formData.role_id && roles.length > 0) {
-            const initialRole = formData.role_id.map((id) => {
-                const role = roles.find((pos) => pos.role_id === id);
-                return {
-                    value: id,
-                    label: role ? `${role.name}` : id,
-                };
-            });
-            setSelectedRole(initialRole);
+            const role = roles.find((pos) => pos.role_id === formData.role_id);
+            const initialRole = {
+                value: formData.role_id,
+                label: role ? `${role.name}` : formData.role_id,
+            };
+            setSelectedRole([initialRole]); // Still use an array if `setSelectedRole` expects one
         }
     }, [formData.role_id, roles]);
 
-    const handleRoleChange = (selectedOptions) => {
-        setSelectedRole(selectedOptions || []);
-        const selectedIds = selectedOptions ? selectedOptions.map((opt) => opt.value) : [];
-        handleChange("role_id", selectedIds); // Pass array of selected IDs to parent
+
+    const handleRoleChange = (selectedOption) => {
+        setSelectedRole(selectedOption || null);
+        const selectedId = selectedOption ? selectedOption.value : null; // Extract the value from the single object
+        handleChange("role_id", selectedId); // Pass the single selected ID to parent
     };
+
 
     const roleOptions = roles.map((role) => ({
         value: role.role_id,
@@ -35,7 +35,6 @@ const RoleSelector = ({ formData, handleChange }) => {
         <div>
             <FormControl fullWidth margin="normal">
                 <CreatableSelect
-                    isMulti
                     isClearable
                     isLoading={loading}
                     options={roleOptions}

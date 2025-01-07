@@ -29,12 +29,12 @@ export const getShifts = async (req, res) => {
 
 // Controller to update a shift
 export const updateShift = async (req, res) => {
-    const { shift_id, start_time, end_time, location_id } = req.body;
+    const { shift_id, start_time, end_time, location_id, role_id } = req.body;
 
-    if (validateRequest({ shift_id, start_time, end_time, location_id }, res)) return;
+    if (validateRequest({ shift_id, start_time, end_time, location_id, role_id }, res)) return;
 
     try {
-        const result = await updateShiftInDB(start_time, end_time, location_id, shift_id);
+        const result = await updateShiftInDB(start_time, end_time, location_id, role_id, shift_id);
 
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Shift updated successfully' });
@@ -49,12 +49,12 @@ export const updateShift = async (req, res) => {
 
 // Controller to create a shift
 export const createShift = async (req, res) => {
-    const { date, repeat, e_id, location_id, start_time, end_time } = req.body;
+    const { date, repeat, e_id, role_id, location_id, start_time, end_time } = req.body;
 
-    if (validateRequest({ date, e_id, location_id, start_time, end_time }, res)) return;
+    if (validateRequest({ date, e_id, role_id, location_id, start_time, end_time }, res)) return;
 
     try {
-        const result = await createShiftInDB(date, repeat, e_id, location_id, start_time, end_time);
+        const result = await createShiftInDB(date, repeat, e_id, role_id, location_id, start_time, end_time);
 
         if (result.success) {
             return res.status(200).json({
@@ -92,7 +92,7 @@ export const deleteShift = async (shift_id) => {
 }
 
 
-export const createShiftsForDatesBulk = async (locationId, startTime, endTime, dateIds) => {
+export const createShiftsForDatesBulk = async (locationId, role_id, startTime, endTime, dateIds) => {
     try {
 
         // Validate inputs
@@ -101,7 +101,7 @@ export const createShiftsForDatesBulk = async (locationId, startTime, endTime, d
         }
 
         // Call the createShiftsForDatesBulk function from the model
-        const shiftIds = await createShiftsForDatesBulkInDB(locationId, startTime, endTime, dateIds);
+        const shiftIds = await createShiftsForDatesBulkInDB(locationId, role_id, startTime, endTime, dateIds);
 
         if (shiftIds.length === 0) {
             throw new Error('No shifts were created.');

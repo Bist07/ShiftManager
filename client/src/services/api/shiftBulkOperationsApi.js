@@ -1,13 +1,14 @@
 // src/api/shiftApi.js
 import axiosInstance from './axiosInstance';
 
-export const createBulkShift = async (day, repeat, e_id, location_id, start_time, end_time) => {
+export const createBulkShift = async (day, repeat, e_id, location_id, role_id, start_time, end_time) => {
     try {
         // Use a POST request for updating the shift
         const response = await axiosInstance.post('/api/shiftBulkOperations/create', {
             day,
             repeat,
             e_id,
+            role_id,
             location_id,
             start_time,
             end_time,

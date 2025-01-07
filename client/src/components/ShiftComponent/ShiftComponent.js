@@ -1,72 +1,73 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box } from '@mui/material';
+//Form Selector imports
 import DatePicker from './DatePicker';
 import TimePickerComponent from './TimePickerComponent';
 import RepeatOptions from './RepeatOptions';
 import LocationSelector from './LocationSelector';
 import EmployeeSelector from './EmployeeSelector';
+import RoleSelector from './RoleSelector';
+//Api imports
 import { createBulkShift, deleteShiftsAndAssignments } from '../../services/api/shiftBulkOperationsApi';
 import { updateShift } from '../../services/api/shiftApi';
+//Icons import
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
+//Utils import
 import { isInvalid } from '../../utils/utils';
+import { validateShiftAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
+//Hooks import
+import useAvailability from '../../hooks/useAvailability'
+//Misc
+import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
 
-const ShiftForm = ({ shift_id, e_id, location_id, start_time, end_time, date, onSave, onClose, onDelete, open, }) => {
-    let loc;
-    let emp_id;
+
+const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open, }) => {
+
+
+    const [error, setError] = useState('');
+    const [repeat, setRepeat] = React.useState(false);
+    const { availability } = useAvailability();
+    const [openConflictDialog, setOpenConflictDialog] = useState(false); // State for the conflict dialog
+    const [ignoreConflict, setIgnoreConflict] = useState(true); // State for the conflict dialog
+    const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
     date = new Date(date).toISOString().split('T')[0];
-
-    if (typeof location_id === "undefined") {
-        loc = ""
-    } else {
-        loc = [location_id];
-    }
-
+    const dayName = dayjs(date).format('dddd');
+    const dayOfWeekIndex = dayjs(date).day();
+    let emp_id;
     if (typeof e_id === "undefined") {
         emp_id = ""
     } else {
         emp_id = [e_id];
     }
 
-    const dayName = dayjs(date).format('dddd');
-
     const [formData, setFormData] = useState({
         start_time: start_time || "",
         end_time: end_time || "",
         date: date || "",
         repeat: "",
-        location_id: loc || "",
+        role_id: role_id || '',
+        location_id: location_id || "",
         e_id: emp_id || "",
     });
 
-    const [error, setError] = useState('');
-    const [repeat, setRepeat] = React.useState(false);
 
     // Reset formData when the dialog is opened or date/e_id changes
     useEffect(() => {
         if (open) {
-            if (shift_id) {
-                // If editing, initialize the form with the shift data
-                setFormData({
-                    shift_id: shift_id || '',
-                    start_time: start_time || '',
-                    end_time: end_time || '',
-                    date: date || '',
-                    repeat: "",
-                    location_id: loc || "",
-                    e_id: emp_id || "",
-                });
-            } else {
-                // If creating, reset the form
-                setFormData({
-                    start_time: start_time || '',
-                    end_time: end_time || '',
-                    date: date || '',
-                    repeat: "",
-                    location_id: loc || "",
-                    e_id: emp_id || "",
-                });
-            }
+
+            // If editing, initialize the form with the shift data
+            setFormData({
+                shift_id: shift_id || '',
+                start_time: start_time || '',
+                end_time: end_time || '',
+                date: date || '',
+                repeat: "",
+                location_id: location_id || "",
+                role_id: role_id || '',
+                e_id: emp_id || "",
+            });
+
             setError('');
         }
     }, [open]);
@@ -83,10 +84,10 @@ const ShiftForm = ({ shift_id, e_id, location_id, start_time, end_time, date, on
     };
 
     const handleSave = async () => {
-        const { start_time, end_time, date, location_id, e_id } = formData;
+        const { start_time, end_time, date, location_id, e_id, role_id } = formData;
 
         // Validate required fields
-        if (!start_time || !end_time || !e_id || !location_id || !date) {
+        if (!start_time || !end_time || !e_id || !location_id || !date || !role_id) {
             setError('All fields are required.');
             return;
         }
@@ -106,27 +107,52 @@ const ShiftForm = ({ shift_id, e_id, location_id, start_time, end_time, date, on
             }
         }
 
-        try {
-            if (shift_id) {
-                // Editing an existing shift
-                await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id);
-            } else {
-                // Creating a new shift
-                await createBulkShift(
-                    shiftData.date,
-                    shiftData.repeat,
-                    shiftData.e_id,
-                    shiftData.location_id,
-                    shiftData.start_time,
-                    shiftData.end_time
-                );
-            }
+        // Check availability before proceeding
+        const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
 
-            onSave();
-            onClose();
-        } catch (err) {
-            setError('Failed to save the shift. Please try again.');
+        if (!isAvailable) {
+            const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+            setIgnoreConflict(false)
+            setConflictDetails(conflicts);
+            setOpenConflictDialog(true); // Open conflict dialog
         }
+
+        if (ignoreConflict) {
+            try {
+                if (shift_id) {
+                    // Editing an existing shift
+                    await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id,);
+                } else {
+                    // Creating a new shift
+                    await createBulkShift(
+                        shiftData.date,
+                        shiftData.repeat,
+                        shiftData.e_id,
+                        shiftData.role_id,
+                        shiftData.location_id,
+                        shiftData.start_time,
+                        shiftData.end_time
+                    );
+                }
+
+                onSave();
+                onClose();
+            } catch (err) {
+                setError('Failed to save the shift. Please try again.');
+            }
+        };
+    }
+
+    const handleIgnoreConflict = () => {
+        // Ignore the conflict and proceed with saving
+        setIgnoreConflict(true)
+        setOpenConflictDialog(false);
+    };
+
+    const handleEditConflict = () => {
+        // Allow editing the shift time again
+        setIgnoreConflict(false)
+        setOpenConflictDialog(false);
     };
 
     const handleDelete = async (shift_id) => {
@@ -140,12 +166,11 @@ const ShiftForm = ({ shift_id, e_id, location_id, start_time, end_time, date, on
         }
     };
 
-
-
     let isSaveDisabled =
         isInvalid(formData.start_time) ||
         isInvalid(formData.end_time) ||
         isInvalid(formData.e_id) ||
+        isInvalid(formData.role_id) ||
         isInvalid(formData.location_id) ||
         isInvalid(formData.date);
 
@@ -206,6 +231,7 @@ const ShiftForm = ({ shift_id, e_id, location_id, start_time, end_time, date, on
                     <RepeatOptions formData={formData} handleChange={handleFormChange} />
                 </Collapse>
                 <LocationSelector formData={formData} handleChange={handleFormChange} />
+                <RoleSelector formData={formData} handleChange={handleFormChange} />
                 <EmployeeSelector formData={formData} handleChange={handleFormChange} />
                 {error && <Typography color="error">{error}</Typography>}
             </DialogContent>
@@ -220,6 +246,15 @@ const ShiftForm = ({ shift_id, e_id, location_id, start_time, end_time, date, on
                     {shift_id ? 'Update' : 'Save'}
                 </Button>
             </DialogActions>
+
+            {/* Conflict Dialog */}
+            <ConflictDialog
+                open={openConflictDialog}
+                conflictDetails={conflictDetails}
+                onIgnore={handleIgnoreConflict}
+                onEdit={handleEditConflict}
+                onClose={() => setOpenConflictDialog(false)}
+            />
         </Dialog>
     );
 };

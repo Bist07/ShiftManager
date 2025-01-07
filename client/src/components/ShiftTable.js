@@ -28,6 +28,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
             e_id: shift?.e_id,
             shift_id: shiftDetails[0]?.shift_id,
             location_id: shiftDetails[0]?.location_id,
+            role_id: shiftDetails[0]?.role_id,
             date,
             start_time: shiftDetails[0]?.start_time || 'N/A',
             end_time: shiftDetails[0]?.end_time || 'N/A'
@@ -107,6 +108,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                     start_time={currentShift.start_time}
                     end_time={currentShift.end_time}
                     location_id={currentShift.location_id}
+                    role_id={currentShift.role_id}
                     name={currentShift.name}
                     e_id={currentShift.e_id}
                     date={currentShift.date}

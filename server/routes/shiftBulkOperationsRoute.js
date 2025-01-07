@@ -6,10 +6,10 @@ export const router = express.Router();
 
 //Post route to create a shift
 router.post('/create', async (req, res) => {
-    const { day, repeat, e_id, location_id, start_time, end_time } = req.body;
+    const { day, repeat, e_id, role_id, location_id, start_time, end_time } = req.body;
 
     try {
-        const result = await createAndAssignShiftsInBulk(day, repeat, e_id, location_id, start_time, end_time);
+        const result = await createAndAssignShiftsInBulk(day, repeat, e_id, role_id, location_id, start_time, end_time);
         res.status(200).json(result); // Send success response
     } catch (error) {
         console.error('Error in bulk shift creation:', error);

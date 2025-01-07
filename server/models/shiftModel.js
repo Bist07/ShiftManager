@@ -44,15 +44,15 @@ export const getShiftsByMonthAndYear = async (month, year) => {
 };
 
 // Function to update a shift in the database
-export const updateShiftInDB = async (start_time, end_time, location_id, shift_id) => {
+export const updateShiftInDB = async (start_time, end_time, location_id, role_id, shift_id) => {
     const sqlQuery = `
         UPDATE shifts
-        SET start_time = ?, end_time = ?, location_id = ?
+        SET start_time = ?, end_time = ?, location_id = ?, role_id = ?
         WHERE shift_id = ?;
     `;
 
     try {
-        const params = [start_time, end_time, location_id, shift_id];
+        const params = [start_time, end_time, location_id, role_id, shift_id];
         return await query(sqlQuery, params);
     } catch (error) {
         console.error('Error updating shift:', error);
@@ -60,14 +60,14 @@ export const updateShiftInDB = async (start_time, end_time, location_id, shift_i
     }
 };
 
-export const createShiftInDB = async (date, location_id, start_time, end_time) => {
+export const createShiftInDB = async (date, location_id, role_id, start_time, end_time) => {
     const sqlCreateShift = `
-        INSERT INTO shifts (location_id, start_time, end_time, date_id)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO shifts (location_id,role_id, start_time, end_time, date_id)
+        VALUES (?,?, ?, ?, ?)
     `;
 
     try {
-        const result = await query(sqlCreateShift, [location_id, start_time, end_time, date]);
+        const result = await query(sqlCreateShift, [location_id, role_id, start_time, end_time, date]);
         const shift_ids = result?.insertId.map(row => row.shift_id);
         return shift_ids;
     } catch (error) {
@@ -92,15 +92,15 @@ export const deleteShiftInDB = async (shift_id) => {
     }
 };
 
-export const createShiftsForDatesBulkInDB = async (locationId, startTime, endTime, dateIds) => {
+export const createShiftsForDatesBulkInDB = async (locationId, role_id, startTime, endTime, dateIds) => {
     try {
         // Construct the values for the insert
         const values = dateIds.map(dateId =>
-            `(${locationId}, '${startTime}', '${endTime}', ${dateId})`
+            `(${locationId},'${role_id}' ,'${startTime}', '${endTime}', ${dateId})`
         ).join(", ");  // Join all values with a comma
 
         const sqlCreateShiftBulk = `
-            INSERT INTO shifts (location_id, start_time, end_time, date_id)
+            INSERT INTO shifts (location_id, role_id,start_time, end_time, date_id)
             VALUES ${values}
         `;
 
