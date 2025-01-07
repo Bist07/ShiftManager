@@ -34,7 +34,6 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
             date,
             start_time: shiftDetails[0]?.start_time || 'N/A',
             end_time: shiftDetails[0]?.end_time || 'N/A',
-            transformedShifts
         });
 
 
@@ -115,7 +114,6 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                     name={currentShift.name}
                     e_id={currentShift.e_id}
                     date={currentShift.date}
-                    transformedShifts={transformedShifts}
                     onSave={handleSaveShift}
                     open={handleOpenDialog}
                     onDelete={handleDeleteShift}

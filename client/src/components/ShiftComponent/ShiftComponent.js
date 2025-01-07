@@ -31,7 +31,6 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
     const [ignoreConflict, setIgnoreConflict] = useState(false); // State for the conflict dialog
     const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
     date = new Date(date).toISOString().split('T')[0];
-    const dayName = dayjs(date).format('dddd');
     const dayOfWeekIndex = dayjs(date).day();
 
     let emp_id;
