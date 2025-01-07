@@ -6,7 +6,7 @@ const useShifts = (month, year) => {
     const [shifts, setShifts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    month = month + 1;
     const fetchAndTransformShifts = async () => {
         setLoading(true);
         setError(null);

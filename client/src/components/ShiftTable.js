@@ -15,11 +15,13 @@ import { getLocalDate, mapWeekToDays } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import ShiftDetails from './ShiftDetails';
 import { transformShifts } from '../utils/shiftUtils';
+import useEmployee from '../hooks/useEmployee';
 
 const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
+    const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
     const mappedWeek = mapWeekToDays(week); // Map week to specific dates
     const { shifts, refetchShifts } = useShifts(month, year, filter);
-    const transformedShifts = transformShifts(shifts, filter);
+    const transformedShifts = transformShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
 
     const handleOpenDialog = (shift, date) => {
@@ -35,8 +37,6 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
             start_time: shiftDetails[0]?.start_time || 'N/A',
             end_time: shiftDetails[0]?.end_time || 'N/A',
         });
-
-
     };
 
     const handleCloseDialog = () => {
@@ -81,19 +81,23 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {transformedShifts.map((shift) => (
-                            <TableRow key={shift.e_id}>
+                        {employees.map((emp) => (
+                            <TableRow key={emp.e_id}>
                                 <TableCell component="th" scope="row" sx={{ width: '18%', padding: 0 }}>
-                                    <EmployeeCard title={shift.name} description="Employee" />
+                                    <EmployeeCard title={emp.name} description="Employee" />
                                 </TableCell>
+
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
+                                    // Find the shift for the employee on that day
+                                    const shiftForDay = transformedShifts.find(shift => shift.e_id === emp.e_id);
+
                                     return (
                                         <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
                                             <Button sx={{ padding: 0, margin: 0 }}
-                                                onClick={() => handleOpenDialog(shift, date)}
+                                                onClick={() => handleOpenDialog(shiftForDay, date)}
                                             >
-                                                <ShiftDetails shift={shift} date={date} />
+                                                <ShiftDetails shift={shiftForDay} date={date} />
                                             </Button>
                                         </TableCell>
                                     );

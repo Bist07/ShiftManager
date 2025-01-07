@@ -8,8 +8,6 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TuneIcon from '@mui/icons-material/Tune';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { fetchDates } from '../../services/api/dateApi';
-import Shifts from '../Shifts';
 import Filter from './Filters/Filters';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -18,13 +16,16 @@ import AddIcon from '@mui/icons-material/Add';
 import ShiftDialog from '../ShiftDialog/ShiftDialog';
 import useShifts from '../../hooks/useShifts';
 import dayjs from 'dayjs';
+import ShiftTable from '../ShiftTable';
+import MonthlyShiftTable from '../MonthlyShiftTable';
 
 const ScheduleToolbar = () => {
     const [weeks, setWeeks] = useState([]);
     const [weekAnchorEl, setWeekAnchorEl] = useState(null);
     const [selectedWeek, setSelectedWeek] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1); // Default to current month
+    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Default to current month
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filterOpen, setFilterOpen] = useState(false); // State for collapsible filter section
@@ -44,27 +45,11 @@ const ScheduleToolbar = () => {
     const openWeekMenu = Boolean(weekAnchorEl);
 
     useEffect(() => {
-        const fetchAndGenerateWeeks = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const data = await fetchDates(selectedMonth, selectedYear);
-                const newWeeks = generateWeeks(data);
-                setWeeks(newWeeks);
-                if (!selectedWeek) {
-                    setSelectedWeek(newWeeks[0]); // Set default selected week to the first one
-                }
-            } catch (err) {
-                setError('Failed to load data. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (selectedMonth && selectedYear) {
-            fetchAndGenerateWeeks();
-        }
+        const generatedWeeks = generateWeeks(selectedMonth, selectedYear);
+        setWeeks(generatedWeeks)
+        setSelectedWeek(generatedWeeks[0])
     }, [selectedMonth, selectedYear]);
+
 
     const handleSelectWeek = (week) => {
         setSelectedWeek(week);
@@ -82,8 +67,8 @@ const ScheduleToolbar = () => {
                 setSelectedWeek(weeks[currentIndex - 1]);
             } else {
                 // Handle going to the previous month if needed
-                if (selectedMonth === 1) {
-                    setSelectedMonth(12);
+                if (selectedMonth === 0) {
+                    setSelectedMonth(11);
                     setSelectedWeek(weeks[0])
                     setSelectedYear((prevYear) => prevYear - 1);
                 } else {
@@ -93,8 +78,8 @@ const ScheduleToolbar = () => {
             }
         } else {
 
-            if (selectedMonth === 1) {
-                setSelectedMonth(12)
+            if (selectedMonth === 0) {
+                setSelectedMonth(11)
                 setSelectedYear((prevYear) => prevYear - 1);
             } else {
                 setSelectedMonth((prevMonth) => prevMonth - 1);
@@ -109,8 +94,8 @@ const ScheduleToolbar = () => {
                 setSelectedWeek(weeks[currentIndex + 1]);
             } else {
                 // Handle going to the next month if needed
-                if (selectedMonth === 12) {
-                    setSelectedMonth(1);
+                if (selectedMonth === 11) {
+                    setSelectedMonth(0);
                     setSelectedWeek(weeks[0])
                     setSelectedYear((prevYear) => prevYear + 1);
                 } else {
@@ -119,8 +104,8 @@ const ScheduleToolbar = () => {
                 }
             }
         } else {
-            if (selectedMonth === 12) {
-                setSelectedMonth(1)
+            if (selectedMonth === 11) {
+                setSelectedMonth(0)
                 setSelectedYear((prevYear) => prevYear + 1);
             } else {
                 setSelectedMonth((prevMonth) => prevMonth + 1);
@@ -129,12 +114,9 @@ const ScheduleToolbar = () => {
         }
     };
 
-
     const handleOpenDialog = () => {
         setCurrentShift({
         });
-
-
     };
 
     const handleCloseDialog = () => {
@@ -201,10 +183,10 @@ const ScheduleToolbar = () => {
                             slotProps={{ textField: { size: 'small' } }}
                             label=""
                             views={['year', 'month']}
-                            value={new Date(selectedYear, selectedMonth - 1)}
+                            value={new Date(selectedYear, selectedMonth)}
                             onChange={(newDate) => {
                                 if (newDate) {
-                                    setSelectedMonth(newDate.getMonth() + 1);
+                                    setSelectedMonth(newDate.getMonth());
                                     setSelectedYear(newDate.getFullYear());
                                 }
                             }}
@@ -232,7 +214,7 @@ const ScheduleToolbar = () => {
                             }}
                         >
                             {selectedWeek
-                                ? `${formatWeek(selectedWeek[0].date)} - ${formatWeek(selectedWeek[selectedWeek.length - 1].date)}`
+                                ? `${formatWeek(selectedWeek[0])} - ${formatWeek(selectedWeek[selectedWeek.length - 1])}`
                                 : 'Select Week'}
                             <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#bcbcbc' }} />
                         </Button>
@@ -246,7 +228,7 @@ const ScheduleToolbar = () => {
                     >
                         {weeks.map((week, index) => (
                             <MenuItem key={index} onClick={() => handleSelectWeek(week)}>
-                                {`${formatWeek(week[0].date)} - ${formatWeek(week[week.length - 1].date)}`}
+                                {`${formatWeek(week[0])} - ${formatWeek(week[week.length - 1])}`}
                             </MenuItem>
                         ))}
                     </Menu>
@@ -319,9 +301,17 @@ const ScheduleToolbar = () => {
                 <Filter onFiltersChange={handleFiltersChange} />
             </Collapse>
 
-            <Shifts week={selectedWeek} month={selectedMonth} year={selectedYear} filters={currentFilters} viewMode={viewMode} />
-
-
+            <Box>
+                {(
+                    viewMode === 'week' ? (
+                        <ShiftTable week={selectedWeek} month={selectedMonth} year={selectedYear} filter={currentFilters} />
+                    ) : viewMode === 'month' ? (
+                        <MonthlyShiftTable month={selectedMonth} year={selectedYear} filter={currentFilters} />
+                    ) : (
+                        <Typography sx={{ p: 2 }}>Invalid view mode.</Typography>
+                    )
+                )}
+            </Box>
         </Box >
 
 

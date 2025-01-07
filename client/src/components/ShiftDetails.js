@@ -7,31 +7,33 @@ import { getHours } from '../utils/dateUtils';
 const ShiftDetails = ({ shift, date, roles, onClick }) => {
 
     if (date) {
-        const shiftForDay = shift.shiftDays[date]; // This gives you the array for that date
-        const startTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].start_time : null;
-        const endTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].end_time : null;
-        const role = shiftForDay && shiftForDay[0] ? shiftForDay[0].role_name : null;
+        if (shift) {
+            const shiftForDay = shift.shiftDays[date]; // This gives you the array for that date
+            const startTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].start_time : null;
+            const endTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].end_time : null;
+            const role = shiftForDay && shiftForDay[0] ? shiftForDay[0].role_name : null;
 
-        if (startTime && endTime) {
-            const { diffHours, diffRemainingMinutes, formatted } = getHours(startTime, endTime);
-            return (
-                <Card sx={{ maxWidth: 345, borderRadius: 2, boxShadow: 3 }}>
-                    <CardActionArea sx={{ display: 'flex', flexDirection: 'column' }}>
-                        <CardContent>
-                            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main', fontSize: '14px' }}>
-                                {formatTime(startTime)} - {formatTime(endTime)}
-                            </Typography>
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <Typography variant="body1" sx={{ fontSize: '12px', color: 'text.secondary' }}>
-                                    {role} • {formatted}
+            if (startTime && endTime) {
+                const { diffHours, diffRemainingMinutes, formatted } = getHours(startTime, endTime);
+                return (
+                    <Card sx={{ maxWidth: 345, borderRadius: 2, boxShadow: 3 }}>
+                        <CardActionArea sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <CardContent>
+                                <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main', fontSize: '14px' }}>
+                                    {formatTime(startTime)} - {formatTime(endTime)}
                                 </Typography>
-                            </Box>
-                        </CardContent>
-                    </CardActionArea>
-                </Card>
-            );
-        }
+                                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                    <Typography variant="body1" sx={{ fontSize: '12px', color: 'text.secondary' }}>
+                                        {role} • {formatted}
+                                    </Typography>
+                                </Box>
+                            </CardContent>
+                        </CardActionArea>
+                    </Card>
+                );
+            }
 
+        }
         // If no valid shift times, show "Add" card with hover effect
         return (
             <Card
@@ -57,6 +59,7 @@ const ShiftDetails = ({ shift, date, roles, onClick }) => {
                 </CardActionArea>
             </Card>
         );
+
     }
 
     const { diffHours, diffRemainingMinutes, formatted } = getHours(shift.start_time, shift.end_time);

@@ -14,46 +14,50 @@ export const formatTime = (time) => {
 export const formatDate = (isoString) => {
     const date = new Date(isoString);
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const month = String(date.getMonth()).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 };
 
 export const formatWeek = (isoString) => {
-    const localDate = getLocalDate(isoString);
-    const formattedDate = `${localDate.getDate()} ${localDate.toLocaleString('default', { month: 'short' })}`;
+    const date = getLocalDate(isoString);
+    const formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
     return formattedDate;
 };
 
-export const generateWeeks = (dates) => {
+export const generateWeeks = (month, year) => {
     const newWeeks = [];
     let week = [];
 
-    dates.forEach((item) => {
-        // Add the current date and date_id to the current week
-        const newDate = formatDate(item.date);
-        week.push({
-            date: newDate,
-            date_id: item.date_id
-        });
+    // Get the first day of the month
+    const days = getDaysInMonth(month, year);
 
-        // Check if it's the last day of the week (Saturday, 7, 14, 21, etc.)
-        if (new Date(item.date).getDate() % 7 === 0) {
+    // Iterate through all days of the month
+    for (let i = 0; i <= days.length - 1; i++) {
+        // Add the current date to the current week
+        week.push(days[i]);
+
+        // Check if it's the last day of the week (Saturday or 7th, 14th, 21st, etc.)
+        if (dayjs(days[i]).day() === 6) {  // dayjs().day() returns 6 for Saturday
             newWeeks.push(week);  // Push the current week to the newWeeks array
             week = [];  // Reset the week for the next set of dates
         }
-    });
+    }
 
+    // If there are remaining days in the last week, add it to the newWeeks array
     if (week.length > 0) {
-        newWeeks.push(week);  // Push any remaining days as the last week
+        newWeeks.push(week);
     }
 
     return newWeeks;
 };
 
 export const getLocalDate = (date) => {
-    const [year, month, day] = (date).split('-');
+    const [year, month, day] = date.split('-');
+
+    // Subtract 1 from the month to adjust for zero-indexing
     const localDate = new Date(year, month - 1, day);
+
     return localDate;
 };
 
@@ -62,21 +66,20 @@ export const mapWeekToDays = (week) => {
         return {}; // Return an empty object if the week is null or an empty array
     }
     const mappedWeek = {};
+    week.forEach((date) => {
 
-    week.forEach((dayObj) => {
-
-        const localDate = getLocalDate(dayObj.date);
+        const localDate = getLocalDate(date);
         const dayName = new Date(localDate).toLocaleString('en-us', { weekday: 'long' }); // Get day name (e.g., "Sunday")
 
         // Directly store the date, no need for an array
-        mappedWeek[dayName] = dayObj.date;
+        mappedWeek[dayName] = date;
     });
+    console.log(mappedWeek)
     return mappedWeek;
 };
 
-
 export const getDaysInMonth = (month, year) => {
-    const firstDay = dayjs(new Date(year, month - 1, 1)); // First day of the month
+    const firstDay = dayjs(new Date(year, month, 1)); // First day of the month
     const lastDay = firstDay.endOf('month'); // Last day of the month
 
     const days = [];
