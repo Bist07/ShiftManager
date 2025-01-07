@@ -40,7 +40,6 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
     } else {
         emp_id = [e_id];
     }
-
     const [formData, setFormData] = useState({
         start_time: start_time || "",
         end_time: end_time || "",
@@ -50,7 +49,6 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
         location_id: location_id || "",
         e_id: emp_id || "",
     });
-
 
     // Reset formData when the dialog is opened or date/e_id changes
     useEffect(() => {
@@ -117,7 +115,7 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
             setOpenConflictDialog(true); // Open conflict dialog
         }
 
-        if (ignoreConflict) {
+        if (!ignoreConflict) {
             try {
                 if (shift_id) {
                     // Editing an existing shift
@@ -133,18 +131,61 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
                         shiftData.start_time,
                         shiftData.end_time
                     );
-                }
 
+                }
                 onSave();
-                onClose();
             } catch (err) {
                 setError('Failed to save the shift. Please try again.');
             }
-        };
+        }
     }
 
-    const handleIgnoreConflict = () => {
+    const handleIgnoreConflict = async () => {
         // Ignore the conflict and proceed with saving
+        const { start_time, end_time, date, location_id, e_id, role_id } = formData;
+
+        // Validate required fields
+        if (!start_time || !end_time || !e_id || !location_id || !date || !role_id) {
+            setError('All fields are required.');
+            return;
+        }
+
+        const shiftData = {
+            ...formData,
+            start_time: start_time,
+            end_time: end_time,
+        };
+
+        if (shiftData.repeat === "") {
+            shiftData.repeat = {
+                frequency: '1',
+                days: [dayName],
+                startDate: shiftData.date,
+                endDate: shiftData.date,
+            }
+        }
+
+        try {
+            if (shift_id) {
+                // Editing an existing shift
+                await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id,);
+            } else {
+                // Creating a new shift
+                await createBulkShift(
+                    shiftData.date,
+                    shiftData.repeat,
+                    shiftData.e_id,
+                    shiftData.role_id,
+                    shiftData.location_id,
+                    shiftData.start_time,
+                    shiftData.end_time
+                );
+
+            }
+            onSave();
+        } catch (err) {
+            setError('Failed to save the shift. Please try again.');
+        }
         setIgnoreConflict(true)
         setOpenConflictDialog(false);
     };

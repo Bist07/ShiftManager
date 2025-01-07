@@ -30,15 +30,14 @@ VALUES ?
 
 
 export const assignShiftsToEmployeesBulkInDB = async (employeeIds, shiftIds) => {
-    console.log(employeeIds, shiftIds)
     try {
         // Construct the values for the insert: each employeeId with each shiftId
         const values = [];
-        employeeIds.forEach(employeeId => {
-            shiftIds.forEach(shiftId => {
-                values.push(`(${employeeId}, ${shiftId})`);  // Pair employeeId with shiftId
-            });
+
+        shiftIds.forEach(shiftId => {
+            values.push(`(${employeeIds}, ${shiftId})`);  // Pair employeeId with shiftId
         });
+
 
         // Join all pairs with commas
         const sqlAssignShiftBulk = `

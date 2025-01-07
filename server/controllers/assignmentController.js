@@ -28,7 +28,7 @@ export const deleteAssignment = async (e_id, shift_id) => {
 export const assignShiftsToEmployeesBulk = async (employeeIds, shiftIds) => {
     try {
         // Validate inputs
-        if (!Array.isArray(employeeIds) || !Array.isArray(shiftIds)) {
+        if (!employeeIds || !Array.isArray(shiftIds)) {
             throw new Error('No valid shifts found for the given parameters.');
         }
 
