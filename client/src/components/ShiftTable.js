@@ -10,7 +10,7 @@ import {
     Button,
 } from '@mui/material';
 import EmployeeCard from './EmployeeCard';
-import ShiftComponent from './ShiftComponent/ShiftComponent';
+import ShiftComponent from './ShiftDialog/ShiftDialog';
 import { getLocalDate, mapWeekToDays } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import ShiftDetails from './ShiftDetails';

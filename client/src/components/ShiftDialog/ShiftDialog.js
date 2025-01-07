@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box } from '@mui/material';
 //Form Selector imports
-import DatePicker from './DatePicker';
-import TimePickerComponent from './TimePickerComponent';
-import RepeatOptions from './RepeatOptions';
-import LocationSelector from './LocationSelector';
-import EmployeeSelector from './EmployeeSelector';
-import RoleSelector from './RoleSelector';
+import DatePicker from './ShiftDialogFields/DatePicker';
+import TimePickerComponent from './ShiftDialogFields/TimePickerComponent';
+import RepeatOptions from './ShiftDialogFields/RepeatOptions/RepeatOptions';
+import LocationSelector from './ShiftDialogFields/LocationSelector';
+import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
+import RoleSelector from './ShiftDialogFields/RoleSelector';
 //Api imports
 import { createBulkShift, deleteShiftsAndAssignments } from '../../services/api/shiftBulkOperationsApi';
 import { updateShift } from '../../services/api/shiftApi';
@@ -23,7 +23,7 @@ import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
 
 
-const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
+const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
     const [error, setError] = useState('');
     const [repeat, setRepeat] = React.useState(false);
     const { availability } = useAvailability();
@@ -262,4 +262,4 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
     );
 };
 
-export default ShiftForm;
+export default ShiftDialog;

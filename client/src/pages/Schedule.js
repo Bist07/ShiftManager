@@ -1,12 +1,12 @@
 import React from 'react';
-import ShiftSelector from '../components/ScheduleToolbar/ShiftSelector';
+import ScheduleToolbar from '../components/ScheduleToolbar/ScheduleToolbar';
 
 const Schedule = () => {
 
 
     return (
         <>
-            <ShiftSelector />
+            <ScheduleToolbar />
         </>
     );
 };

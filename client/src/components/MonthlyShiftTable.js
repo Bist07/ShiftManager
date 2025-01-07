@@ -14,7 +14,7 @@ import ShiftDetails from './ShiftDetails';
 import { getDaysInMonth, getLocalDate } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import AddIcon from '@mui/icons-material/Add';
-import ShiftComponent from './ShiftComponent/ShiftComponent';
+import ShiftComponent from './ShiftDialog/ShiftDialog';
 import { transformShifts } from '../utils/shiftUtils';
 
 const MonthlyShiftTable = ({ month, year, filter }) => {

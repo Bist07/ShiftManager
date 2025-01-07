@@ -10,16 +10,16 @@ import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { fetchDates } from '../../services/api/dateApi';
 import Shifts from '../Shifts';
-import Filter from './Filter/Filters';
+import Filter from './Filters/Filters';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AddIcon from '@mui/icons-material/Add';
-import ShiftComponent from '../ShiftComponent/ShiftComponent';
+import ShiftDialog from '../ShiftDialog/ShiftDialog';
 import useShifts from '../../hooks/useShifts';
 import dayjs from 'dayjs';
 
-const ShiftSelector = () => {
+const ScheduleToolbar = () => {
     const [weeks, setWeeks] = useState([]);
     const [weekAnchorEl, setWeekAnchorEl] = useState(null);
     const [selectedWeek, setSelectedWeek] = useState(null);
@@ -306,7 +306,7 @@ const ShiftSelector = () => {
 
                 </IconButton>
                 {currentShift && (
-                    <ShiftComponent
+                    <ShiftDialog
                         date={dayjs().format('YYYY-MM-DD')}
                         onSave={handleSaveShift}
                         open={handleOpenDialog}
@@ -331,4 +331,4 @@ const ShiftSelector = () => {
     );
 };
 
-export default ShiftSelector;
+export default ScheduleToolbar;
