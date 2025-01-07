@@ -29,7 +29,7 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
     const [repeat, setRepeat] = React.useState(false);
     const { availability } = useAvailability();
     const [openConflictDialog, setOpenConflictDialog] = useState(false); // State for the conflict dialog
-    const [ignoreConflict, setIgnoreConflict] = useState(true); // State for the conflict dialog
+    const [ignoreConflict, setIgnoreConflict] = useState(false); // State for the conflict dialog
     const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
     date = new Date(date).toISOString().split('T')[0];
     const dayName = dayjs(date).format('dddd');
@@ -70,6 +70,13 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
         }
     }, [open]);
 
+    useEffect(() => {
+        if (ignoreConflict) {
+            // Proceed with saving after ignoring conflicts
+            handleSave();
+        }
+    }, [ignoreConflict]);
+
     const handleFormChange = (key, e) => {
         setFormData((prev) => ({
             ...prev,
@@ -102,73 +109,23 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
                 days: [dayName],
                 startDate: shiftData.date,
                 endDate: shiftData.date,
-            }
+            };
         }
 
         // Check availability before proceeding
         const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-
-        if (!isAvailable) {
+        console.log(isAvailable)
+        if (!isAvailable && !ignoreConflict) {
             const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-            setIgnoreConflict(false)
             setConflictDetails(conflicts);
             setOpenConflictDialog(true); // Open conflict dialog
-        }
-
-        if (!ignoreConflict) {
-            try {
-                if (shift_id) {
-                    // Editing an existing shift
-                    await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id,);
-                } else {
-                    // Creating a new shift
-                    await createBulkShift(
-                        shiftData.date,
-                        shiftData.repeat,
-                        shiftData.e_id,
-                        shiftData.role_id,
-                        shiftData.location_id,
-                        shiftData.start_time,
-                        shiftData.end_time
-                    );
-
-                }
-                onSave();
-            } catch (err) {
-                setError('Failed to save the shift. Please try again.');
-            }
-        }
-    }
-
-    const handleIgnoreConflict = async () => {
-        // Ignore the conflict and proceed with saving
-        const { start_time, end_time, date, location_id, e_id, role_id } = formData;
-
-        // Validate required fields
-        if (!start_time || !end_time || !e_id || !location_id || !date || !role_id) {
-            setError('All fields are required.');
-            return;
-        }
-
-        const shiftData = {
-            ...formData,
-            start_time: start_time,
-            end_time: end_time,
-        };
-
-        if (shiftData.repeat === "") {
-            shiftData.repeat = {
-                frequency: '1',
-                days: [dayName],
-                startDate: shiftData.date,
-                endDate: shiftData.date,
-            }
+            return; // Exit without saving
         }
 
         try {
             if (shift_id) {
                 // Editing an existing shift
-                await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id,);
+                await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id);
             } else {
                 // Creating a new shift
                 await createBulkShift(
@@ -180,15 +137,21 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
                     shiftData.start_time,
                     shiftData.end_time
                 );
-
             }
             onSave();
         } catch (err) {
             setError('Failed to save the shift. Please try again.');
         }
-        setIgnoreConflict(true)
-        setOpenConflictDialog(false);
     };
+
+    const handleIgnoreConflict = async () => {
+        setIgnoreConflict(true);
+        setOpenConflictDialog(false);
+
+        // Proceed with save after ignoring conflicts
+        await handleSave();
+    };
+
 
     const handleEditConflict = () => {
         // Allow editing the shift time again
