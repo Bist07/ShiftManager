@@ -15,6 +15,7 @@ import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 //Utils import
 import { isInvalid } from '../../utils/utils';
 import { validateShiftAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
+import { ValidateShift } from '../../utils/shiftUtils';
 //Hooks import
 import useAvailability from '../../hooks/useAvailability';
 //Misc
@@ -22,8 +23,7 @@ import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
 
 
-const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open, shifts }) => {
-    console.log(shifts)
+const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
     const [error, setError] = useState('');
     const [repeat, setRepeat] = React.useState(false);
     const { availability } = useAvailability();
@@ -33,6 +33,7 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
     date = new Date(date).toISOString().split('T')[0];
     const dayName = dayjs(date).format('dddd');
     const dayOfWeekIndex = dayjs(date).day();
+
     let emp_id;
     if (typeof e_id === "undefined") {
         emp_id = ""
@@ -105,17 +106,15 @@ const ShiftForm = ({ shift_id, e_id, location_id, role_id, start_time, end_time,
         if (shiftData.repeat === "") {
             shiftData.repeat = {
                 frequency: '1',
-                days: [dayName],
+                days: [dayOfWeekIndex],
                 startDate: shiftData.date,
                 endDate: shiftData.date,
             };
         }
 
-        // const date_ids = await
-
         // Check availability before proceeding
         const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-        const isScheduled = ValidateShift(shiftData.e_id, date_ids, shiftData.start_time, shiftData.end_time, shifts)
+        const isScheduled = ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
         if (!isAvailable && !ignoreConflict) {
             const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
             setConflictDetails(conflicts);

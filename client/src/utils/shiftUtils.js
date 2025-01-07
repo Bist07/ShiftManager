@@ -1,4 +1,6 @@
 import { mapWeekToDays } from "./dateUtils";
+import { fetchDateIds } from '../services/api/dateApi';
+import { fetchShiftsForValidation } from "../services/api/shiftApi";
 
 export const getShiftDetails = (shift, date, formatTime) => {
     const shiftDetails = shift.shiftDays[date];
@@ -69,26 +71,53 @@ export const getScheduledHours = (e_id, shifts, period) => {
     return scheduledHours;
 }
 
-export const ValidateShift = (e_id, day, days = [], start_time, end_time, shifts) => {
-    // Ensure valid input
-    if (!e_id || !day || !start_time || !end_time || !shifts) {
+export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
+    // Validate input
+    if (!e_id || !repeat || !start_time || !end_time) {
+        console.error('Invalid input: e_id, repeat, start_time, or end_time is missing');
         return false;
     }
 
-    // Ensure the day is included in the days array
-    if (!days.includes(day)) {
-        days = [...days, day];
+    try {
+        // Fetch date IDs based on the repeat pattern
+        const date_ids = await fetchDateIds(repeat);
+        if (!date_ids || date_ids.length === 0) {
+            console.error('No date IDs found for the given repeat pattern');
+            return false;
+        }
+
+        // Fetch shifts for the employee within the given date range
+        const shifts = await fetchShiftsForValidation(e_id, date_ids);
+
+        // Log fetched shifts for debugging
+        console.log('Fetched shifts:', shifts);
+
+        // Check for conflicts based on matching date_id
+        for (const shift of shifts) {
+            if (date_ids.includes(shift.date_id)) {
+                // Match found, check for time overlap
+                const shiftStart = new Date(`1970-01-01T${shift.start_time}Z`);
+                const shiftEnd = new Date(`1970-01-01T${shift.end_time}Z`);
+                const newStart = new Date(`1970-01-01T${start_time}Z`);
+                const newEnd = new Date(`1970-01-01T${end_time}Z`);
+
+                if (
+                    (newStart >= shiftStart && newStart < shiftEnd) || // Overlaps at the start
+                    (newEnd > shiftStart && newEnd <= shiftEnd) ||    // Overlaps at the end
+                    (newStart <= shiftStart && newEnd >= shiftEnd)    // Completely overlaps existing shift
+                ) {
+                    console.error('Shift conflict detected for date_id:', shift.date_id, { shift, newStart, newEnd });
+                    return false;
+                }
+            }
+        }
+
+        // No conflicts found
+        return true;
+
+    } catch (error) {
+        console.error('Error validating shift:', error);
+        return false;
     }
-
-    // Get availability slots for the specified days using the helper function
-    const employeeAvailability = getEmployeeAvailabilityForDays(e_id, days, availability);
-
-    if (!employeeAvailability || employeeAvailability.length === 0) {
-        return false; // No availability found for the employee or the specific days
-    }
-
-    // Check if the shift falls within any available time slot
-    return employeeAvailability.some(({ availabilityStart, availabilityEnd }) =>
-        start_time >= availabilityStart && end_time <= availabilityEnd
-    );
 };
+

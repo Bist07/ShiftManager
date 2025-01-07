@@ -1,4 +1,4 @@
-import { getShiftsByMonthAndYear, updateShiftInDB, deleteShiftInDB, createShiftInDB, createShiftsForDatesBulkInDB } from '../models/shiftModel.js';
+import { getShiftsByMonthAndYear, updateShiftInDB, deleteShiftInDB, createShiftInDB, createShiftsForDatesBulkInDB, getShiftsInDB } from '../models/shiftModel.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Middleware for validating request fields
@@ -26,6 +26,25 @@ export const getShifts = async (req, res) => {
         res.status(500).send('An error occurred while fetching shifts');
     }
 };
+
+// Controller to handle getting shifts
+export const getShiftsForValidation = async (e_id, dateIds) => {
+    if (validateRequest({ e_id, dateIds })) return null; // Return null or empty array if validation fails
+
+    try {
+        const shifts = await getShiftsInDB(e_id, dateIds);
+
+        if (shifts.length === 0) {
+            return null; // Return null if no shifts are found
+        }
+
+        return shifts; // Return shifts data
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while fetching shifts'); // Throw error for route handler to catch
+    }
+};
+
 
 // Controller to update a shift
 export const updateShift = async (req, res) => {

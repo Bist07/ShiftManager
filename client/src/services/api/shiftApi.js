@@ -11,6 +11,16 @@ export const fetchShifts = async (month, year) => {
     }
 };
 
+export const fetchShiftsForValidation = async (e_id, date_ids) => {
+    try {
+        const response = await axiosInstance.get('/api/shifts/validation', {
+            params: { e_id, date_ids } // Send date_ids as a comma-separated string
+        });
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch shifts');
+    }
+};
 
 export const updateShift = async (shift_id, start_time, end_time, location_id, role_id) => {
     try {
