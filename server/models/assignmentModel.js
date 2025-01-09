@@ -1,14 +1,15 @@
 // models/shiftModel.js
 import { query } from '../config/db.js';
 
-export const deleteAssignmentInDB = async (e_id, shift_id) => {
+export const deleteAssignmentModel = async (e_id, shift_id) => {
+    console.log("called once")
     try {
         const sqlQuery = `
             DELETE FROM assignments
             WHERE employee_id = ? AND shift_id = ?
         `;
         const params = [e_id, shift_id];
-
+        console.log(params)
         const result = await query(sqlQuery, params);
 
         // Check if any rows were affected
@@ -29,7 +30,7 @@ VALUES ?
 `;
 
 
-export const assignShiftsToEmployeesBulkInDB = async (employeeIds, shiftIds) => {
+export const assignShiftsToEmployeesBulkModel = async (employeeIds, shiftIds) => {
     try {
         // Construct the values for the insert: each employeeId with each shiftId
         const values = [];
@@ -37,7 +38,6 @@ export const assignShiftsToEmployeesBulkInDB = async (employeeIds, shiftIds) => 
         shiftIds.forEach(shiftId => {
             values.push(`(${employeeIds}, ${shiftId})`);  // Pair employeeId with shiftId
         });
-
 
         // Join all pairs with commas
         const sqlAssignShiftBulk = `
@@ -57,7 +57,7 @@ export const assignShiftsToEmployeesBulkInDB = async (employeeIds, shiftIds) => 
 
 
 // Function to assign a shift to an employee
-export const assignShiftToEmployeeInDB = async (e_id, shift_id) => {
+export const assignShiftToEmployeeModel = async (e_id, shift_id) => {
 
     try {
         await query(sqlAssignShift, [e_id, shift_id]);
@@ -69,8 +69,8 @@ export const assignShiftToEmployeeInDB = async (e_id, shift_id) => {
 };
 
 
-// You can also add other utility bulk operations if needed, like deleting assignments in bulk
-export const deleteAssignmentsInBulkInDB = async (employeeIds, shiftIds) => {
+
+export const deleteAssignmentsInBulkModel = async (employeeIds, shiftIds) => {
     try {
         for (let e_id of employeeIds) {
             for (let shift_id of shiftIds) {

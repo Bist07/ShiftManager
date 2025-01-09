@@ -2,7 +2,7 @@
 import { query } from '../config/db.js';
 
 // Function to get shifts by month and year
-export const getAvailabilityInDB = async () => {
+export const getAvailabilityModel = async () => {
     const sqlQuery = `
     SELECT 
         *
@@ -13,7 +13,7 @@ export const getAvailabilityInDB = async () => {
 };
 
 // Function to update the availibility in the database
-export const updateAvailabilityInDB = async (e_id, day_of_week, start_time, end_time) => {
+export const updateAvailabilityModel = async (e_id, day_of_week, start_time, end_time) => {
     const sqlQuery = `
         UPDATE availability
         SET start_time = ?, end_time = ?
@@ -25,7 +25,7 @@ export const updateAvailabilityInDB = async (e_id, day_of_week, start_time, end_
 };
 
 // Function to update the availibility in the database
-export const createAvailabilityInDB = async (e_id, day_of_week, start_time, end_time) => {
+export const createAvailabilityModel = async (e_id, day_of_week, start_time, end_time) => {
     const sqlQuery = `
         INSERT INTO avaiibility (e_id, day_of_week, start_time, end_time)
         VALUES (?, ?, ?, ?);`;

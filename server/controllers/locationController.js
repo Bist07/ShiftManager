@@ -1,12 +1,12 @@
 // controllers/locationController.js
-import { getLocationsInDB } from '../models/locationModel.js';
+import { getLocationsLogic } from '../logic/locationLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Controller to handle getting location
 export const getLocation = async (req, res) => {
 
     try {
-        const locations = await getLocationsInDB();
+        const locations = await getLocationsLogic();
 
         // If no location found
         if (locations.length === 0) {

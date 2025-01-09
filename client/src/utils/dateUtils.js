@@ -74,7 +74,6 @@ export const mapWeekToDays = (week) => {
         // Directly store the date, no need for an array
         mappedWeek[dayName] = date;
     });
-    console.log(mappedWeek)
     return mappedWeek;
 };
 

@@ -1,11 +1,10 @@
-// controllers/shiftController.js
-import { getAvailabilityInDB, updateAvailabilityInDB, createAvailabilityInDB } from '../models/availabilityModel.js';
+// controllers/availabilityController.js
 import { validateFields } from '../utils/validateFields.js';
-
+import { getAvailabilityLogic, updateAvailabilityLogic, createAvailabilityLogic } from '../logic/availabilityLogic.js'
 
 export const getAvailability = async (req, res) => {
     try {
-        const availability = await getAvailabilityInDB();
+        const availability = await getAvailabilityLogic();
 
         if (availability.length === 0) {
             return res.status(404).send('No availability found');
@@ -30,7 +29,7 @@ export const updateAvailability = async (req, res) => {
         if (validationError) return validationError;
 
         // Call the model function to update the availibility in the database
-        const result = await updateAvailabilityInDB(e_id, day_of_week, start_time, end_time);
+        const result = await updateAvailabilityLogic(e_id, day_of_week, start_time, end_time);
 
         // If the update is successful, send a response
         if (result.affectedRows > 0) {
@@ -55,7 +54,7 @@ export const createAvailability = async (req, res) => {
         if (validationError) return validationError;
 
         // Call the model function to create the shift in the database
-        const result = await createAvailabilityInDB(e_id, day_of_week, start_time, end_time);
+        const result = await createAvailabilityLogic(e_id, day_of_week, start_time, end_time);
 
         // If the post is successful, send a response
         if (result.affectedRows > 0) {

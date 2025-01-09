@@ -2,7 +2,7 @@
 import { query } from '../config/db.js';
 
 // Function to get shifts by month and year
-export const getLocationsInDB = async () => {
+export const getLocationsModel = async () => {
     const sqlQuery = `
         SELECT *
         FROM locations

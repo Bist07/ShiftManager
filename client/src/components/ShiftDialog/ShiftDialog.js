@@ -9,7 +9,7 @@ import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
 import RoleSelector from './ShiftDialogFields/RoleSelector';
 //Api imports
 import { createBulkShift, deleteShiftsAndAssignments } from '../../services/api/shiftBulkOperationsApi';
-import { updateShift } from '../../services/api/shiftApi';
+import { handleShiftChanges } from '../../services/shiftService';
 //Icons import
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 //Utils import
@@ -21,6 +21,7 @@ import useAvailability from '../../hooks/useAvailability';
 //Misc
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
+
 
 
 const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
@@ -88,7 +89,6 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     const toggleRepeat = () => {
         setRepeat((prev) => !prev);
     };
-
     const handleSave = async () => {
         const { start_time, end_time, date, location_id, e_id, role_id } = formData;
 
@@ -112,38 +112,45 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
                 endDate: shiftData.date,
             };
         }
+
+        if (shiftData.repeat.frequency == "1") {
+            const DaysUntillEndOfWeek = 7 - (dayOfWeekIndex + 1);
+            const endOfWeek = dayjs(shiftData.date).add(DaysUntillEndOfWeek, 'day').format('YYYY-MM-DD');;
+
+            shiftData.repeat = {
+                ...shiftData.repeat,
+                startDate: shiftData.date,
+                endDate: endOfWeek,
+            };
+
+
+        }
         const changes = {};
         for (const key in formData) {
             if (formData[key] !== initialData[key]) {
                 changes[key] = { oldValue: initialData[key], newValue: formData[key] };
             }
         }
-
         // Check availability before proceeding
-        const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-        const isScheduled = ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
-        if (!isAvailable && !ignoreConflict) {
-            const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-            setConflictDetails(conflicts);
-            setOpenConflictDialog(true); // Open conflict dialog
-            return; // Exit without saving
-        }
+
+        // if (shiftData.e_id.length !== 0) {
+
+        //     const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+        //     const isScheduled = ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
+
+        //     if (!isAvailable && !ignoreConflict) {
+        //         const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+        //         setConflictDetails(conflicts);
+        //         setOpenConflictDialog(true); // Open conflict dialog
+        //         return; // Exit without saving
+        //     }
+        // }
 
         try {
+
             if (shift_id) {
                 // Editing an existing shift
-                if (Object.keys(changes).length > 0) {
-                    // Call different APIs based on the changes
-                    if ('start_time' in changes || 'end_time' in changes || 'location_id' in changes || 'role_id' in changes) {
-                        // Update shift timing
-                        await updateShift(shift_id, formData.start_time, formData.end_time, formData.location_id, formData.role_id);
-                    }
-                    if ('e_id' in changes || 'date' in changes) {
-
-
-                    }
-
-                }
+                await handleShiftChanges(changes, shift_id, shiftData);
 
             } else {
                 // Creating a new shift
@@ -177,7 +184,6 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         setIgnoreConflict(false)
         setOpenConflictDialog(false);
     };
-
     const handleDelete = async (shift_id) => {
         try {
             await deleteShiftsAndAssignments(e_id, shift_id);
@@ -192,7 +198,6 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     let isSaveDisabled =
         isInvalid(formData.start_time) ||
         isInvalid(formData.end_time) ||
-        isInvalid(formData.e_id) ||
         isInvalid(formData.role_id) ||
         isInvalid(formData.location_id) ||
         isInvalid(formData.date);

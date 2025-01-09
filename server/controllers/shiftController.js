@@ -1,4 +1,4 @@
-import { getShiftsByMonthAndYear, updateShiftInDB, deleteShiftInDB, createShiftInDB, createShiftsForDatesBulkInDB, getShiftsInDB } from '../models/shiftModel.js';
+import { getShiftsByMonthAndYearLogic, updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic } from '../logic/shiftLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Middleware for validating request fields
@@ -14,7 +14,7 @@ export const getShifts = async (req, res) => {
     if (validateRequest({ month, year }, res)) return;
 
     try {
-        const shifts = await getShiftsByMonthAndYear(month, year);
+        const shifts = await getShiftsByMonthAndYearLogic(month, year);
 
         if (shifts.length === 0) {
             return res.status(404).send('No shifts found for the selected month and year');
@@ -32,7 +32,7 @@ export const getShiftsForValidation = async (e_id, dateIds) => {
     if (validateRequest({ e_id, dateIds })) return null; // Return null or empty array if validation fails
 
     try {
-        const shifts = await getShiftsInDB(e_id, dateIds);
+        const shifts = await getShiftsLogic(e_id, dateIds);
 
         if (shifts.length === 0) {
             return null; // Return null if no shifts are found
@@ -53,7 +53,7 @@ export const updateShift = async (req, res) => {
     if (validateRequest({ shift_id, start_time, end_time, location_id, role_id }, res)) return;
 
     try {
-        const result = await updateShiftInDB(start_time, end_time, location_id, role_id, shift_id);
+        const result = await updateShiftLogic(start_time, end_time, location_id, role_id, shift_id);
 
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Shift updated successfully' });
@@ -73,7 +73,7 @@ export const createShift = async (req, res) => {
     if (validateRequest({ date, e_id, role_id, location_id, start_time, end_time }, res)) return;
 
     try {
-        const result = await createShiftInDB(date, repeat, e_id, role_id, location_id, start_time, end_time);
+        const result = await createShiftLogic(date, repeat, e_id, role_id, location_id, start_time, end_time);
 
         if (result.success) {
             return res.status(200).json({
@@ -97,7 +97,7 @@ export const deleteShift = async (shift_id) => {
     }
 
     try {
-        const result = await deleteShiftInDB(shift_id);
+        const result = await deleteShiftLogic(shift_id);
 
         if (result.affectedRows > 0) {
             return result;
@@ -111,7 +111,8 @@ export const deleteShift = async (shift_id) => {
 }
 
 
-export const createShiftsForDatesBulk = async (locationId, role_id, startTime, endTime, dateIds) => {
+export const createShiftsForDatesBulk = async (req, res) => {
+    const { locationId, role_id, startTime, endTime, dateIds } = req.body;
     try {
 
         // Validate inputs
@@ -120,7 +121,7 @@ export const createShiftsForDatesBulk = async (locationId, role_id, startTime, e
         }
 
         // Call the createShiftsForDatesBulk function from the model
-        const shiftIds = await createShiftsForDatesBulkInDB(locationId, role_id, startTime, endTime, dateIds);
+        const shiftIds = await createShiftsForDatesBulkLogic(locationId, role_id, startTime, endTime, dateIds);
 
         if (shiftIds.length === 0) {
             throw new Error('No shifts were created.');

@@ -1,7 +1,7 @@
 import { query } from '../config/db.js';
 
 // Function to get shifts 
-export const getShiftsInDB = async (e_id, date_ids) => {
+export const getShiftsModel = async (e_id, date_ids) => {
     const placeholders = date_ids.map(() => '?').join(', '); // Create a list of placeholders like "?, ?, ?"
     const sqlQuery = `
         SELECT 
@@ -22,7 +22,7 @@ export const getShiftsInDB = async (e_id, date_ids) => {
 
 
 // Function to get shifts by month and year
-export const getShiftsByMonthAndYear = async (month, year) => {
+export const getShiftsByMonthAndYearModel = async (month, year) => {
     const sqlQuery = `
         SELECT 
             CONCAT(e.first_name, ' ', e.last_name) AS name,
@@ -55,7 +55,7 @@ export const getShiftsByMonthAndYear = async (month, year) => {
 };
 
 // Function to update a shift in the database
-export const updateShiftInDB = async (start_time, end_time, location_id, role_id, shift_id) => {
+export const updateShiftModel = async (start_time, end_time, location_id, role_id, shift_id) => {
     const sqlQuery = `
         UPDATE shifts
         SET start_time = ?, end_time = ?, location_id = ?, role_id = ?
@@ -71,7 +71,7 @@ export const updateShiftInDB = async (start_time, end_time, location_id, role_id
     }
 };
 
-export const createShiftInDB = async (date, location_id, role_id, start_time, end_time) => {
+export const createShiftModel = async (date, location_id, role_id, start_time, end_time) => {
     const sqlCreateShift = `
         INSERT INTO shifts (location_id,role_id, start_time, end_time, date_id)
         VALUES (?,?, ?, ?, ?)
@@ -88,7 +88,7 @@ export const createShiftInDB = async (date, location_id, role_id, start_time, en
 };
 
 // Function to delete a shift in the database
-export const deleteShiftInDB = async (shift_id) => {
+export const deleteShiftModel = async (shift_id) => {
     const sqlQuery = `
         DELETE FROM shifts
         WHERE shift_id = ?;
@@ -103,7 +103,7 @@ export const deleteShiftInDB = async (shift_id) => {
     }
 };
 
-export const createShiftsForDatesBulkInDB = async (locationId, role_id, startTime, endTime, dateIds) => {
+export const createShiftsForDatesBulkModel = async (locationId, role_id, startTime, endTime, dateIds) => {
     try {
         // Construct the values for the insert
         const values = dateIds.map(dateId =>

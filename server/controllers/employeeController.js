@@ -1,16 +1,11 @@
 // controllers/employeeController.js
-import {
-    getEmployeeInDB,
-    updateEmployeeInDB,
-    deleteEmployeeInDB,
-    createEmployeeInDB
-} from '../models/employeeModel.js';
 import { validateFields } from '../utils/validateFields.js';
+import { getEmployeeLogic, updateEmployeeLogic, createEmployeeLogic, deleteEmployeeLogic } from '../logic/employeeLogic.js'
 
 // Controller to get employees
 export const getEmployee = async (req, res) => {  // Accept both req and res
     try {
-        const employees = await getEmployeeInDB();
+        const employees = await getEmployeeLogic();
 
         if (employees.length === 0) {
             return res.status(404).json({ message: 'No employees found' });
@@ -32,7 +27,7 @@ export const updateEmployee = async (req, res) => {
     if (validationError) return validationError;
 
     try {
-        const result = await updateEmployeeInDB(e_id, name, email);
+        const result = await updateEmployeeLogic(e_id, name, email);
 
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Employee updated successfully' });
@@ -54,7 +49,7 @@ export const createEmployee = async (req, res) => {
     if (validationError) return validationError;
 
     try {
-        const result = await createEmployeeInDB(name, email);
+        const result = await createEmployeeLogic(name, email);
 
         if (result.success) {
             return res.status(201).json({
@@ -79,7 +74,7 @@ export const deleteEmployee = async (req, res) => {
     }
 
     try {
-        const result = await deleteEmployeeInDB(e_id);
+        const result = await deleteEmployeeLogic(e_id);
 
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Employee deleted successfully' });

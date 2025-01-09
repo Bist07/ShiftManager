@@ -78,6 +78,7 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
         return false;
     }
 
+    console.log("VALIDATING")
     try {
         // Fetch date IDs based on the repeat pattern
         const date_ids = await fetchDateIds(repeat);
@@ -105,10 +106,13 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
                     (newStart <= shiftStart && newEnd >= shiftEnd)    // Completely overlaps existing shift
                 ) {
                     console.error('Shift conflict detected for date_id:', shift.date_id, { shift, newStart, newEnd });
+                    console.log("NOT")
                     return false;
                 }
             }
         }
+
+        console.log("VALIDATED")
 
         // No conflicts found
         return true;

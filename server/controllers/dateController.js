@@ -1,5 +1,5 @@
 // controllers/dateController.js
-import { getDatesByMonthAndYear, updateDateInDB, sqlgetDatesIDForShift } from '../models/dateModel.js';
+import { getDatesForShiftLogic, updateDateLogic, getDatesByMonthAndYearLogic } from '../logic/dateLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Controller to handle getting shifts
@@ -10,7 +10,7 @@ export const getDates = async (req, res) => {
     if (validationError) return validationError;
 
     try {
-        const shifts = await getDatesByMonthAndYear(month, year);
+        const shifts = await getDatesByMonthAndYearLogic(month, year);
 
         // If no shifts found
         if (shifts.length === 0) {
@@ -37,7 +37,7 @@ export const updateDate = async (req, res) => {
 
 
         // Call the model function to update the shift in the database
-        const result = await updateDateInDB(date_id);
+        const result = await updateDateLogic(date_id);
 
         // If the update is successful, send a response
         if (result.affectedRows > 0) {
@@ -61,7 +61,7 @@ export const getDatesForShift = async (repeat) => {
         }
 
         // Call the sqlgetDatesIDForShift function from the model
-        const dateIds = await sqlgetDatesIDForShift(repeat);
+        const dateIds = await getDatesForShiftLogic(repeat);
 
         if (dateIds.length === 0) {
             throw new Error('No dates found matching the given parameters.');

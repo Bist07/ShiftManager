@@ -2,7 +2,7 @@
 import { query } from '../config/db.js';
 
 // Function to get shifts by month and year
-export const getDatesByMonthAndYear = async (month, year) => {
+export const getDatesByMonthAndYearModel = async (month, year) => {
     const sqlQuery = `
     SELECT 
         full_date AS date,  
@@ -18,7 +18,7 @@ export const getDatesByMonthAndYear = async (month, year) => {
 
 
 // Function to update the shift in the database
-export const updateDateInDB = async (date_id, is_Holiday) => {
+export const updateDateModel = async (date_id, is_Holiday) => {
     const sqlQuery = `
         UPDATE dim_date
         SET is_Holiday = ?
@@ -30,7 +30,7 @@ export const updateDateInDB = async (date_id, is_Holiday) => {
 };
 
 
-export const sqlgetDatesIDForShift = async ({ days, startDate, endDate, frequency }) => {
+export const getDatesIdForShiftModel = async (days, startDate, endDate, frequency) => {
     if (!days || !startDate || !endDate || !frequency) {
         throw new Error("Missing required parameters");
     }

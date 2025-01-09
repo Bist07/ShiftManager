@@ -1,7 +1,7 @@
 // src/api/availabilityApi.js
 import axiosInstance from './axiosInstance';
 
-export const fetchAvailability = async (month, year) => {
+export const fetchAvailability = async () => {
     try {
         const response = await axiosInstance.get('/api/availability');
         return response.data;

@@ -38,7 +38,6 @@ export const updateShift = async (shift_id, start_time, end_time, location_id, r
     }
 };
 
-
 export const createShift = async (date, repeat, e_id, role_id, location_id, start_time, end_time) => {
     try {
         // Use a POST request for updating the shift

@@ -1,12 +1,12 @@
 // controllers/roletController.js
-import { getRolesInDB } from '../models/roleModel.js';
+import { getRolesLogic } from '../logic/roleLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Controller to handle getting roles
 export const getRole = async (req, res) => {
 
     try {
-        const roles = await getRolesInDB();
+        const roles = await getRolesLogic();
 
         // If no roles found
         if (roles.length === 0) {

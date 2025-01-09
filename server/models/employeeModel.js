@@ -1,7 +1,7 @@
 import { query } from '../config/db.js';
 
 // Function to get all employees
-export const getEmployeeInDB = async () => {
+export const getEmployeeModel = async () => {
     const sqlQuery = `
         SELECT *
         FROM employee;
@@ -15,7 +15,7 @@ export const getEmployeeInDB = async () => {
 };
 
 // Function to update employee details in the database
-export const updateEmployeeInDB = async (first_name, last_name, email, e_id) => {
+export const updateEmployeeModel = async (first_name, last_name, email, e_id) => {
     const sqlQuery = `
         UPDATE employee
         SET first_name = ?, last_name = ?, email = ?
@@ -32,7 +32,7 @@ export const updateEmployeeInDB = async (first_name, last_name, email, e_id) => 
 };
 
 // Function to create a new employee in the database
-export const createEmployeeInDB = async (first_name, last_name, email) => {
+export const createEmployeeModel = async (first_name, last_name, email) => {
     const sqlQuery = `
         INSERT INTO employee (first_name, last_name, email)
         VALUES (?, ?, ?);
@@ -52,7 +52,7 @@ export const createEmployeeInDB = async (first_name, last_name, email) => {
 };
 
 // Function to delete an employee by ID
-export const deleteEmployeeInDB = async (e_id) => {
+export const deleteEmployeeModel = async (e_id) => {
     const sqlQuery = `
         DELETE FROM employee
         WHERE e_id = ?;
