@@ -188,8 +188,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     };
     const handleDelete = async (shift_id) => {
         try {
-            await deleteAssignment(e_id, shift_id)
-            // await deleteShiftsAndAssignments(e_id, shift_id);
+            await deleteShiftsAndAssignments(e_id, shift_id);
 
             onDelete();
             onClose();
