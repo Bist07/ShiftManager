@@ -5,10 +5,11 @@ export const getShiftsModel = async (e_id, date_ids) => {
     const placeholders = date_ids.map(() => '?').join(', '); // Create a list of placeholders like "?, ?, ?"
     const sqlQuery = `
         SELECT 
-        s.shift_id, employee_id, start_time, end_time, date_id
+        s.shift_id, employee_id, start_time, end_time, d.full_date,s.date_id
         FROM shifts s
         JOIN assignments a ON a.shift_id = s.shift_id
-        WHERE employee_id = ? AND date_id IN (${placeholders})
+        JOIN dim_Date d ON s.date_id = d.date_id
+        WHERE employee_id = ? AND s.date_id IN (${placeholders})
     `;
 
     try {

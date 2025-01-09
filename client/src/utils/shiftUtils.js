@@ -72,8 +72,6 @@ export const getScheduledHours = (e_id, shifts, period) => {
 }
 
 export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
-    console.log(e_id, repeat, start_time, end_time)
-    // Validate input
     if (!e_id || !repeat || !start_time || !end_time) {
         console.error('Invalid input: e_id, repeat, start_time, or end_time is missing');
         return false;
@@ -89,12 +87,13 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
 
         // Fetch shifts for the employee within the given date range
         const shifts = await fetchShiftsForValidation(e_id, date_ids);
-
+        console.log(shifts)
+        // Collect conflicts
+        const conflicts = [];
 
         // Check for conflicts based on matching date_id
-        for (const shift of shifts) {
+        shifts.forEach((shift) => {
             if (date_ids.includes(shift.date_id)) {
-                // Match found, check for time overlap
                 const shiftStart = new Date(`1970-01-01T${shift.start_time}Z`);
                 const shiftEnd = new Date(`1970-01-01T${shift.end_time}Z`);
                 const newStart = new Date(`1970-01-01T${start_time}Z`);
@@ -105,20 +104,34 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
                     (newEnd > shiftStart && newEnd <= shiftEnd) ||    // Overlaps at the end
                     (newStart <= shiftStart && newEnd >= shiftEnd)    // Completely overlaps existing shift
                 ) {
-                    console.error('Shift conflict detected for date_id:', shift.date_id, { shift, newStart, newEnd });
-
-                    return false;
+                    conflicts.push({
+                        e_id,
+                        date: shift.full_date,
+                        shiftStart: shift.start_time,
+                        shiftEnd: shift.end_time,
+                        conflictStart: start_time,
+                        conflictEnd: end_time,
+                    });
                 }
             }
-        }
+        });
 
 
-        // No conflicts found
-        return true;
+        // Group conflicts by employee ID
+        const groupedConflicts = conflicts.reduce((acc, detail) => {
+            if (!acc[detail.e_id]) {
+                acc[detail.e_id] = [];
+            }
+            acc[detail.e_id].push(detail);
+            return acc;
+        }, {});
+
+
+        // Return grouped conflicts (if empty, no conflicts)
+        return groupedConflicts;
 
     } catch (error) {
         console.error('Error validating shift:', error);
         return false;
     }
 };
-

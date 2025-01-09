@@ -22,7 +22,6 @@ import useAvailability from '../../hooks/useAvailability';
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
 
-
 const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
     const [error, setError] = useState('');
     const [repeat, setRepeat] = React.useState(false);
@@ -30,6 +29,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     const [openConflictDialog, setOpenConflictDialog] = useState(false); // State for the conflict dialog
     const [ignoreConflict, setIgnoreConflict] = useState(false); // State for the conflict dialog
     const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
+    const [ScheduleConflicts, setScheduleConflicts] = useState([]); // Store conflict details
     const [initialData, setInitialData] = useState(null); // Store initial data
     let emp_id;
     if (typeof e_id === "undefined") {
@@ -127,7 +127,6 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
                 endDate: endOfWeek,
             };
 
-
         }
         const changes = {};
         for (const key in formData) {
@@ -138,10 +137,15 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         // Check availability before proceeding
 
         if (shiftData.e_id.length !== 0) {
+            let isScheduled;
+            const ScheduleConflict = await ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
 
+            if (ScheduleConflict) {
+                isScheduled = true;
+            } else (
+                isScheduled = false
+            )
             const isAvailable = validateAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-            const isScheduled = await ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
-
             const hasConflicts = !isAvailable || !isScheduled;
             if (hasConflicts && !ignoreConflict) {
                 const conflicts = findConflictingSlots(
@@ -152,6 +156,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
                     shiftData.end_time,
                     availability
                 );
+                setScheduleConflicts(ScheduleConflict);
                 setConflictDetails(conflicts);
                 setOpenConflictDialog(true); // Open conflict dialog
                 return; // Exit without saving
@@ -292,6 +297,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
             <ConflictDialog
                 open={openConflictDialog}
                 conflictDetails={conflictDetails}
+                ScheduleConflicts={ScheduleConflicts}
                 onIgnore={handleIgnoreConflict}
                 onEdit={handleEditConflict}
                 onClose={() => setOpenConflictDialog(false)}
