@@ -14,15 +14,13 @@ import { handleShiftChanges } from '../../services/shiftService';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 //Utils import
 import { isInvalid } from '../../utils/utils';
-import { validateShiftAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
+import { validateAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
 import { ValidateShift } from '../../utils/shiftUtils';
 //Hooks import
 import useAvailability from '../../hooks/useAvailability';
 //Misc
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
-import { deleteAssignment } from '../../services/api/assignmentApi';
-
 
 
 const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
@@ -32,10 +30,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     const [openConflictDialog, setOpenConflictDialog] = useState(false); // State for the conflict dialog
     const [ignoreConflict, setIgnoreConflict] = useState(false); // State for the conflict dialog
     const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
-    date = new Date(date).toISOString().split('T')[0];
-    const dayOfWeekIndex = dayjs(date).day();
     const [initialData, setInitialData] = useState(null); // Store initial data
-
     let emp_id;
     if (typeof e_id === "undefined") {
         emp_id = ""
@@ -51,6 +46,8 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         location_id: location_id || "",
         e_id: emp_id || "",
     });
+
+    let dayOfWeekIndex = dayjs(formData.date).day();
 
     // Reset formData when the dialog is opened or date/e_id changes
     useEffect(() => {
@@ -72,6 +69,10 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
             setError('');
         }
     }, [open]);
+
+    useEffect(() => {
+        dayOfWeekIndex = dayjs(formData.date).day();
+    }, [formData.date]);
 
     useEffect(() => {
         if (ignoreConflict) {
@@ -115,6 +116,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
             };
         }
 
+
         if (shiftData.repeat.frequency == "1") {
             const DaysUntillEndOfWeek = 7 - (dayOfWeekIndex + 1);
             const endOfWeek = dayjs(shiftData.date).add(DaysUntillEndOfWeek, 'day').format('YYYY-MM-DD');;
@@ -135,18 +137,27 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         }
         // Check availability before proceeding
 
-        // if (shiftData.e_id.length !== 0) {
+        if (shiftData.e_id.length !== 0) {
 
-        //     const isAvailable = validateShiftAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-        //     const isScheduled = ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
+            const isAvailable = validateAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+            const isScheduled = await ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
 
-        //     if (!isAvailable && !ignoreConflict) {
-        //         const conflicts = findConflictingSlots(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-        //         setConflictDetails(conflicts);
-        //         setOpenConflictDialog(true); // Open conflict dialog
-        //         return; // Exit without saving
-        //     }
-        // }
+            const hasConflicts = !isAvailable || !isScheduled;
+            if (hasConflicts && !ignoreConflict) {
+                const conflicts = findConflictingSlots(
+                    shiftData.e_id,
+                    dayOfWeekIndex,
+                    shiftData.repeat.days,
+                    shiftData.start_time,
+                    shiftData.end_time,
+                    availability
+                );
+                setConflictDetails(conflicts);
+                setOpenConflictDialog(true); // Open conflict dialog
+                return; // Exit without saving
+            }
+
+        }
 
         try {
 

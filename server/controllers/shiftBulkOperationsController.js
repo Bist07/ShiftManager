@@ -12,7 +12,6 @@ export const createAndAssignShiftsInBulk = async (req, res) => {
     try {
         // Step 1: Get date IDs based on the given parameters
         const dateIds = await getDatesForShiftLogic(repeat); // Use the core logic function
-
         if (dateIds.length === 0) {
             return res.status(404).json({ message: 'No valid dates found for the given parameters.' });
         }

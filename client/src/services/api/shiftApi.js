@@ -11,10 +11,10 @@ export const fetchShifts = async (month, year) => {
     }
 };
 
-export const fetchShiftsForValidation = async (e_id, date_ids) => {
+export const fetchShiftsForValidation = async (e_id, dateIds) => {
     try {
         const response = await axiosInstance.get('/api/shifts/validation', {
-            params: { e_id, date_ids } // Send date_ids as a comma-separated string
+            params: { e_id, dateIds } // Send date_ids as a comma-separated string
         });
         return response.data;
     } catch (error) {

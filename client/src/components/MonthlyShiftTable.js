@@ -17,7 +17,7 @@ import AddIcon from '@mui/icons-material/Add';
 import ShiftComponent from './ShiftDialog/ShiftDialog';
 import { transformShifts } from '../utils/shiftUtils';
 
-const MonthlyShiftTable = ({ month, year, filter }) => {
+const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
     const { shifts, refetchShifts } = useShifts(month, year);
     const transformedShifts = transformShifts(shifts, filter);
     const [currentShift, setCurrentShift] = useState(null);
@@ -26,6 +26,10 @@ const MonthlyShiftTable = ({ month, year, filter }) => {
     useEffect(() => {
         daysInMonth = getDaysInMonth(month, year);
     }, [month, year]);
+
+    useEffect(() => {
+        refetchShifts();
+    }, [refetchTrigger, month, year]);
 
     const handleOpenDialog = (shift, date) => {
         setCurrentShift({

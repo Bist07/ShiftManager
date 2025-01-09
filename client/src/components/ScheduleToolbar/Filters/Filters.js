@@ -42,7 +42,7 @@ const Filters = ({ onFiltersChange }) => {
             if (onFiltersChange) {
                 onFiltersChange(updatedFilters);
             }
-            console.log(updatedFilters);
+
             return updatedFilters;
         });
     };

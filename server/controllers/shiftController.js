@@ -28,17 +28,19 @@ export const getShifts = async (req, res) => {
 };
 
 // Controller to handle getting shifts
-export const getShiftsForValidation = async (e_id, dateIds) => {
+export const getShiftsForValidation = async (req, res) => {
+    const { e_id, dateIds } = req.query;
+
     if (validateRequest({ e_id, dateIds })) return null; // Return null or empty array if validation fails
 
     try {
         const shifts = await getShiftsLogic(e_id, dateIds);
 
         if (shifts.length === 0) {
-            return null; // Return null if no shifts are found
+            return res.status(404).send('No shifts found for the selected month and year');
         }
 
-        return shifts; // Return shifts data
+        res.status(200).json(shifts);
     } catch (error) {
         console.error(error);
         throw new Error('An error occurred while fetching shifts'); // Throw error for route handler to catch
@@ -122,12 +124,12 @@ export const createShiftsForDatesBulk = async (req, res) => {
 
         // Call the createShiftsForDatesBulk function from the model
         const shiftIds = await createShiftsForDatesBulkLogic(locationId, role_id, startTime, endTime, dateIds);
-
         if (shiftIds.length === 0) {
-            throw new Error('No shifts were created.');
-        } else {
-            return shiftIds;
+            return res.status(404).send('No shifts found for the selected month and year');
         }
+
+        res.status(200).json(shiftIds);
+
     } catch (error) {
         console.error('Error in createShifts controller:', error);
         throw new Error('Failed to create shifts in bulk.');

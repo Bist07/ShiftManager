@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Table,
     TableBody,
@@ -17,12 +17,17 @@ import ShiftDetails from './ShiftDetails';
 import { transformShifts } from '../utils/shiftUtils';
 import useEmployee from '../hooks/useEmployee';
 
-const ShiftTable = ({ shifts: initialShifts, week, month, year, filter }) => {
+const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
     const mappedWeek = mapWeekToDays(week); // Map week to specific dates
     const { shifts, refetchShifts } = useShifts(month, year, filter);
     const transformedShifts = transformShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
+
+
+    useEffect(() => {
+        refetchShifts();
+    }, [refetchTrigger]);
 
     const handleOpenDialog = (shift, date) => {
         const shiftDetails = shift.shiftDays[date] || [];

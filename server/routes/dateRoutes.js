@@ -9,7 +9,7 @@ export const router = express.Router();
 router.get('/', getDates);
 
 // Define the GET route for dates
-router.get('/dateIds', getDates);
+router.get('/dateIds', getDatesForShift);
 
 // Put route to update a dates
 router.put('/update', updateDate);

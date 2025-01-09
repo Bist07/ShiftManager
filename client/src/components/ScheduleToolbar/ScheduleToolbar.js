@@ -14,7 +14,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AddIcon from '@mui/icons-material/Add';
 import ShiftDialog from '../ShiftDialog/ShiftDialog';
-import useShifts from '../../hooks/useShifts';
 import dayjs from 'dayjs';
 import ShiftTable from '../ShiftTable';
 import MonthlyShiftTable from '../MonthlyShiftTable';
@@ -25,7 +24,7 @@ const ScheduleToolbar = () => {
     const [selectedWeek, setSelectedWeek] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Default to current month
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
-
+    const [refetchTrigger, setRefetchTrigger] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [filterOpen, setFilterOpen] = useState(false); // State for collapsible filter section
@@ -35,7 +34,6 @@ const ScheduleToolbar = () => {
         roleFilters: [],
     });
     const [viewMode, setViewMode] = useState('week'); // State to toggle between 'week' and 'month' view
-    const { refetchShifts } = useShifts(selectedMonth, selectedYear);
     const [currentShift, setCurrentShift] = useState(null);
 
     const handleFiltersChange = (updatedFilters) => {
@@ -124,7 +122,7 @@ const ScheduleToolbar = () => {
     };
 
     const handleSaveShift = () => {
-        refetchShifts();
+        setRefetchTrigger((prev) => !prev);
         handleCloseDialog();
     };
 
@@ -304,9 +302,9 @@ const ScheduleToolbar = () => {
             <Box>
                 {(
                     viewMode === 'week' ? (
-                        <ShiftTable week={selectedWeek} month={selectedMonth} year={selectedYear} filter={currentFilters} />
+                        <ShiftTable week={selectedWeek} month={selectedMonth} year={selectedYear} filter={currentFilters} refetchTrigger={refetchTrigger} />
                     ) : viewMode === 'month' ? (
-                        <MonthlyShiftTable month={selectedMonth} year={selectedYear} filter={currentFilters} />
+                        <MonthlyShiftTable month={selectedMonth} year={selectedYear} filter={currentFilters} refetchTrigger={refetchTrigger} />
                     ) : (
                         <Typography sx={{ p: 2 }}>Invalid view mode.</Typography>
                     )

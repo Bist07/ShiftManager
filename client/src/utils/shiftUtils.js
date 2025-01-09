@@ -72,13 +72,13 @@ export const getScheduledHours = (e_id, shifts, period) => {
 }
 
 export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
+    console.log(e_id, repeat, start_time, end_time)
     // Validate input
     if (!e_id || !repeat || !start_time || !end_time) {
         console.error('Invalid input: e_id, repeat, start_time, or end_time is missing');
         return false;
     }
 
-    console.log("VALIDATING")
     try {
         // Fetch date IDs based on the repeat pattern
         const date_ids = await fetchDateIds(repeat);
@@ -106,13 +106,12 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
                     (newStart <= shiftStart && newEnd >= shiftEnd)    // Completely overlaps existing shift
                 ) {
                     console.error('Shift conflict detected for date_id:', shift.date_id, { shift, newStart, newEnd });
-                    console.log("NOT")
+
                     return false;
                 }
             }
         }
 
-        console.log("VALIDATED")
 
         // No conflicts found
         return true;

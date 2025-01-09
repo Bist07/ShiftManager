@@ -51,8 +51,9 @@ export const updateDate = async (req, res) => {
     }
 };
 
-export const getDatesForShift = async (repeat) => {
+export const getDatesForShift = async (req, res) => {
     try {
+        const { repeat } = req.query;
         const { days, startDate, endDate, frequency } = repeat;
 
         // Validate inputs
@@ -64,10 +65,10 @@ export const getDatesForShift = async (repeat) => {
         const dateIds = await getDatesForShiftLogic(repeat);
 
         if (dateIds.length === 0) {
-            throw new Error('No dates found matching the given parameters.');
-        } else {
-            return dateIds;
+            return res.status(404).send('No dateIds found');
         }
+
+        res.status(200).json(dateIds);
 
     } catch (error) {
         console.error('Error in getDatesForShift controller:', error);

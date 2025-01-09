@@ -40,7 +40,7 @@ export const transformAvailability = (availability) => {
     return Object.values(groupedAvailability); // Convert the object to an array of grouped availabilities
 };
 
-export const validateShiftAvailability = (e_id, day, days = [], start_time, end_time, availability) => {
+export const validateAvailability = (e_id, day, days = [], start_time, end_time, availability) => {
     // Ensure valid input
     if (!e_id || !day || !start_time || !end_time || !availability) {
         return false;

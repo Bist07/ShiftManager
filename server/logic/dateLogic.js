@@ -28,6 +28,7 @@ export const getDatesForShiftLogic = async (repeat) => {
 
         // Call the model function to get date IDs for the shift
         const result = await getDatesIdForShiftModel(days, startDate, endDate, frequency);
+
         return result;
     } catch (error) {
         console.error('Error in getDatesForShift logic:', error);
