@@ -21,6 +21,7 @@ import useAvailability from '../../hooks/useAvailability';
 //Misc
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
+import { deleteAssignment } from '../../services/api/assignmentApi';
 
 
 
@@ -89,6 +90,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     const toggleRepeat = () => {
         setRepeat((prev) => !prev);
     };
+
     const handleSave = async () => {
         const { start_time, end_time, date, location_id, e_id, role_id } = formData;
 
@@ -186,7 +188,8 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     };
     const handleDelete = async (shift_id) => {
         try {
-            await deleteShiftsAndAssignments(e_id, shift_id);
+            await deleteAssignment(e_id, shift_id)
+            // await deleteShiftsAndAssignments(e_id, shift_id);
 
             onDelete();
             onClose();

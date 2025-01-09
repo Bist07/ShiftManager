@@ -2,14 +2,13 @@
 import { query } from '../config/db.js';
 
 export const deleteAssignmentModel = async (e_id, shift_id) => {
-    console.log("called once")
     try {
         const sqlQuery = `
             DELETE FROM assignments
             WHERE employee_id = ? AND shift_id = ?
         `;
         const params = [e_id, shift_id];
-        console.log(params)
+
         const result = await query(sqlQuery, params);
 
         // Check if any rows were affected

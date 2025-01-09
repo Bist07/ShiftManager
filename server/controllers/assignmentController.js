@@ -12,7 +12,7 @@ export const deleteAssignment = async (req, res) => {
         const result = await deleteAssignmentLogic(e_id, shift_id);
 
         // If the assignment was deleted successfully
-        if (result.affectedRows > 0) {
+        if (result.success) {
             return res.status(200).json({ message: 'Assignment deleted successfully.' });
         } else {
             // If no assignment with the given e_id exists
