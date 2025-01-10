@@ -135,3 +135,26 @@ export const createShiftsForDatesBulkModel = async (locationId, role_id, startTi
         throw new Error('Failed to create shifts in bulk.');
     }
 };
+
+// Function to get shifts 
+export const getUnassignedShiftsModel = async () => {
+
+    const sqlQuery = `
+        SELECT 
+        s.shift_id, NULL AS e_id, s.start_time, s.end_time, d.full_date, s.date_id, s.location_id, s.role_id
+        FROM shifts s
+        JOIN dim_Date d ON s.date_id = d.date_id
+        LEFT JOIN assignments a ON a.shift_id = s.shift_id
+        WHERE a.shift_id IS NULL;
+    `;
+
+    try {
+        const results = await query(sqlQuery);
+        console.log(results)
+        return results;
+
+    } catch (error) {
+        console.error('Error executing query:', error);
+        throw new Error('Failed to fetch shifts from the database');
+    }
+};

@@ -1,5 +1,5 @@
 // logic/shiftLogic.js
-import { getShiftsByMonthAndYearModel, updateShiftModel, deleteShiftModel, createShiftModel, createShiftsForDatesBulkModel, getShiftsModel } from '../models/shiftModel.js';
+import { getShiftsByMonthAndYearModel, updateShiftModel, deleteShiftModel, createShiftModel, createShiftsForDatesBulkModel, getShiftsModel, getUnassignedShiftsModel } from '../models/shiftModel.js';
 
 // Logic to get shifts by month and year
 export const getShiftsByMonthAndYearLogic = async (month, year) => {
@@ -60,3 +60,14 @@ export const getShiftsLogic = async (e_id, dateIds) => {
         throw new Error('Failed to fetch shifts');
     }
 };
+
+// Logic to get unassigned shifts
+export const getUnassignedShiftsLogic = async () => {
+    try {
+        const shifts = await getUnassignedShiftsModel();
+        return shifts;
+    } catch (error) {
+        throw new Error('Failed to fetch shifts');
+    }
+};
+

@@ -1,4 +1,4 @@
-import { getShiftsByMonthAndYearLogic, updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic } from '../logic/shiftLogic.js';
+import { getShiftsByMonthAndYearLogic, updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic, getUnassignedShiftsLogic } from '../logic/shiftLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Middleware for validating request fields
@@ -133,5 +133,22 @@ export const createShiftsForDatesBulk = async (req, res) => {
     } catch (error) {
         console.error('Error in createShifts controller:', error);
         throw new Error('Failed to create shifts in bulk.');
+    }
+};
+
+// Controller to handle getting shifts
+export const getUnassignedShifts = async (req, res) => {
+
+    try {
+        const shifts = await getUnassignedShiftsLogic();
+
+        if (shifts.length === 0) {
+            return res.status(404).send('No unassinged shifts found');
+        }
+
+        res.status(200).json(shifts);
+    } catch (error) {
+        console.error(error);
+        throw new Error('An error occurred while fetching shifts'); // Throw error for route handler to catch
     }
 };

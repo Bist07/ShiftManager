@@ -1,7 +1,6 @@
 // src/api/shiftApi.js
 import axiosInstance from './axiosInstance';
 
-
 export const fetchShifts = async (month, year) => {
     try {
         const response = await axiosInstance.get('/api/shifts', { params: { month, year } });
@@ -65,5 +64,15 @@ export const deleteShift = async (shift_id) => {
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to delete shift');
+    }
+};
+
+
+export const fetchUnassignedShifts = async () => {
+    try {
+        const response = await axiosInstance.get('/api/shifts/unassigned');
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response?.data?.message || 'Failed to fetch shifts');
     }
 };
