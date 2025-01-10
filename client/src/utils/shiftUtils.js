@@ -87,13 +87,12 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
 
         // Fetch shifts for the employee within the given date range
         const shifts = await fetchShiftsForValidation(e_id, date_ids);
-        console.log(shifts)
         // Collect conflicts
         const conflicts = [];
 
         // Check for conflicts based on matching date_id
         shifts.forEach((shift) => {
-            if (date_ids.includes(shift.date_id)) {
+            if (e_id.includes(shift.e_id) && date_ids.includes(shift.date_id)) {
                 const shiftStart = new Date(`1970-01-01T${shift.start_time}Z`);
                 const shiftEnd = new Date(`1970-01-01T${shift.end_time}Z`);
                 const newStart = new Date(`1970-01-01T${start_time}Z`);
@@ -105,8 +104,8 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
                     (newStart <= shiftStart && newEnd >= shiftEnd)    // Completely overlaps existing shift
                 ) {
                     conflicts.push({
-                        e_id,
-                        date: shift.full_date,
+                        e_id: shift.e_id, // Include matched e_id
+                        date: shift.full_date,   // Include the full date
                         shiftStart: shift.start_time,
                         shiftEnd: shift.end_time,
                         conflictStart: start_time,
@@ -117,16 +116,18 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
         });
 
 
+
         // Group conflicts by employee ID
         const groupedConflicts = conflicts.reduce((acc, detail) => {
             if (!acc[detail.e_id]) {
                 acc[detail.e_id] = [];
             }
             acc[detail.e_id].push(detail);
+
             return acc;
         }, {});
 
-
+        console.log("SHIF", groupedConflicts)
         // Return grouped conflicts (if empty, no conflicts)
         return groupedConflicts;
 

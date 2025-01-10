@@ -1,25 +1,30 @@
 import { query } from '../config/db.js';
 
 // Function to get shifts 
-export const getShiftsModel = async (e_id, date_ids) => {
-    const placeholders = date_ids.map(() => '?').join(', '); // Create a list of placeholders like "?, ?, ?"
+export const getShiftsModel = async (e_ids, date_ids) => {
+
+    // Create placeholders for e_ids and date_ids
+    const eIdPlaceholders = e_ids.map(() => '?').join(', '); // "?, ?, ?"
+    const dateIdPlaceholders = date_ids.map(() => '?').join(', '); // "?, ?, ?"
+
     const sqlQuery = `
         SELECT 
-        s.shift_id, employee_id, start_time, end_time, d.full_date,s.date_id
+        s.shift_id, employee_id AS e_id, start_time, end_time, d.full_date, s.date_id
         FROM shifts s
         JOIN assignments a ON a.shift_id = s.shift_id
         JOIN dim_Date d ON s.date_id = d.date_id
-        WHERE employee_id = ? AND s.date_id IN (${placeholders})
+        WHERE employee_id IN (${eIdPlaceholders}) AND s.date_id IN (${dateIdPlaceholders})
     `;
 
     try {
-        const results = await query(sqlQuery, [e_id, ...date_ids]); // Pass `e_id` and spread `date_ids`
+        const results = await query(sqlQuery, [...e_ids, ...date_ids]); // Spread e_ids and date_ids into the query
         return results;
     } catch (error) {
         console.error('Error executing query:', error);
         throw new Error('Failed to fetch shifts from the database');
     }
 };
+
 
 
 // Function to get shifts by month and year

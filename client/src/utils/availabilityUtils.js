@@ -3,7 +3,6 @@ export const transformAvailability = (availability) => {
     if (!availability || availability.length === 0) {
         return []; // Return an empty array if the availability is invalid
     }
-
     const groupedAvailability = {};
 
     availability.forEach(({ e_id, day_of_week, start_time, end_time }) => {
@@ -56,31 +55,9 @@ export const validateAvailability = (e_id, day, days = [], start_time, end_time,
 // Function to find conflicting slots
 export const findConflictingSlots = (e_id, dayOfWeekIndex, repeatDays, start_time, end_time, availability) => {
     const employeeAvailability = getEmployeeAvailabilityForDays(e_id, repeatDays, availability);
-    const conflicts = [];
-
-    employeeAvailability.forEach(({ availabilityStart, availabilityEnd, day }) => {
-        if (availabilityStart !== 'undefined') {
-
-            conflicts.push({
-                Available: true,
-                day,
-                start_time: availabilityStart,
-                end_time: availabilityEnd,
-                e_id,
-            });
-
-        } else {
-            conflicts.push({
-                Available: false,
-                day,
-                e_id,
-            });
-        }
-    });
-
 
     // Group conflicts by employee ID (e_id)
-    const groupedConflicts = conflicts.reduce((acc, detail) => {
+    const groupedConflicts = employeeAvailability.reduce((acc, detail) => {
         if (!acc[detail.e_id]) {
             acc[detail.e_id] = [];
         }
@@ -140,7 +117,6 @@ export const getEmployeeAvailabilityForDays = (e_ids, days, availability) => {
             });
         }
     });
-
 
     return result;
 };
