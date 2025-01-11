@@ -4,9 +4,11 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, 
 import { DatePicker } from '@mui/x-date-pickers';
 import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
 import { assignShiftsToEmployees } from '../../services/api/shiftBulkOperationsApi';
+import usePreference from '../../hooks/usePreference';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { validateAvailability } from '../../utils/availabilityUtils';
+import { ValidateShift } from '../../utils/shiftUtils';
 import dayjs from 'dayjs';
 import useUnassignedShifts from '../../hooks/useUnassignedShifts';
 import useAvailability from '../../hooks/useAvailability';
@@ -20,9 +22,9 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
         date: "",
         e_id: [],
         startDate: "",
-        endDate: "",
+        endDate: ""
     });
-
+    const { prefrences } = usePreference([]); // Assuming this returns employee preferences
     const [ScheduleConflicts, setScheduleConflicts] = useState([]);
     const { unassignedShifts } = useUnassignedShifts();
     const { availability } = useAvailability();
@@ -70,13 +72,44 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
             return;
         }
 
-        // Handle conflict checking
-        const isAvailable = validateAvailability(e_id, start_time, end_time, date);
-        const hasConflicts = !isAvailable;
+        // Handle availability check and assign shifts only to available employees
+        const isScheduled = ValidateShift();
+        const availableEmployees = e_id.filter((employeeId) => {
+            const employeeAvailability = validateAvailability([employeeId], start_time, end_time, date);
+            return employeeAvailability; // Filter out employees with conflicts
+        });
 
+        if (availableEmployees.length === 0) {
+            setError('No available employees for the selected shift.');
+            return;
+        }
+
+        // Step 1: Distribute shifts based on preferences and availability
         try {
-            // Assign the shifts to selected employees
-            // await assignShiftsToEmployees(formData);
+            // Filter preferences that match the selected role and location for each employee
+            const employeesWithPreferences = prefrences.filter((pref) =>
+                availableEmployees.includes(pref.e_id) && pref.MaxWeeklyHours > 0
+            );
+
+            // Sort employees based on their preference
+            const sortedEmployees = employeesWithPreferences.sort((a, b) => {
+                // Sort logic to ensure the most appropriate assignment
+                return a.MaxWeeklyHours - b.MaxWeeklyHours; // Adjust the sorting criteria based on your requirements
+            });
+
+            // Assign shifts to employees equally
+            let shiftsAssigned = 0;
+            const totalShifts = unassignedShifts.length;
+
+            sortedEmployees.forEach((employee) => {
+                if (shiftsAssigned < totalShifts) {
+                    // Assign shift logic here
+                    assignShiftsToEmployees(employee.e_id, unassignedShifts[shiftsAssigned]);
+                    shiftsAssigned++;
+                }
+            });
+
+            // Update the shift assignment
             onSave();
         } catch (err) {
             setError('Failed to assign shifts. Please try again.');
