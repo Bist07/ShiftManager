@@ -87,7 +87,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                 <Table stickyHeader sx={{ minWidth: 650, tableLayout: 'fixed' }} aria-label="employee shift table">
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ width: '17%' }} align="center"></TableCell>
+                            <TableCell sx={{ width: '15%', padding: 0 }} align="center"></TableCell>
                             {Object.keys(mappedWeek).map((day) => {
                                 const date = mappedWeek[day];
                                 const localDate = getLocalDate(date);
@@ -96,7 +96,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                                     day: 'numeric',
                                 });
                                 return (
-                                    <TableCell key={localDate} align="center">
+                                    <TableCell key={localDate} align="center" sx={{ width: '12%', padding: 1 }}>
                                         <strong>{day}</strong> <br />
                                         {formattedDate}
                                     </TableCell>
@@ -120,13 +120,13 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                                 sx={{
                                     backgroundColor: '#d7e6ee', // Tint for the entire unassigned row
                                 }}
-                            >  <TableCell component="th" scope="row" sx={{ width: '18%', padding: 0 }}>
+                            >  <TableCell component="th" scope="row" sx={{ padding: 0, borderBottom: '1px solid #ccc' }}>
                                 </TableCell>
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
                                     const shiftsForDate = unassignedShiftsByDate[date] || [];
                                     return (
-                                        <TableCell key={date} align="center" sx={{ borderLeft: '1px solid #ccc', padding: 0 }}>
+                                        <TableCell key={date} align="center" sx={{ borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', padding: 0 }}>
                                             {shiftsForDate.map((shift) => (
                                                 <Button
                                                     key={shift.shift_id}
@@ -143,7 +143,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                         )}
                         {employees.map((emp) => (
                             <TableRow key={emp.e_id}>
-                                <TableCell component="th" scope="row" sx={{ width: '18%', padding: 0 }}>
+                                <TableCell component="th" scope="row" sx={{ padding: 0 }}>
                                     <EmployeeCard title={emp.name} description="Employee" />
                                 </TableCell>
 

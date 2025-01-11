@@ -11,7 +11,7 @@ const MonthlyShiftCard = ({ shift, onClick }) => {
         <Card sx={{ width: '100%', height: '100%', borderRadius: 2, boxShadow: 3, display: 'flex', marginLeft: 0, marginRight: 3 }}>
             <CardActionArea sx={{ width: '100%', height: '100%' }}>
                 <CardContent >
-                    <Box sx={{ textAlign: 'left', padding: -20 }} >
+                    <Box sx={{ textAlign: 'left' }} >
                         <Typography variant="body1" sx={{ fontSize: '12px', color: 'primary.main', display: "block" }}>
                             {shift.name}
                         </Typography>
@@ -19,7 +19,7 @@ const MonthlyShiftCard = ({ shift, onClick }) => {
                             {formatTime(shift.start_time)} - {formatTime(shift.end_time)}
                         </Typography>
                         <Typography variant="body1" sx={{ fontSize: '12px', color: 'text.secondary', display: "block" }}>
-                            {formatted} • {shift.role_name}
+                            {shift.role_name} • {formatted}
                         </Typography>
 
                     </Box>

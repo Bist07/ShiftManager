@@ -59,8 +59,6 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                 height: '100%', // Ensure content takes full height
                 borderRadius: 2,
                 boxShadow: 3,
-                margin: 0,
-                padding: 0,
                 position: 'relative',
                 opacity: 0.1, // Start with reduced opacity
                 transition: 'opacity 0.3s ease', // Smooth transition
@@ -76,15 +74,15 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    width: '100%', // Ensure content takes full width
-                    height: '100%', // Ensure content takes full height
+                    width: '100%',
+                    height: '100%',
                 }}
                 onClick={onClick}
             >
-                <CardContent sx={{ padding: 2 }}>
+                <CardContent sx={{ paddingLeft: 2, paddingRight: 2, paddingTop: 0, paddingBottom: 0 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <AddIcon sx={{ fontSize: 40, color: 'primary.main' }} />
-                        <Typography variant="body1" sx={{ fontSize: '14px', color: 'text.primary', mt: 2 }}>
+                        <Typography variant="body1" sx={{ fontSize: '14px', color: 'text.secondary', mb: 1 }}>
                             No shift scheduled
                         </Typography>
                     </Box>

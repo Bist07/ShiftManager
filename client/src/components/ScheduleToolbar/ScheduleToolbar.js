@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography } from '@mui/material';
+import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography, AppBar } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -128,7 +128,16 @@ const ScheduleToolbar = () => {
 
     return (
         <Box>
-            <Toolbar sx={{ justifyContent: 'space-between', backgroundColor: '#f5f5f5', padding: '12px', borderBottom: '1px solid #bcbcbc' }}>
+            <Toolbar
+                sx={{
+                    justifyContent: 'space-between',
+                    backgroundColor: '#f5f5f5',
+                    padding: '12px',
+                    borderBottom: '1px solid #bcbcbc',
+                    position: 'sticky', // Stick to the top
+                    top: 0,
+                    zIndex: 1000,
+                }}>
                 <Box sx={{ display: 'flex', gap: '16px', height: '40px' }}>
                     <IconButton
                         onClick={() => setViewMode(viewMode === 'week' ? 'month' : 'week')}
@@ -294,7 +303,6 @@ const ScheduleToolbar = () => {
                     />
                 )}
             </Toolbar>
-
             <Collapse in={filterOpen}>
                 <Filter onFiltersChange={handleFiltersChange} />
             </Collapse>
