@@ -1,4 +1,4 @@
-import { mapWeekToDays } from "./dateUtils";
+import { mapWeekToDays, formatDate } from "./dateUtils";
 import { fetchDateIds } from '../services/api/dateApi';
 import { fetchShiftsForValidation } from "../services/api/shiftApi";
 
@@ -7,6 +7,16 @@ export const getShiftDetails = (shift, date, formatTime) => {
     if (!shiftDetails) return 'No Shift Assigned';
     return `${formatTime(shiftDetails[0].start_time)} - ${formatTime(shiftDetails[0].end_time)}`;
 };
+
+export const GroupUnassignedShiftsByDate = (unassignedShifts) => {
+    return unassignedShifts.reduce((acc, shift) => {
+        const formattedDate = formatDate(shift.full_date);
+        acc[formattedDate] = acc[formattedDate] || [];
+        acc[formattedDate].push(shift);
+        return acc;
+    }, {});
+};
+
 
 export const transformShifts = (shifts, filters) => {
     const groupedShifts = {};
@@ -127,7 +137,6 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
             return acc;
         }, {});
 
-        console.log("SHIF", groupedConflicts)
         // Return grouped conflicts (if empty, no conflicts)
         return groupedConflicts;
 

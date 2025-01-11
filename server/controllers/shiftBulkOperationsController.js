@@ -16,12 +16,19 @@ export const createAndAssignShiftsInBulk = async (req, res) => {
             return res.status(404).json({ message: 'No valid dates found for the given parameters.' });
         }
 
+        if (!e_id) {
+            const shiftIds = await createShiftsForDatesBulkLogic(location_id, role_id, start_time, end_time, dateIds);
+            if (shiftIds.length === 0) {
+                return res.status(404).json({ message: 'No unassigned shifts created.' });
+            }
+        }
+
         // Step 2: Iterate over each employee and create a new shift for each
         for (const e of e_id) {
             const shiftIds = await createShiftsForDatesBulkLogic(location_id, role_id, start_time, end_time, dateIds); // Use the core logic function
 
             if (shiftIds.length === 0) {
-                return res.status(404).json({ message: 'No valid shifts found for the given parameters.' });
+                return res.status(404).json({ message: 'No shifts created.' });
             }
 
             // Step 3: Assign the newly created shifts to the current employee

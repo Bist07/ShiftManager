@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography, AppBar } from '@mui/material';
+import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -11,12 +11,12 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Filter from './Filters/Filters';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import AddIcon from '@mui/icons-material/Add';
 import ShiftDialog from '../ShiftDialog/ShiftDialog';
 import dayjs from 'dayjs';
 import ShiftTable from '../ShiftTable';
 import MonthlyShiftTable from '../MonthlyShiftTable';
+import AutoAssignButton from './AutoAssignShifts';
 
 const ScheduleToolbar = () => {
     const [weeks, setWeeks] = useState([]);
@@ -124,6 +124,10 @@ const ScheduleToolbar = () => {
     const handleSaveShift = () => {
         setRefetchTrigger((prev) => !prev);
         handleCloseDialog();
+    };
+
+    const handleAutoAssign = () => {
+        // Your auto-assign logic
     };
 
     return (
@@ -243,21 +247,7 @@ const ScheduleToolbar = () => {
 
                 {/* Add a Box with flexGrow to push Tune button to the right */}
                 <Box sx={{ display: 'flex', flexGrow: 1, gap: '16px' }} />
-                <IconButton
-                    sx={{
-                        fontSize: '15px',
-                        textTransform: 'none',
-                        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                        gap: '8px',
-                        borderRadius: '5px',
-                        border: '1px solid #bcbcbc', // Add border to mimic outlined style
-                        color: '#626262',
-                        '&:hover': { backgroundColor: '#f0f0f0' },
-                    }}
-                >
-                    <AutoFixHighIcon />
-                    Auto
-                </IconButton>
+                <AutoAssignButton onClick={handleAutoAssign} />
                 {/* Tune Button, flipped when filter is open */}
                 <IconButton
                     onClick={handleToggleFilter}

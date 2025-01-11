@@ -69,8 +69,6 @@ export const findConflictingSlots = (e_id, dayOfWeekIndex, repeatDays, start_tim
     return groupedConflicts;
 };
 
-
-
 export const getEmployeeAvailabilityForDays = (e_ids, days, availability) => {
     if (!e_ids || !days || !availability) {
         return [];

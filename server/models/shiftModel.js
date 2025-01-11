@@ -151,7 +151,6 @@ export const getUnassignedShiftsModel = async () => {
 
     try {
         const results = await query(sqlQuery);
-        console.log(results)
         return results;
 
     } catch (error) {

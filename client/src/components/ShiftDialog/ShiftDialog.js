@@ -96,7 +96,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         const { start_time, end_time, date, location_id, e_id, role_id } = formData;
 
         // Validate required fields
-        if (!start_time || !end_time || !e_id || !location_id || !date || !role_id) {
+        if (!start_time || !end_time || !location_id || !date || !role_id) {
             setError('All fields are required.');
             return;
         }

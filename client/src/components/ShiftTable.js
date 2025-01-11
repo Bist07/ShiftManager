@@ -13,7 +13,7 @@ import EmployeeCard from './EmployeeCard';
 import { getLocalDate, mapWeekToDays, formatDate } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import WeeklyShiftCard from './ShiftDetailsCard/WeeklyShiftCard';
-import { transformShifts } from '../utils/shiftUtils';
+import { transformShifts, GroupUnassignedShiftsByDate } from '../utils/shiftUtils';
 import useEmployee from '../hooks/useEmployee';
 import useUnassignedShifts from '../hooks/useUnassignedShifts';
 import UnassignedShiftCard from './ShiftDetailsCard/UnassignedShiftCard';
@@ -67,12 +67,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
     };
 
     // Group unassigned shifts by formatted date
-    const unassignedShiftsByDate = unassignedShifts.reduce((acc, shift) => {
-        const formattedDate = formatDate(shift.full_date);
-        acc[formattedDate] = acc[formattedDate] || [];
-        acc[formattedDate].push(shift);
-        return acc;
-    }, {});
+    const unassignedShiftsByDate = GroupUnassignedShiftsByDate(unassignedShifts);
 
     return (
         <>

@@ -18,7 +18,6 @@ const ConflictDialog = ({ open, conflictDetails, ScheduleConflicts, onIgnore, on
             groupedConflicts[e_id].push(...conflicts);
         });
     });
-    console.log(groupedConflicts)
 
     return (
         <Dialog open={open} onClose={onClose}>
