@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Box } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box, TextField } from '@mui/material';
 // Import form selector components
-import TimePickerComponent from './ShiftDialogFields/TimePickerComponent';
+import { DatePicker } from '@mui/x-date-pickers';
 import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
 import { assignShiftsToEmployees } from '../../services/api/shiftBulkOperationsApi';
-import { validateAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
-import ConflictDialog from './ConflictDialog';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { validateAvailability } from '../../utils/availabilityUtils';
 import dayjs from 'dayjs';
+import useUnassignedShifts from '../../hooks/useUnassignedShifts';
+import useAvailability from '../../hooks/useAvailability';
+import { getMaxDate, getMinDate } from '../../utils/shiftUtils';
 
 const AutoAssignDialog = ({ open, onClose, onSave }) => {
     const [error, setError] = useState('');
@@ -15,11 +19,17 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
         end_time: "",
         date: "",
         e_id: [],
+        startDate: "",
+        endDate: "",
     });
-    const [openConflictDialog, setOpenConflictDialog] = useState(false);
-    const [conflictDetails, setConflictDetails] = useState([]);
+
     const [ScheduleConflicts, setScheduleConflicts] = useState([]);
-    const [ignoreConflict, setIgnoreConflict] = useState(false);
+    const { unassignedShifts } = useUnassignedShifts();
+    const { availability } = useAvailability();
+    const [isAssigned, setIsAssigned] = useState(false);
+    const [selectedShift, setSelectedShift] = useState(null);
+    const [selectedEmployee, setSelectedEmployee] = useState('');
+    const [endMinDate, setEndMinDate] = useState(getMinDate(unassignedShifts));
 
     // Handle form data changes
     const handleFormChange = (key, value) => {
@@ -36,10 +46,20 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
                 end_time: "",
                 date: "",
                 e_id: [],
+                startDate: "",
+                endDate: ""
             });
+            setEndMinDate(getMinDate(unassignedShifts));
             setError('');
         }
     }, [open]);
+
+    const minDate = getMinDate(unassignedShifts);
+    const maxDate = getMaxDate(unassignedShifts);
+
+    useEffect(() => {
+        setEndMinDate(formData.startDate || getMinDate(unassignedShifts));
+    }, [formData.startDate, unassignedShifts]);
 
     const handleSave = async () => {
         const { start_time, end_time, date, e_id } = formData;
@@ -54,40 +74,12 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
         const isAvailable = validateAvailability(e_id, start_time, end_time, date);
         const hasConflicts = !isAvailable;
 
-        if (hasConflicts && !ignoreConflict) {
-            const conflicts = findConflictingSlots(e_id, start_time, end_time, date);
-            setScheduleConflicts(conflicts);
-            setConflictDetails(conflicts);
-            setOpenConflictDialog(true); // Show conflict dialog
-            return; // Exit without saving
-        }
-
         try {
             // Assign the shifts to selected employees
-            await assignShiftsToEmployees(formData);
+            // await assignShiftsToEmployees(formData);
             onSave();
         } catch (err) {
             setError('Failed to assign shifts. Please try again.');
-        }
-    };
-
-    const handleIgnoreConflict = async () => {
-        setIgnoreConflict(true);
-        setOpenConflictDialog(false);
-        await handleSave();
-    };
-
-    const handleEditConflict = () => {
-        setIgnoreConflict(false);
-        setOpenConflictDialog(false);
-    };
-
-    const handleDelete = async () => {
-        try {
-            // Implement delete logic if necessary
-            onClose();
-        } catch (err) {
-            setError('Failed to delete shifts. Please try again.');
         }
     };
 
@@ -98,27 +90,37 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
             </Box>
             <DialogContent>
                 {/* Select date, time range and employees */}
-                <TimePickerComponent formData={formData} handleChange={handleFormChange} />
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                        minDate={dayjs(minDate)}
+                        maxDate={dayjs(maxDate)}
+                        label="Start Date"
+                        value={formData.startDate ? dayjs(formData.startDate) : null}
+                        onChange={(date) => handleFormChange('startDate', date ? date.format('YYYY-MM-DD') : '')}
+                        fullWidth
+                        margin="normal"
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                    <DatePicker
+                        minDate={dayjs(endMinDate)}
+                        maxDate={dayjs(maxDate)}
+                        label="End Date"
+                        value={formData.endDate ? dayjs(formData.endDate) : null}
+                        onChange={(date) => handleFormChange('endDate', date ? date.format('YYYY-MM-DD') : '')}
+                        fullWidth
+                        margin="normal"
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </LocalizationProvider>
                 <EmployeeSelector formData={formData} handleChange={handleFormChange} />
                 {error && <Typography color="error">{error}</Typography>}
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button onClick={handleDelete} color="error">Delete</Button>
-                <Button onClick={handleSave} disabled={!formData.start_time || !formData.end_time || !formData.date || formData.e_id.length === 0}>
-                    Save
+                <Button onClick={handleSave} disabled={!formData.startDate || !formData.endDate || formData.e_id.length === 0}>
+                    Assign
                 </Button>
             </DialogActions>
-
-            {/* Conflict Dialog */}
-            <ConflictDialog
-                open={openConflictDialog}
-                conflictDetails={conflictDetails}
-                ScheduleConflicts={ScheduleConflicts}
-                onIgnore={handleIgnoreConflict}
-                onEdit={handleEditConflict}
-                onClose={() => setOpenConflictDialog(false)}
-            />
         </Dialog>
     );
 };

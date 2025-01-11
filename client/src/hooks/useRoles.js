@@ -8,22 +8,21 @@ const useRoles = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const fetchAndTransformRoles = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await fetchRoles();
+            const transformedData = transformRoleData(data);
+            setRole(transformedData);
+        } catch (err) {
+            setError('Failed to load data. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchAndTransformRoles = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const data = await fetchRoles();
-                const transformedData = transformRoleData(data);
-                setRole(transformedData);
-            } catch (err) {
-                setError('Failed to load data. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-
         fetchAndTransformRoles();
 
     }, []);

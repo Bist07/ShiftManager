@@ -7,19 +7,21 @@ const useLocations = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        setLoading(true);
-        setError(null);
-        const getLocations = async () => {
-            try {
-                const data = await fetchLocations();
-                setLocations(data);
-            } catch (err) {
-                setError('Failed to load data. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
+    const getLocations = async () => {
+        try {
+            setLoading(true);
+            setError(null);
+            const data = await fetchLocations();
+            setLocations(data);
+        } catch (err) {
+            setError('Failed to load data. Please try again later.');
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
+
 
         getLocations();
     }, []);

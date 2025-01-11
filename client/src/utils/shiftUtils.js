@@ -145,3 +145,30 @@ export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
         return false;
     }
 };
+
+export const getMaxDate = (unassignedShifts) => {
+    if (!unassignedShifts || unassignedShifts.length === 0) return null;
+
+    return unassignedShifts.reduce((maxDate, shift) => {
+        const shiftDate = new Date(shift.full_date); // Assuming `full_date` is a valid date string
+
+        if (!maxDate || shiftDate > maxDate) {
+            return shiftDate;
+        }
+
+        return maxDate;
+    }, null);
+};
+
+export const getMinDate = (unassignedShifts) => {
+    if (!unassignedShifts || unassignedShifts.length === 0) return null;
+    return unassignedShifts.reduce((minDate, shift) => {
+        const shiftDate = new Date(shift.full_date); // Assuming `full_date` is a valid date string
+
+        if (!minDate || shiftDate < minDate) {
+            return shiftDate;
+        }
+
+        return minDate;
+    }, null);
+};

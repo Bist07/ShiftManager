@@ -26,7 +26,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
     const transformedShifts = transformShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
     const [showUnassigned, setShowUnassigned] = useState(false); // Toggle for unassigned shifts
-    const { unassignedShifts, refetchUnassignedShifts } = useUnassignedShifts([]);
+    const { unassignedShifts, refetchUnassignedShifts } = useUnassignedShifts();
 
     useEffect(() => {
         refetchShifts();

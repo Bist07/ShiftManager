@@ -8,22 +8,21 @@ const useAvailability = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const fetchAndTransformAvailability = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await fetchAvailability();
+            const transformedAvailability = transformAvailability(data);
+            setAvailability(transformedAvailability);
+        } catch (err) {
+            setError('Failed to load data. Please try again later.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const fetchAndTransformAvailability = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const data = await fetchAvailability();
-                const transformedAvailability = transformAvailability(data);
-                setAvailability(transformedAvailability);
-            } catch (err) {
-                setError('Failed to load data. Please try again later.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-
         fetchAndTransformAvailability();
 
     }, []);
