@@ -7,14 +7,13 @@ export const formatTime = (time) => {
 
     // Replace lowercase 'a.m.'/'p.m.' with uppercase 'AM'/'PM' and remove the period.
     formattedTime = formattedTime.replace(/(a.m.|p.m.)/, (match) => match.toUpperCase().replace('.', '').replace('.', ''));
-
     return formattedTime;
 };
 
 export const formatDate = (isoString) => {
     const date = new Date(isoString);
     const year = date.getFullYear();
-    const month = String(date.getMonth()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 };
@@ -119,8 +118,10 @@ export const getHours = (startTime, endTime) => {
     return {
         diffHours,
         diffRemainingMinutes,
-        formatted: diffRemainingMinutes === 0
-            ? `${diffHours}h`
-            : `${diffHours}h ${diffRemainingMinutes}min`
+        formatted: diffHours === 0
+            ? `${diffRemainingMinutes}min`
+            : diffRemainingMinutes === 0
+                ? `${diffHours}h`
+                : `${diffHours}h ${diffRemainingMinutes}min`
     };
 };

@@ -10,14 +10,14 @@ import {
     Button,
 } from '@mui/material';
 import EmployeeCard from './EmployeeCard';
-import ShiftComponent from './ShiftDialog/ShiftDialog';
 import { getLocalDate, mapWeekToDays, formatDate } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
-import ShiftDetails from './ShiftDetails';
+import WeeklyShiftCard from './ShiftDetailsCard/WeeklyShiftCard';
 import { transformShifts } from '../utils/shiftUtils';
 import useEmployee from '../hooks/useEmployee';
 import useUnassignedShifts from '../hooks/useUnassignedShifts';
-import UnassignedShiftCard from './UnassignedShiftCard';
+import UnassignedShiftCard from './ShiftDetailsCard/UnassignedShiftCard';
+import ShiftDialog from './ShiftDialog/ShiftDialog';
 
 const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
@@ -27,7 +27,6 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
     const [currentShift, setCurrentShift] = useState(null);
     const [showUnassigned, setShowUnassigned] = useState(false); // Toggle for unassigned shifts
     const { unassignedShifts, refetchUnassignedShifts } = useUnassignedShifts([]);
-
 
     useEffect(() => {
         refetchShifts();
@@ -105,15 +104,10 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                             })}
                         </TableRow>
                         {showUnassigned && (
-                            <TableRow>
+                            <TableRow >
                                 <TableCell
-                                    align="center"
-                                    colSpan={Object.keys(mappedWeek).length}
-                                    sx={{
-
-                                        backgroundColor: '#f5f5f5', // Add background tint to unassigned section
-                                        border: '2px solid #d3d3d3', // Add a border
-                                    }}
+                                    colSpan={Object.keys(mappedWeek).length + 1}
+                                    sx={{ borderBottom: 2, borderBottomColor: "#0085ff", color: '#0085ff' }}
                                 >
                                     <strong>Unassigned Shifts</strong>
                                 </TableCell>
@@ -124,23 +118,19 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                         {showUnassigned && (
                             <TableRow
                                 sx={{
-                                    backgroundColor: '#f5f5f5', // Tint for the entire unassigned row
-                                    borderTop: '2px solid #d3d3d3', // Top border for the unassigned shifts row
+                                    backgroundColor: '#d7e6ee', // Tint for the entire unassigned row
                                 }}
                             >  <TableCell component="th" scope="row" sx={{ width: '18%', padding: 0 }}>
-
                                 </TableCell>
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
-                                    const formattedDate = formatDate(date);
-                                    const shiftsForDate = unassignedShiftsByDate[formattedDate] || [];
-
+                                    const shiftsForDate = unassignedShiftsByDate[date] || [];
                                     return (
-                                        <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
+                                        <TableCell key={date} align="center" sx={{ borderLeft: '1px solid #ccc', padding: 0 }}>
                                             {shiftsForDate.map((shift) => (
                                                 <Button
                                                     key={shift.shift_id}
-                                                    sx={{ padding: 0, margin: 0 }}
+                                                    sx={{ padding: 0, margin: 0.5 }}
                                                     onClick={() => handleOpenDialog(shift, date)}
                                                 >
                                                     <UnassignedShiftCard shift={shift} date={date} />
@@ -163,10 +153,10 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
 
                                     return (
                                         <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
-                                            <Button sx={{ padding: 0, margin: 0 }}
+                                            <Button sx={{ padding: 0, margin: 0.5 }}
                                                 onClick={() => handleOpenDialog(shiftForDay, date)}
                                             >
-                                                <ShiftDetails shift={shiftForDay} date={date} />
+                                                <WeeklyShiftCard shift={shiftForDay} date={date} />
                                             </Button>
                                         </TableCell>
                                     );
@@ -176,10 +166,10 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
 
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer >
 
             {currentShift && (
-                <ShiftComponent
+                <ShiftDialog
                     shift_id={currentShift.shift_id}
                     start_time={currentShift.start_time}
                     end_time={currentShift.end_time}
@@ -193,7 +183,8 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                     onDelete={handleDeleteShift}
                     onClose={handleCloseDialog}
                 />
-            )}
+            )
+            }
         </>
     );
 };

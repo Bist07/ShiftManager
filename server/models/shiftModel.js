@@ -141,10 +141,11 @@ export const getUnassignedShiftsModel = async () => {
 
     const sqlQuery = `
         SELECT 
-        s.shift_id, NULL AS e_id, s.start_time, s.end_time, d.full_date, s.date_id, s.location_id, s.role_id
+        s.shift_id, NULL AS e_id, s.start_time, s.end_time, d.full_date, s.date_id, s.location_id, s.role_id, r.role_name
         FROM shifts s
         JOIN dim_Date d ON s.date_id = d.date_id
         LEFT JOIN assignments a ON a.shift_id = s.shift_id
+        LEFT JOIN roles r ON s.role_id = r.role_id
         WHERE a.shift_id IS NULL;
     `;
 

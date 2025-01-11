@@ -10,7 +10,7 @@ import {
     Button,
     Box,
 } from '@mui/material';
-import ShiftDetails from './ShiftDetails';
+import MonthlyShiftCard from './ShiftDetailsCard/MonthlyShiftCard';
 import { getDaysInMonth, getLocalDate } from '../utils/dateUtils';
 import useShifts from '../hooks/useShifts';
 import AddIcon from '@mui/icons-material/Add';
@@ -129,11 +129,11 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
                             <AddIcon onClick={() => handleOpenDialog('', date)} fontSize="medium" />
                         </Box>
 
-                        <Box sx={{ marginTop: '20px' }}>
+                        <Box sx={{ marginTop: '20px', mr: 0, ml: 0, padding: 0 }}>
                             {hasShift && shiftsForDay.map((shiftDetail, idx) => (
-                                <Button onClick={() => handleOpenDialog(shiftDetail, date)} >
+                                <Button onClick={() => handleOpenDialog(shiftDetail, date)} sx={{ margin: 0 }} >
                                     <Box key={idx}>
-                                        <ShiftDetails shift={shiftDetail} />
+                                        <MonthlyShiftCard shift={shiftDetail} />
                                     </Box>
                                 </Button>
                             ))}
