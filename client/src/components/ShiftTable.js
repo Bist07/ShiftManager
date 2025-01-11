@@ -33,7 +33,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
     }, [refetchTrigger]);
 
     const handleOpenDialog = (shift, date) => {
-        const shiftDetails = shift.shiftDays[date] || [];
+        const shiftDetails = shift?.shiftDays?.[date] || [];
 
         setCurrentShift({
             name: shift?.name,
