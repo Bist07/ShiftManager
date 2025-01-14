@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, 
 // Import form selector components
 import { DatePicker } from '@mui/x-date-pickers';
 import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
-import { assignShiftsToEmployees } from '../../services/api/shiftBulkOperationsApi';
+// import { assignShiftsToEmployees } from '../../services/api/shiftBulkOperationsApi';
 import usePreference from '../../hooks/usePreference';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -104,7 +104,7 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
             sortedEmployees.forEach((employee) => {
                 if (shiftsAssigned < totalShifts) {
                     // Assign shift logic here
-                    assignShiftsToEmployees(employee.e_id, unassignedShifts[shiftsAssigned]);
+                    // assignShiftsToEmployees(employee.e_id, unassignedShifts[shiftsAssigned]);
                     shiftsAssigned++;
                 }
             });
