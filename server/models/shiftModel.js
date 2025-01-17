@@ -28,7 +28,7 @@ export const getShiftsModel = async (e_ids, date_ids) => {
 
 
 // Function to get shifts by month and year
-export const getShiftsByMonthAndYearModel = async (month, year) => {
+export const getShiftsByYearModel = async (year) => {
     const sqlQuery = `
         SELECT 
             CONCAT(e.first_name, ' ', e.last_name) AS name,
@@ -46,13 +46,13 @@ export const getShiftsByMonthAndYearModel = async (month, year) => {
         LEFT JOIN shifts s ON a.shift_id = s.shift_id
         LEFT JOIN dim_Date d ON s.date_id = d.date_id
         LEFT JOIN roles r ON s.role_id = r.role_id
-        WHERE YEAR(d.full_date) = ? AND MONTH(d.full_date) = ? 
+        WHERE YEAR(d.full_date) = ?
             OR (s.shift_id IS NULL) -- Include employees without shifts
         ORDER BY e.e_id, d.full_date;
     `;
 
     try {
-        const params = [year, month];
+        const params = [year];
         return await query(sqlQuery, params);
     } catch (error) {
         console.error('Error fetching shifts:', error);

@@ -1,5 +1,6 @@
 // models/shiftModel.js
 import { query } from '../config/db.js';
+import dayjs from 'dayjs';
 
 // Function to get shifts by month and year
 export const getDatesByMonthAndYearModel = async (month, year) => {
@@ -16,7 +17,6 @@ export const getDatesByMonthAndYearModel = async (month, year) => {
     return await query(sqlQuery, params);
 };
 
-
 // Function to update the shift in the database
 export const updateDateModel = async (date_id, is_Holiday) => {
     const sqlQuery = `
@@ -29,39 +29,51 @@ export const updateDateModel = async (date_id, is_Holiday) => {
     return await query(sqlQuery, params);
 };
 
-
-export const getDatesIdForShiftModel = async (days, startDate, endDate, frequency) => {
-    if (!days || !startDate || !endDate || !frequency) {
-        throw new Error("Missing required parameters");
+export const getDatesIdForShiftModel = async (dates) => {
+    if (!Array.isArray(dates) || dates.length === 0) {
+        throw new Error("Missing required parameter: dates must be a non-empty array");
     }
-    console.log("Getting date IDs for shift with parameters:", { days, startDate, endDate, frequency });
-    const isSingleDay = startDate === endDate;
-    const queryText = isSingleDay
-        ? `
-            SELECT date_id
-            FROM dim_Date
-            WHERE full_date = ?;
-        `
-        : `
-            SELECT date_id
-            FROM dim_Date
-            WHERE day_of_week IN (?)
-            AND full_date >= ?
-            AND full_date <= ?
-            AND MOD(DATEDIFF(full_date, ?), ?) = 0;
-        `;
-    const params = isSingleDay
-        ? [startDate]
-        : [days, startDate, endDate, startDate, frequency];
 
+    console.log("Getting date IDs for shift with parameters:", { dates });
+
+    // Dynamically generate placeholders for the IN clause
+    const placeholders = dates.map(() => '?').join(', ');
+
+    const queryText = `
+        SELECT date_id, full_date
+        FROM dim_Date
+        WHERE full_date IN (${placeholders});
+    `;
 
     try {
-        const results = await query(queryText, params);
+        // Execute the query with the dates array
+        const results = await query(queryText, dates);
+        console.log(results)
+        // Extract date_ids from the results
         const dateIds = results.map(row => row.date_id);
-        console.log("Date IDs for shift:", results);
-        return dateIds;
+
+        // Find the dates that didn't get a date_id
+        const missingDates = dates.filter(date => !results.some(row => (dayjs(row.full_date)).format('YYYY-MM-DD') === date));
+
+        console.log("Date IDs for shift:", dateIds);
+        console.log("Dates that did not return a date_id:", missingDates);
+
+        return { dateIds, missingDates };
     } catch (err) {
         console.error("Error executing query:", err);
         throw err;
     }
+};
+
+
+export const insertDateModel = async (fullDate, dayOfWeek, isHoliday, isWeekend) => {
+    const insertQuery = `
+        INSERT INTO dim_Date (full_date, day_of_week, is_Holiday, is_Weekend)
+        VALUES (?, ?, ?, ?);
+    `;
+    const result = await query(insertQuery, [fullDate, dayOfWeek, isHoliday, isWeekend]);
+    const dateIds = result?.insertId.map(row => row.date_id);
+
+    console.log("Date IDs for shift:", dateIds);
+    return dateIds;
 };

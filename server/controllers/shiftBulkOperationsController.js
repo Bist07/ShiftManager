@@ -2,18 +2,23 @@
 
 import { deleteAssignmentLogic, assignShiftsToEmployeesBulkLogic } from '../logic/assignmentLogic.js';
 import { createShiftsForDatesBulkLogic, deleteShiftLogic } from '../logic/shiftLogic.js';
-import { getDatesForShiftLogic } from '../logic/dateLogic.js';
+import { getDatesForShiftLogic, createDateLogic } from '../logic/dateLogic.js';
 import { query } from '../config/db.js'; // Import the query function
 
 // Function to create shifts in bulk and assign them to employees with a transaction
 export const createAndAssignShiftsInBulk = async (req, res) => {
-    const { day, repeat, e_id, role_id, location_id, start_time, end_time } = req.body;
+    const { dates, e_id, role_id, location_id, start_time, end_time } = req.body;
     const conn = await query('BEGIN'); // Start the transaction
     try {
         // Step 1: Get date IDs based on the given parameters
-        const dateIds = await getDatesForShiftLogic(repeat); // Use the core logic function
-        if (dateIds.length === 0) {
+        const { dateIds, missingDates } = await getDatesForShiftLogic(dates); // Use the core logic function
+        if (dateIds.length === 0 && missingDates.length === 0) {
             return res.status(404).json({ message: 'No valid dates found for the given parameters.' });
+        }
+
+        if (missingDates.length > 0) {
+            const newDateIds = await createDateLogic(dates)
+            dateIds.push(...newDateIds);
         }
 
         if (!e_id) {

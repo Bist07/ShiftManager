@@ -13,6 +13,7 @@ import {
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { generateValidDates } from '../../../../utils/dateUtils';
 import dayjs from 'dayjs';
 
 const RepeatOptions = ({ formData, handleChange }) => {

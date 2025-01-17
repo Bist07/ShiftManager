@@ -16,6 +16,7 @@ import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 import { isInvalid } from '../../utils/utils';
 import { validateAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
 import { ValidateShift } from '../../utils/shiftUtils';
+import { generateValidDates } from '../../utils/dateUtils';
 //Hooks import
 import useAvailability from '../../hooks/useAvailability';
 //Misc
@@ -45,6 +46,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         role_id: role_id || '',
         location_id: location_id || "",
         e_id: emp_id || "",
+        dates: [date] || "",
     });
 
     let dayOfWeekIndex = dayjs(formData.date).day();
@@ -63,6 +65,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
                 location_id: location_id || '',
                 role_id: role_id || '',
                 e_id: emp_id || '',
+                dates: [date] || "",
             };
             setInitialData(data);
             setFormData(data);
@@ -128,6 +131,9 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
             };
 
         }
+
+        shiftData.dates = generateValidDates(shiftData.repeat.days, shiftData.repeat.startDate, shiftData.repeat.endDate, shiftData.repeat.frequency);
+
         const changes = {};
         for (const key in formData) {
             if (formData[key] !== initialData[key]) {
@@ -136,33 +142,33 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         }
         // Check availability before proceeding
 
-        if (shiftData.e_id.length !== 0) {
-            let isScheduled;
-            const ScheduleConflict = await ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
+        // if (shiftData.e_id.length !== 0) {
+        //     let isScheduled;
+        //     const ScheduleConflict = await ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
 
-            if (ScheduleConflict) {
-                isScheduled = true;
-            } else (
-                isScheduled = false
-            )
-            const isAvailable = validateAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-            const hasConflicts = !isAvailable || !isScheduled;
-            if (hasConflicts && !ignoreConflict) {
-                const conflicts = findConflictingSlots(
-                    shiftData.e_id,
-                    dayOfWeekIndex,
-                    shiftData.repeat.days,
-                    shiftData.start_time,
-                    shiftData.end_time,
-                    availability
-                );
-                setScheduleConflicts(ScheduleConflict);
-                setConflictDetails(conflicts);
-                setOpenConflictDialog(true); // Open conflict dialog
-                return; // Exit without saving
-            }
+        //     if (ScheduleConflict) {
+        //         isScheduled = true;
+        //     } else (
+        //         isScheduled = false
+        //     )
+        //     const isAvailable = validateAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+        //     const hasConflicts = !isAvailable || !isScheduled;
+        //     if (hasConflicts && !ignoreConflict) {
+        //         const conflicts = findConflictingSlots(
+        //             shiftData.e_id,
+        //             dayOfWeekIndex,
+        //             shiftData.repeat.days,
+        //             shiftData.start_time,
+        //             shiftData.end_time,
+        //             availability
+        //         );
+        //         setScheduleConflicts(ScheduleConflict);
+        //         setConflictDetails(conflicts);
+        //         setOpenConflictDialog(true); // Open conflict dialog
+        //         return; // Exit without saving
+        //     }
 
-        }
+        // }
 
         try {
 
@@ -173,8 +179,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
             } else {
                 // Creating a new shift
                 await createBulkShift(
-                    shiftData.date,
-                    shiftData.repeat,
+                    shiftData.dates,
                     shiftData.e_id,
                     shiftData.role_id,
                     shiftData.location_id,
@@ -238,6 +243,7 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
                 isInvalid(formData.repeat.endDate);
         }
     }
+
 
     return (
         <Dialog open={open} onClose={onClose}>

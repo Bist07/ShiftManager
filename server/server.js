@@ -13,7 +13,6 @@ import { router as shiftBulkOperations } from './routes/shiftBulkOperationsRoute
 import { router as roleRoutes } from './routes/roleRoutes.js'
 import { router as preferenceRoutes } from './routes/preferenceRoutes.js'
 
-
 const app = express();
 
 // Use middleware

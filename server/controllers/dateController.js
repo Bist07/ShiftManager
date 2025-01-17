@@ -25,7 +25,6 @@ export const getDates = async (req, res) => {
     }
 };
 
-
 export const updateDate = async (req, res) => {
 
     try {
@@ -34,7 +33,6 @@ export const updateDate = async (req, res) => {
 
         const validationError = validateFields({ date_id }, res);
         if (validationError) return validationError;
-
 
         // Call the model function to update the shift in the database
         const result = await updateDateLogic(date_id);

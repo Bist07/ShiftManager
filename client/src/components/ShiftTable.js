@@ -22,7 +22,7 @@ import ShiftDialog from './ShiftDialog/ShiftDialog';
 const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
     const mappedWeek = mapWeekToDays(week); // Map week to specific dates
-    const { shifts, refetchShifts } = useShifts(month, year, filter);
+    const { shifts, refetchShifts } = useShifts(year, filter);
     const transformedShifts = transformShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
     const [showUnassigned, setShowUnassigned] = useState(false); // Toggle for unassigned shifts

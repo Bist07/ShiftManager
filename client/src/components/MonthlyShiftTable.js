@@ -18,7 +18,7 @@ import ShiftComponent from './ShiftDialog/ShiftDialog';
 import { transformShifts } from '../utils/shiftUtils';
 
 const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
-    const { shifts, refetchShifts } = useShifts(month, year);
+    const { shifts, refetchShifts } = useShifts(year);
     const transformedShifts = transformShifts(shifts, filter);
     const [currentShift, setCurrentShift] = useState(null);
     let daysInMonth = getDaysInMonth(month, year);
@@ -29,7 +29,7 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
 
     useEffect(() => {
         refetchShifts();
-    }, [refetchTrigger, month, year]);
+    }, [refetchTrigger, year]);
 
     const handleOpenDialog = (shift, date) => {
         setCurrentShift({

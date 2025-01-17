@@ -1,9 +1,9 @@
 // src/api/shiftApi.js
 import axiosInstance from './axiosInstance';
 
-export const fetchShifts = async (month, year) => {
+export const fetchShifts = async (year) => {
     try {
-        const response = await axiosInstance.get('/api/shifts', { params: { month, year } });
+        const response = await axiosInstance.get('/api/shifts', { params: { year } });
         return response.data;
     } catch (error) {
         throw new Error(error.response?.data?.message || 'Failed to fetch shifts');

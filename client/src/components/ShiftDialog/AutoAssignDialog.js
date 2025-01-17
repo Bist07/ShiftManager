@@ -44,9 +44,6 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
     useEffect(() => {
         if (open) {
             setFormData({
-                start_time: "",
-                end_time: "",
-                date: "",
                 e_id: [],
                 startDate: "",
                 endDate: ""
@@ -64,55 +61,77 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
     }, [formData.startDate, unassignedShifts]);
 
     const handleSave = async () => {
-        const { start_time, end_time, date, e_id } = formData;
+        const { startDate, endDate, e_id } = formData;
 
         // Validate required fields
-        if (!start_time || !end_time || !date || e_id.length === 0) {
+        if (!startDate || !endDate || e_id.length === 0) {
             setError('All fields are required.');
             return;
         }
 
-        // Handle availability check and assign shifts only to available employees
-        const isScheduled = ValidateShift();
-        const availableEmployees = e_id.filter((employeeId) => {
-            const employeeAvailability = validateAvailability([employeeId], start_time, end_time, date);
-            return employeeAvailability; // Filter out employees with conflicts
-        });
-
-        if (availableEmployees.length === 0) {
-            setError('No available employees for the selected shift.');
-            return;
-        }
-
-        // Step 1: Distribute shifts based on preferences and availability
         try {
-            // Filter preferences that match the selected role and location for each employee
+            // Step 1: Check availability
+            const isScheduled = ValidateShift();
+            const availableEmployees = e_id.filter((employeeId) =>
+                validateAvailability([employeeId], unassignedShifts.start_time, unassignedShifts.end_time, availability)
+            );
+
+            if (availableEmployees.length === 0) {
+                setError('No available employees for the selected shift.');
+                return;
+            }
+
+            // Step 2: Filter preferences and sort employees
             const employeesWithPreferences = prefrences.filter((pref) =>
                 availableEmployees.includes(pref.e_id) && pref.MaxWeeklyHours > 0
             );
 
-            // Sort employees based on their preference
             const sortedEmployees = employeesWithPreferences.sort((a, b) => {
-                // Sort logic to ensure the most appropriate assignment
-                return a.MaxWeeklyHours - b.MaxWeeklyHours; // Adjust the sorting criteria based on your requirements
-            });
-
-            // Assign shifts to employees equally
-            let shiftsAssigned = 0;
-            const totalShifts = unassignedShifts.length;
-
-            sortedEmployees.forEach((employee) => {
-                if (shiftsAssigned < totalShifts) {
-                    // Assign shift logic here
-                    // assignShiftsToEmployees(employee.e_id, unassignedShifts[shiftsAssigned]);
-                    shiftsAssigned++;
+                // Primary sort by MaxWeeklyHours (ascending)
+                if (a.MaxWeeklyHours !== b.MaxWeeklyHours) {
+                    return a.MaxWeeklyHours - b.MaxWeeklyHours;
                 }
+                // Secondary sort by employee seniority (or other criteria)
+                return a.seniority - b.seniority; // Replace 'seniority' with your actual criteria
             });
 
-            // Update the shift assignment
+            // Step 3: Distribute shifts fairly (Round-robin and 1 shift per day per employee)
+            const totalShifts = unassignedShifts.length;
+            let shiftsAssigned = 0;
+            const assignedShiftsByEmployee = {}; // Tracks shifts assigned per employee on the given day
+
+            // Initialize assigned shifts tracker
+            sortedEmployees.forEach((employee) => {
+                assignedShiftsByEmployee[employee.e_id] = 0;
+            });
+
+            while (shiftsAssigned < totalShifts) {
+                for (const employee of sortedEmployees) {
+                    const employeeId = employee.e_id;
+
+                    // Check if employee has already been assigned a shift on this day
+                    if (assignedShiftsByEmployee[employeeId] === 0) {
+                        // Assign shift to employee
+                        console.log(employeeId, unassignedShifts[shiftsAssigned]);
+                        assignedShiftsByEmployee[employeeId]++;
+                        shiftsAssigned++;
+
+                        // Stop if all shifts are assigned
+                        if (shiftsAssigned >= totalShifts) break;
+                    }
+                }
+            }
+
+            // Step 4: Handle unassigned shifts
+            if (shiftsAssigned < totalShifts) {
+                console.warn(`Unassigned shifts remaining: ${totalShifts - shiftsAssigned}`);
+                setError('Some shifts could not be assigned. Please review manually.');
+            }
+
+            // Finalize and update state
             onSave();
         } catch (err) {
-            setError('Failed to assign shifts. Please try again.');
+            setError('An error occurred during shift assignment. Please try again.');
         }
     };
 

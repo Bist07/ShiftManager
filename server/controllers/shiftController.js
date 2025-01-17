@@ -1,4 +1,4 @@
-import { getShiftsByMonthAndYearLogic, updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic, getUnassignedShiftsLogic } from '../logic/shiftLogic.js';
+import { getShiftsByYearLogic, updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic, getUnassignedShiftsLogic } from '../logic/shiftLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Middleware for validating request fields
@@ -9,15 +9,15 @@ const validateRequest = (fields, res) => {
 
 // Controller to handle getting shifts
 export const getShifts = async (req, res) => {
-    const { month, year } = req.query;
+    const { year } = req.query;
 
-    if (validateRequest({ month, year }, res)) return;
+    if (validateRequest({ year }, res)) return;
 
     try {
-        const shifts = await getShiftsByMonthAndYearLogic(month, year);
+        const shifts = await getShiftsByYearLogic(year);
 
         if (shifts.length === 0) {
-            return res.status(404).send('No shifts found for the selected month and year');
+            return res.status(404).send('No shifts found for the selected year');
         }
 
         res.status(200).json(shifts);

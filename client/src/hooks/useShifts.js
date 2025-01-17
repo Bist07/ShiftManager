@@ -2,17 +2,16 @@
 import { useState, useEffect } from 'react';
 import { fetchShifts } from '../services/api/shiftApi';
 
-const useShifts = (month, year) => {
+const useShifts = (year) => {
     const [shifts, setShifts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    month = month + 1;
     const fetchAndTransformShifts = async () => {
         setLoading(true);
         setError(null);
         try {
 
-            const data = await fetchShifts(month, year);
+            const data = await fetchShifts(year);
             setShifts(data);
 
         } catch (err) {
@@ -24,10 +23,10 @@ const useShifts = (month, year) => {
 
     useEffect(() => {
 
-        if (month && year) {
+        if (year) {
             fetchAndTransformShifts();
         }
-    }, [month, year]);
+    }, [year]);
 
     const refetchShifts = () => {
         fetchAndTransformShifts();

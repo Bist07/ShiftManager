@@ -30,14 +30,16 @@ export const transformAvailability = (availability) => {
 
 export const validateAvailability = (e_id, day, days = [], start_time, end_time, availability) => {
     // Ensure valid input
-    if (!e_id || !day || !start_time || !end_time || !availability) {
+    if (!e_id || !days || !start_time || !end_time || !availability) {
         return false;
     }
 
-    // Ensure the day is included in the days array
-    if (!days.includes(day)) {
-        days = [...days, day];
+    if (!day) {// Ensure the day is included in the days array
+        if (!days.includes(day)) {
+            days = [...days, day];
+        }
     }
+
 
     // Get availability slots for the specified days using the helper function
     const employeeAvailability = getEmployeeAvailabilityForDays(e_id, days, availability);
