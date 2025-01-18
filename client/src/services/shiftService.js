@@ -1,12 +1,9 @@
-import { updateShift } from "./api/shiftApi";
-import { createBulkShift, deleteShiftsAndAssignments } from "./api/shiftBulkOperationsApi";
-import { deleteAssignment } from "./api/assignmentApi";
+import { updateShift, createBulkShift, deleteShiftsAndAssignments, deleteAssignment } from './api';
 
 export async function handleShiftChanges(changes, shift_id, shiftData) {
     if (Object.keys(changes).length === 0) {
         return;
     }
-
 
 
     // Case 5: Change in date or repeat (covers all scenarios)

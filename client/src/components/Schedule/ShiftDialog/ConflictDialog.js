@@ -1,9 +1,8 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
-import useEmployee from '../../../hooks/useEmployee';
-import { getEmployeeNameFromId } from '../../../utils/employeeUtils';
+import { useEmployee } from '../../../hooks';
+import { getEmployeeNameFromId, formatDate, formatTime } from '../../../utils';
 import dayjs from 'dayjs';
-import { formatDate, formatTime } from '../../../utils/dateUtils';
 
 const ConflictDialog = ({ open, conflictDetails, ScheduleConflicts, onIgnore, onEdit, onClose }) => {
     const { employees = [], loading } = useEmployee();

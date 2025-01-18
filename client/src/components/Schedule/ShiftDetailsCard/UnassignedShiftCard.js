@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Card, CardActionArea, CardContent, Typography, Box } from '@mui/material';
-import { formatTime, getHours } from '../../../utils/dateUtils';
+import { formatTime, getHours } from '../../../utils';
 
 const UnassignedShiftCard = ({ shift, onClick }) => {
     const { diffHours, diffRemainingMinutes, formatted } = getHours(shift.start_time, shift.end_time);

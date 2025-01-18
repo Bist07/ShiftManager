@@ -1,6 +1,6 @@
 // /hooks/useShifts.js
 import { useState, useEffect } from 'react';
-import { fetchShifts } from '../services/api/shiftApi';
+import { fetchShifts } from '../services/api';
 
 const useShifts = () => {
     const [shifts, setShifts] = useState([]);

@@ -1,6 +1,6 @@
 // /hooks/useLocations.js
 import { useState, useEffect } from 'react';
-import { fetchLocations } from '../services/api/locationApi';
+import { fetchLocations } from '../services/api';
 
 const useLocations = () => {
     const [locations, setLocations] = useState([]);

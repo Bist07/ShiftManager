@@ -10,14 +10,12 @@ import {
     Button,
 } from '@mui/material';
 import EmployeeCard from './EmployeeCard';
-import { getLocalDate, mapWeekToDays } from '../../utils/dateUtils';
-import useShifts from '../../hooks/useShifts';
+import { getLocalDate, mapWeekToDays, transformShifts, GroupUnassignedShiftsByDate } from '../../utils';
+import { useShifts, useEmployee, useUnassignedShifts } from '../../hooks';
 import WeeklyShiftCard from './ShiftDetailsCard/WeeklyShiftCard';
-import { transformShifts, GroupUnassignedShiftsByDate } from '../../utils/shiftUtils';
-import useEmployee from '../../hooks/useEmployee';
-import useUnassignedShifts from '../../hooks/useUnassignedShifts';
 import UnassignedShiftCard from './ShiftDetailsCard/UnassignedShiftCard';
 import ShiftDialog from './ShiftDialog/ShiftDialog';
+
 
 const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array

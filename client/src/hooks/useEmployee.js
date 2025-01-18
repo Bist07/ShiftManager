@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { fetchEmployee } from '../services/api/employeeApi';
-import { transformEmployeeData } from '../utils/employeeUtils';
+import { fetchEmployee } from '../services/api';
+import { transformEmployeeData } from '../utils';
 
 const useEmployee = () => {
     const [employees, setEmployee] = useState([]);

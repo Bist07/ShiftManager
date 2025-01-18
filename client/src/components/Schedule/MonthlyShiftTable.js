@@ -11,11 +11,10 @@ import {
     Box,
 } from '@mui/material';
 import MonthlyShiftCard from './ShiftDetailsCard/MonthlyShiftCard';
-import { getDaysInMonth, getLocalDate } from '../../utils/dateUtils';
-import useShifts from '../../hooks/useShifts';
+import { getDaysInMonth, getLocalDate, transformShifts } from '../../utils';
+import { useShifts } from '../../hooks';
 import AddIcon from '@mui/icons-material/Add';
 import ShiftComponent from './ShiftDialog/ShiftDialog';
-import { transformShifts } from '../../utils/shiftUtils';
 
 const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
     const { shifts, refetchShifts } = useShifts(year);

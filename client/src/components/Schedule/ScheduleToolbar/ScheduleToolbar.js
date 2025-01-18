@@ -3,20 +3,21 @@ import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { formatWeek, generateWeeks } from '../../../utils/dateUtils';
+import { formatWeek, generateWeeks } from '../../../utils';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TuneIcon from '@mui/icons-material/Tune';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import Filter from './Filters/Filters';
+import { Filter } from './Filters';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AddIcon from '@mui/icons-material/Add';
-import ShiftDialog from '../ShiftDialog/ShiftDialog';
+import { ShiftDialog } from '../ShiftDialog';
 import dayjs from 'dayjs';
 import ShiftTable from '../ShiftTable';
 import MonthlyShiftTable from '../MonthlyShiftTable';
-import AutoAssignButton from './AutoAssign/AutoAssignShifts';
+import { AutoAssignButton } from './AutoAssign';
+
 
 const ScheduleToolbar = () => {
     const [weeks, setWeeks] = useState([]);

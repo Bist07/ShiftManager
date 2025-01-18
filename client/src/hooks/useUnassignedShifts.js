@@ -1,4 +1,4 @@
-import { fetchUnassignedShifts } from '../services/api/shiftApi';
+import { fetchUnassignedShifts } from '../services/api';
 import { useState, useEffect } from 'react';
 
 const useUnassignedShifts = () => {

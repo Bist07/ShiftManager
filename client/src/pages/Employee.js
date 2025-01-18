@@ -9,8 +9,8 @@ import {
     Grid,
     Paper,
 } from '@mui/material';
-import AvailabilityForm from './AvailabilityForm';
-import PreferencesForm from './PreferencesForm';
+import AvailabilityForm from '../components/Employees/AvailabilityForm';
+import PreferencesForm from '../components/Employees/PreferencesForm';
 
 const Employee = () => {
     const [tabValue, setTabValue] = useState(0);

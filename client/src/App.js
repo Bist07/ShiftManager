@@ -2,8 +2,7 @@ import React from 'react';
 import './styles/App.css';
 import Header from './components/Header';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Schedule from './pages/Schedule';
-import Employee from './pages/Employee'
+import { Schedule, Employee } from './pages';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme/theme';
 

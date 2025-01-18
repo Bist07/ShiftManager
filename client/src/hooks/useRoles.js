@@ -1,7 +1,7 @@
 // /hooks/useRoles.js
 import { useState, useEffect } from 'react';
-import { fetchRoles } from '../services/api/roleApi';
-import { transformRoleData } from '../utils/roleUtils';
+import { fetchRoles } from '../services/api';
+import { transformRoleData } from '../utils';
 
 const useRoles = () => {
     const [roles, setRole] = useState([]);

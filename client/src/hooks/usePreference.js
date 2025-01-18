@@ -1,6 +1,6 @@
 // /hooks/useLocations.js
 import { useState, useEffect } from 'react';
-import { fetchPreference } from '../services/api/preferenceApi';
+import { fetchPreference } from '../services/api';
 
 const usePreference = () => {
     const [preference, setPreference] = useState([]);

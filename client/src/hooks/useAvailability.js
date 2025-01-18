@@ -1,7 +1,7 @@
 // /hooks/useAvailability.js
 import { useState, useEffect } from 'react';
-import { fetchAvailability } from '../services/api/availabilityApi';
-import { transformAvailability } from '../utils/availabilityUtils';
+import { fetchAvailability } from '../services/api';
+import { transformAvailability } from '../utils';
 
 const useAvailability = () => {
     const [availability, setAvailability] = useState([]);

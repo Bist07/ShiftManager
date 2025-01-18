@@ -1,25 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box } from '@mui/material';
-//Form Selector imports
-import DatePicker from './ShiftDialogFields/DatePicker';
-import TimePickerComponent from './ShiftDialogFields/TimePickerComponent';
-import RepeatOptions from './ShiftDialogFields/RepeatOptions/RepeatOptions';
-import LocationSelector from './ShiftDialogFields/LocationSelector';
-import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
-import RoleSelector from './ShiftDialogFields/RoleSelector';
-//Api imports
-import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api/shiftBulkOperationsApi';
+import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, RoleSelector } from './ShiftDialogFields';
+import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api';
 import { handleShiftChanges } from '../../../services/shiftService';
-//Icons import
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
-//Utils import
-import { isInvalid } from '../../../utils/utils';
-import { validateAvailability, findConflictingSlots } from '../../../utils/availabilityUtils';
-import { ValidateShift } from '../../../utils/shiftUtils';
-import { generateValidDates } from '../../../utils/dateUtils';
-//Hooks import
-import useAvailability from '../../../hooks/useAvailability';
-//Misc
+import { validateAvailability, findConflictingSlots, generateValidDates, ValidateShift, isInvalid } from '../../../utils';
+import { useAvailability } from '../../../hooks';
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
 
