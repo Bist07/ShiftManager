@@ -16,8 +16,7 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
         await deleteShiftsAndAssignments(oldValue || [], shift_id);
 
         await createBulkShift(
-            shiftData.date,
-            shiftData.repeat,
+            shiftData.dates,
             shiftData.e_id,
             shiftData.role_id,
             shiftData.location_id,
@@ -44,8 +43,7 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
 
 
             await createBulkShift(
-                shiftData.date,
-                shiftData.repeat,
+                shiftData.dates,
                 newEIDs,
                 shiftData.role_id,
                 shiftData.location_id,
@@ -72,8 +70,7 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
         await deleteShiftsAndAssignments(removedEIDs, shift_id);
 
         await createBulkShift(
-            shiftData.date,
-            shiftData.repeat,
+            shiftData.dates,
             shiftData.e_id,
             shiftData.role_id,
             shiftData.location_id,

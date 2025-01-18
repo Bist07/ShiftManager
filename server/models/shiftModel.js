@@ -8,7 +8,7 @@ export const getShiftsModel = async () => {
             CONCAT(e.first_name, ' ', e.last_name) AS name,
             e.e_id,  
             s.shift_id,
-            s.full_date AS date,  
+            s.full_date,  
             s.location_id,
             s.start_time, 
             s.end_time ,

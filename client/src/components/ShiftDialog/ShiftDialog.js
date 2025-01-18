@@ -23,7 +23,7 @@ import useAvailability from '../../hooks/useAvailability';
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';
 
-const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
+const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
     const [error, setError] = useState('');
     const [repeat, setRepeat] = React.useState(false);
     const { availability } = useAvailability();
@@ -54,7 +54,6 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
     // Reset formData when the dialog is opened or date/e_id changes
     useEffect(() => {
         if (open) {
-
             // If editing, initialize the form with the shift data
             const data = {
                 shift_id: shift_id || '',
@@ -141,33 +140,33 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
         }
         // Check availability before proceeding
 
-        // if (shiftData.e_id.length !== 0) {
-        //     let isScheduled;
-        //     const ScheduleConflict = await ValidateShift(shiftData.e_id, shiftData.repeat, shiftData.start_time, shiftData.end_time)
+        if (shiftData.e_id.length !== 0) {
+            let isScheduled;
+            const ScheduleConflict = ValidateShift(shifts, shiftData.e_id, shiftData.dates, shiftData.start_time, shiftData.end_time)
 
-        //     if (ScheduleConflict) {
-        //         isScheduled = true;
-        //     } else (
-        //         isScheduled = false
-        //     )
-        //     const isAvailable = validateAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
-        //     const hasConflicts = !isAvailable || !isScheduled;
-        //     if (hasConflicts && !ignoreConflict) {
-        //         const conflicts = findConflictingSlots(
-        //             shiftData.e_id,
-        //             dayOfWeekIndex,
-        //             shiftData.repeat.days,
-        //             shiftData.start_time,
-        //             shiftData.end_time,
-        //             availability
-        //         );
-        //         setScheduleConflicts(ScheduleConflict);
-        //         setConflictDetails(conflicts);
-        //         setOpenConflictDialog(true); // Open conflict dialog
-        //         return; // Exit without saving
-        //     }
+            if (ScheduleConflict) {
+                isScheduled = true;
+            } else (
+                isScheduled = false
+            )
+            const isAvailable = validateAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+            const hasConflicts = !isAvailable || !isScheduled;
+            if (hasConflicts && !ignoreConflict) {
+                const conflicts = findConflictingSlots(
+                    shiftData.e_id,
+                    dayOfWeekIndex,
+                    shiftData.repeat.days,
+                    shiftData.start_time,
+                    shiftData.end_time,
+                    availability
+                );
+                setScheduleConflicts(ScheduleConflict);
+                setConflictDetails(conflicts);
+                setOpenConflictDialog(true); // Open conflict dialog
+                return; // Exit without saving
+            }
 
-        // }
+        }
 
         try {
 

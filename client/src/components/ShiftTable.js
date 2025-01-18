@@ -145,7 +145,6 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
                                     const shiftForDay = transformedShifts.find(shift => shift.e_id === emp.e_id);
-                                    console.log(shiftForDay)
                                     return (
                                         <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
                                             <Button sx={{ padding: 0, margin: 0.5 }}
@@ -166,6 +165,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
             {currentShift && (
                 <ShiftDialog
                     shift_id={currentShift.shift_id}
+                    shifts={shifts}
                     start_time={currentShift.start_time}
                     end_time={currentShift.end_time}
                     location_id={currentShift.location_id}

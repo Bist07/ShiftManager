@@ -1,4 +1,5 @@
 import { mapWeekToDays, formatDate } from "./dateUtils";
+import dayjs from 'dayjs';
 
 export const getShiftDetails = (shift, date, formatTime) => {
     const shiftDetails = shift.shiftDays[date];
@@ -32,19 +33,16 @@ export const transformShifts = (shifts, filters) => {
     }) : shifts; // No filtering if filters are undefined
 
     // Iterate through each shift and group them by employee
-    filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, date, role_id, role_name }) => {
+    filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, full_date, role_id, role_name }) => {
         if (!groupedShifts[e_id]) {
             groupedShifts[e_id] = { e_id, name, shiftDays: {} };
         }
 
-        // Format the shift date to a standard format for comparison (e.g., YYYY-MM-DD)
-        const shiftDate = new Date(date).toLocaleDateString();
-
         // Group shifts by the date
-        groupedShifts[e_id].shiftDays[shiftDate] = groupedShifts[e_id].shiftDays[shiftDate] || [];
+        groupedShifts[e_id].shiftDays[full_date] = groupedShifts[e_id].shiftDays[full_date] || [];
 
         // Add the shift details to the respective date
-        groupedShifts[e_id].shiftDays[shiftDate].push({
+        groupedShifts[e_id].shiftDays[full_date].push({
             shift_id,
             role_id,
             role_name,
@@ -79,64 +77,54 @@ export const getScheduledHours = (e_id, shifts, period) => {
     return scheduledHours;
 }
 
-export const ValidateShift = async (e_id, repeat, start_time, end_time) => {
-    if (!e_id || !repeat || !start_time || !end_time) {
+export const ValidateShift = (shifts, e_id, dates, start_time, end_time) => {
+    if (!e_id || !dates || !start_time || !end_time) {
         console.error('Invalid input: e_id, repeat, start_time, or end_time is missing');
         return false;
     }
 
     try {
-        // Fetch date IDs based on the repeat pattern
-        // const date_ids = await fetchDateIds(repeat);
-        // if (!date_ids || date_ids.length === 0) {
-        //     console.error('No date IDs found for the given repeat pattern');
-        //     return false;
-        // }
 
-        // // Fetch shifts for the employee within the given date range
-        // // const shifts = await fetchShiftsForValidation(e_id, date_ids);
-        // // Collect conflicts
-        // const conflicts = [];
+        // Collect conflicts
+        const conflicts = [];
 
-        // // Check for conflicts based on matching date_id
-        // shifts.forEach((shift) => {
-        //     if (e_id.includes(shift.e_id) && date_ids.includes(shift.date_id)) {
-        //         const shiftStart = new Date(`1970-01-01T${shift.start_time}Z`);
-        //         const shiftEnd = new Date(`1970-01-01T${shift.end_time}Z`);
-        //         const newStart = new Date(`1970-01-01T${start_time}Z`);
-        //         const newEnd = new Date(`1970-01-01T${end_time}Z`);
+        // Check for conflicts based on matching date
+        shifts.forEach((shift) => {
+            if (e_id.includes(shift.e_id) && dates.includes(shift.full_date)) {
+                const shiftStart = new Date(`1970-01-01T${shift.start_time}Z`);
+                const shiftEnd = new Date(`1970-01-01T${shift.end_time}Z`);
+                const newStart = new Date(`1970-01-01T${start_time}Z`);
+                const newEnd = new Date(`1970-01-01T${end_time}Z`);
 
-        //         if (
-        //             (newStart >= shiftStart && newStart < shiftEnd) || // Overlaps at the start
-        //             (newEnd > shiftStart && newEnd <= shiftEnd) ||    // Overlaps at the end
-        //             (newStart <= shiftStart && newEnd >= shiftEnd)    // Completely overlaps existing shift
-        //         ) {
-        //             conflicts.push({
-        //                 e_id: shift.e_id, // Include matched e_id
-        //                 date: shift.full_date,   // Include the full date
-        //                 shiftStart: shift.start_time,
-        //                 shiftEnd: shift.end_time,
-        //                 conflictStart: start_time,
-        //                 conflictEnd: end_time,
-        //             });
-        //         }
-        //     }
-        // });
+                if (
+                    (newStart >= shiftStart && newStart < shiftEnd) || // Overlaps at the start
+                    (newEnd > shiftStart && newEnd <= shiftEnd) ||    // Overlaps at the end
+                    (newStart <= shiftStart && newEnd >= shiftEnd)    // Completely overlaps existing shift
+                ) {
+                    conflicts.push({
+                        e_id: shift.e_id, // Include matched e_id
+                        date: shift.full_date,   // Include the full date
+                        shiftStart: shift.start_time,
+                        shiftEnd: shift.end_time,
+                        conflictStart: start_time,
+                        conflictEnd: end_time,
+                    });
+                }
+            }
+        });
 
+        // Group conflicts by employee ID
+        const groupedConflicts = conflicts.reduce((acc, detail) => {
+            if (!acc[detail.e_id]) {
+                acc[detail.e_id] = [];
+            }
+            acc[detail.e_id].push(detail);
 
+            return acc;
+        }, {});
 
-        // // Group conflicts by employee ID
-        // const groupedConflicts = conflicts.reduce((acc, detail) => {
-        //     if (!acc[detail.e_id]) {
-        //         acc[detail.e_id] = [];
-        //     }
-        //     acc[detail.e_id].push(detail);
-
-        //     return acc;
-        // }, {});
-
-        // // Return grouped conflicts (if empty, no conflicts)
-        // return groupedConflicts;
+        // Return grouped conflicts (if empty, no conflicts)
+        return groupedConflicts;
 
     } catch (error) {
         console.error('Error validating shift:', error);
