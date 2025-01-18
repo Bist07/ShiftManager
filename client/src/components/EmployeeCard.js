@@ -3,17 +3,6 @@ import { Box, Typography, Avatar } from '@mui/material';
 
 const EmployeeCard = ({ title, description, image }) => {
 
-    function stringToColor(name) {
-        let hash = 0;
-        for (let i = 0; i < name.length; i++) {
-            hash = name.charCodeAt(i) + ((hash << 5) - hash); // Hash function
-        }
-
-        // Generate a color from the hash
-        const color = `#${(hash & 0xffffff).toString(16).padStart(6, '0')}`;
-        return color;
-    }
-
     return (
         <Box
             sx={{
@@ -32,7 +21,7 @@ const EmployeeCard = ({ title, description, image }) => {
                 {/* Left: Circular Image */}
 
                 <Avatar
-                    sx={{ bgcolor: stringToColor(title), marginLeft: 2 }}
+                    sx={{ marginLeft: 2 }}
                     alt={title}
                     src="/broken-image.jpg"
                 />

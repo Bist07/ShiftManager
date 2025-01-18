@@ -99,8 +99,10 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                 );
                             })}
                         </TableRow>
+
+                        {/* Unassigned Shifts Header (Conditional display) */}
                         {showUnassigned && (
-                            <TableRow >
+                            <TableRow>
                                 <TableCell
                                     colSpan={Object.keys(mappedWeek).length + 1}
                                     sx={{ borderBottom: 2, borderBottomColor: "#0085ff", color: '#0085ff' }}
@@ -110,14 +112,16 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                             </TableRow>
                         )}
                     </TableHead>
+
                     <TableBody>
+                        {/* Unassigned Shifts Row */}
                         {showUnassigned && (
                             <TableRow
                                 sx={{
                                     backgroundColor: '#d7e6ee', // Tint for the entire unassigned row
                                 }}
-                            >  <TableCell component="th" scope="row" sx={{ padding: 0, borderBottom: '1px solid #ccc' }}>
-                                </TableCell>
+                            >
+                                <TableCell component="th" scope="row" sx={{ padding: 0, borderBottom: '1px solid #ccc' }}></TableCell>
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
                                     const shiftsForDate = unassignedShiftsByDate[date] || [];
@@ -137,6 +141,15 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                 })}
                             </TableRow>
                         )}
+                        <TableRow>
+                            <TableCell
+                                colSpan={Object.keys(mappedWeek).length + 1}
+                                sx={{ borderBottom: 2, borderBottomColor: "#0085ff", color: '#0085ff' }}
+                            >
+                                <strong>Assigned Shifts</strong>
+                            </TableCell>
+                        </TableRow>
+                        {/* Assigned Shifts Rows (Always displayed) */}
                         {employees.map((emp) => (
                             <TableRow key={emp.e_id}>
                                 <TableCell component="th" scope="row" sx={{ padding: 0 }}>
@@ -158,10 +171,10 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                 })}
                             </TableRow>
                         ))}
-
                     </TableBody>
                 </Table>
-            </TableContainer >
+            </TableContainer>
+
 
             {currentShift && (
                 <ShiftDialog
