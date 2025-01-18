@@ -41,6 +41,13 @@ const RoleSelector = ({ formData, handleChange }) => {
                     value={selectedRole}
                     onChange={handleRoleChange}
                     placeholder="Select or create role"
+                    menuPortalTarget={document.body} // Render dropdown outside parent container
+                    styles={{
+                        menuPortal: (base) => ({
+                            ...base,
+                            zIndex: 1300, // Adjust z-index to make dropdown appear on top
+                        }),
+                    }}
                 />
             </FormControl>
         </div>

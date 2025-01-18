@@ -42,6 +42,13 @@ const EmployeeSelector = ({ formData, handleChange }) => {
                     value={selectedEmployees}
                     onChange={handleEmployeeChange}
                     placeholder="Select or create employees"
+                    menuPortalTarget={document.body} // Render dropdown outside parent container
+                    styles={{
+                        menuPortal: (base) => ({
+                            ...base,
+                            zIndex: 1300, // Adjust z-index to make dropdown appear on top
+                        }),
+                    }}
                 />
             </FormControl>
         </div>
