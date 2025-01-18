@@ -39,12 +39,12 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
         setCurrentShift({
             name: shift?.name,
             e_id: shift?.e_id,
-            shift_id: shiftDetails[0]?.shift_id,
-            location_id: shiftDetails[0]?.location_id,
-            role_id: shiftDetails[0]?.role_id,
+            shift_id: shiftDetails[0]?.shift_id || shift.shift_id,
+            location_id: shiftDetails[0]?.location_id || shift.location_id,
+            role_id: shiftDetails[0]?.role_id || shift.role_id,
             date,
-            start_time: shiftDetails[0]?.start_time || 'N/A',
-            end_time: shiftDetails[0]?.end_time || 'N/A',
+            start_time: shiftDetails[0]?.start_time || shift.start_time,
+            end_time: shiftDetails[0]?.end_time || shift.end_time,
         });
     };
 

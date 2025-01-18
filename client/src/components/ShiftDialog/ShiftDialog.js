@@ -33,7 +33,8 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
     const [ScheduleConflicts, setScheduleConflicts] = useState([]); // Store conflict details
     const [initialData, setInitialData] = useState(null); // Store initial data
     let emp_id;
-    if (typeof e_id === "undefined") {
+
+    if (typeof e_id === "undefined" || e_id === null) {
         emp_id = ""
     } else {
         emp_id = [e_id];
