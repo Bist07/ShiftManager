@@ -5,6 +5,7 @@ export const assignShiftToEmployeeLogic = async (employeeId, shiftId) => {
         // Call the model function to assign a single shift to an employee
         const result = await assignShiftToEmployeeModel(employeeId, shiftId);
         if (result.affectedRows > 0) {
+            console.log(result)
             return { success: true };
         } else {
             return { success: false, message: 'Failed to assign shift', error: 'No changes made or shift not found' };
@@ -20,6 +21,7 @@ export const assignShiftsToEmployeesBulkLogic = async (employeeIds, shiftIds) =>
         // Call the model function to assign shifts in bulk to employees
         const result = await assignShiftsToEmployeesBulkModel(employeeIds, shiftIds);
         if (result.affectedRows > 0) {
+            console.log(result)
             return { success: true, message: 'Shifts assigned to employees in bulk successfully.' };
         } else {
             return { success: false, message: 'Failed to assign shifts to employees.' };

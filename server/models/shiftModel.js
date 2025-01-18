@@ -1,41 +1,14 @@
 import { query } from '../config/db.js';
 
-// Function to get shifts 
-export const getShiftsModel = async (e_ids, date_ids) => {
 
-    // Create placeholders for e_ids and date_ids
-    const eIdPlaceholders = e_ids.map(() => '?').join(', '); // "?, ?, ?"
-    const dateIdPlaceholders = date_ids.map(() => '?').join(', '); // "?, ?, ?"
-
-    const sqlQuery = `
-        SELECT 
-        s.shift_id, employee_id AS e_id, start_time, end_time, d.full_date, s.date_id
-        FROM shifts s
-        JOIN assignments a ON a.shift_id = s.shift_id
-        JOIN dim_Date d ON s.date_id = d.date_id
-        WHERE employee_id IN (${eIdPlaceholders}) AND s.date_id IN (${dateIdPlaceholders})
-    `;
-
-    try {
-        const results = await query(sqlQuery, [...e_ids, ...date_ids]); // Spread e_ids and date_ids into the query
-        return results;
-    } catch (error) {
-        console.error('Error executing query:', error);
-        throw new Error('Failed to fetch shifts from the database');
-    }
-};
-
-
-
-// Function to get shifts by month and year
-export const getShiftsByYearModel = async (year) => {
+// Function to get all shifts 
+export const getShiftsModel = async () => {
     const sqlQuery = `
         SELECT 
             CONCAT(e.first_name, ' ', e.last_name) AS name,
             e.e_id,  
             s.shift_id,
-            d.full_date AS date,  
-            d.day_of_week, 
+            s.full_date AS date,  
             s.location_id,
             s.start_time, 
             s.end_time ,
@@ -44,16 +17,13 @@ export const getShiftsByYearModel = async (year) => {
         FROM employee e
         LEFT JOIN assignments a ON a.employee_id = e.e_id
         LEFT JOIN shifts s ON a.shift_id = s.shift_id
-        LEFT JOIN dim_Date d ON s.date_id = d.date_id
         LEFT JOIN roles r ON s.role_id = r.role_id
-        WHERE YEAR(d.full_date) = ?
-            OR (s.shift_id IS NULL) -- Include employees without shifts
-        ORDER BY e.e_id, d.full_date;
+        ORDER BY e.e_id, s.full_date;
     `;
 
     try {
-        const params = [year];
-        return await query(sqlQuery, params);
+
+        return await query(sqlQuery);
     } catch (error) {
         console.error('Error fetching shifts:', error);
         throw new Error('Failed to fetch shifts.');
@@ -109,15 +79,16 @@ export const deleteShiftModel = async (shift_id) => {
     }
 };
 
-export const createShiftsForDatesBulkModel = async (locationId, role_id, startTime, endTime, dateIds) => {
+export const createShiftsForDatesBulkModel = async (locationId, role_id, startTime, endTime, dates) => {
     try {
         // Construct the values for the insert
-        const values = dateIds.map(dateId =>
-            `(${locationId},'${role_id}' ,'${startTime}', '${endTime}', ${dateId})`
+
+        const values = dates.map(date =>
+            `(${locationId},'${role_id}','${startTime}', '${endTime}', '${date}')`
         ).join(", ");  // Join all values with a comma
 
         const sqlCreateShiftBulk = `
-            INSERT INTO shifts (location_id, role_id,start_time, end_time, date_id)
+            INSERT INTO shifts (location_id, role_id, start_time, end_time, full_date)
             VALUES ${values}
         `;
 
@@ -126,6 +97,15 @@ export const createShiftsForDatesBulkModel = async (locationId, role_id, startTi
         const shift_ids = [];
 
         for (let i = 0; i < result.affectedRows; i++) {
+            const sqlUpdateDateId = `
+            UPDATE shifts s
+            INNER JOIN dim_Date d
+                ON s.full_date = d.full_date
+            SET s.date_id = d.date_id
+            WHERE s.date_id IS NULL;
+        `;
+            await query(sqlUpdateDateId);
+
             shift_ids.push(Number(result.insertId) + i);
         }
 

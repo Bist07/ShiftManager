@@ -19,7 +19,7 @@ import useUnassignedShifts from '../hooks/useUnassignedShifts';
 import UnassignedShiftCard from './ShiftDetailsCard/UnassignedShiftCard';
 import ShiftDialog from './ShiftDialog/ShiftDialog';
 
-const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchTrigger }) => {
+const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
     const mappedWeek = mapWeekToDays(week); // Map week to specific dates
     const { shifts, refetchShifts } = useShifts(year, filter);
@@ -145,7 +145,7 @@ const ShiftTable = ({ shifts: initialShifts, week, month, year, filter, refetchT
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
                                     const shiftForDay = transformedShifts.find(shift => shift.e_id === emp.e_id);
-
+                                    console.log(shiftForDay)
                                     return (
                                         <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
                                             <Button sx={{ padding: 0, margin: 0.5 }}

@@ -1,4 +1,4 @@
-import { getShiftsByYearLogic, updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic, getUnassignedShiftsLogic } from '../logic/shiftLogic.js';
+import { updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic, getUnassignedShiftsLogic } from '../logic/shiftLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Middleware for validating request fields
@@ -9,41 +9,18 @@ const validateRequest = (fields, res) => {
 
 // Controller to handle getting shifts
 export const getShifts = async (req, res) => {
-    const { year } = req.query;
-
-    if (validateRequest({ year }, res)) return;
 
     try {
-        const shifts = await getShiftsByYearLogic(year);
+        const shifts = await getShiftsLogic();
 
         if (shifts.length === 0) {
-            return res.status(404).send('No shifts found for the selected year');
+            return res.status(404).send('No shifts found');
         }
 
         res.status(200).json(shifts);
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred while fetching shifts');
-    }
-};
-
-// Controller to handle getting shifts
-export const getShiftsForValidation = async (req, res) => {
-    const { e_id, dateIds } = req.query;
-
-    if (validateRequest({ e_id, dateIds })) return null; // Return null or empty array if validation fails
-
-    try {
-        const shifts = await getShiftsLogic(e_id, dateIds);
-
-        if (shifts.length === 0) {
-            return res.status(404).send('No shifts found for the selected month and year');
-        }
-
-        res.status(200).json(shifts);
-    } catch (error) {
-        console.error(error);
-        throw new Error('An error occurred while fetching shifts'); // Throw error for route handler to catch
     }
 };
 

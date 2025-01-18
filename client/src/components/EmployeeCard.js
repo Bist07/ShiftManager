@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Typography, Avatar } from '@mui/material';
-import pfp from '../assets/images/pfp.jpg'; // Replace this with dynamic image handling if needed
 
 const EmployeeCard = ({ title, description, image }) => {
 

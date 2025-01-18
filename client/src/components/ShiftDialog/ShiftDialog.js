@@ -119,7 +119,6 @@ const ShiftDialog = ({ shift_id, e_id, location_id, role_id, start_time, end_tim
             };
         }
 
-
         if (shiftData.repeat.frequency == "1") {
             const DaysUntillEndOfWeek = 7 - (dayOfWeekIndex + 1);
             const endOfWeek = dayjs(shiftData.date).add(DaysUntillEndOfWeek, 'day').format('YYYY-MM-DD');;

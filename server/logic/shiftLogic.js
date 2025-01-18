@@ -1,13 +1,13 @@
 // logic/shiftLogic.js
-import { getShiftsByYearModel, updateShiftModel, deleteShiftModel, createShiftModel, createShiftsForDatesBulkModel, getShiftsModel, getUnassignedShiftsModel } from '../models/shiftModel.js';
+import { updateShiftModel, deleteShiftModel, createShiftModel, createShiftsForDatesBulkModel, getShiftsModel, getUnassignedShiftsModel } from '../models/shiftModel.js';
 
 // Logic to get shifts by year
-export const getShiftsByYearLogic = async (year) => {
+export const getShiftsLogic = async () => {
     try {
-        const shifts = await getShiftsByYearModel(year);
+        const shifts = await getShiftsModel();
         return shifts;
     } catch (error) {
-        throw new Error('Failed to fetch shifts by year');
+        throw new Error('Failed to fetch shifts');
     }
 };
 
@@ -42,24 +42,15 @@ export const createShiftLogic = async (date, repeat, e_id, role_id, location_id,
 };
 
 // Logic to create shifts for dates in bulk
-export const createShiftsForDatesBulkLogic = async (locationId, role_id, startTime, endTime, dateIds) => {
+export const createShiftsForDatesBulkLogic = async (locationId, role_id, startTime, endTime, dates) => {
     try {
-        const shiftIds = await createShiftsForDatesBulkModel(locationId, role_id, startTime, endTime, dateIds);
+        const shiftIds = await createShiftsForDatesBulkModel(locationId, role_id, startTime, endTime, dates);
         return shiftIds;
     } catch (error) {
         throw new Error('Failed to create shifts in bulk');
     }
 };
 
-// Logic to get shifts
-export const getShiftsLogic = async (e_id, dateIds) => {
-    try {
-        const shifts = await getShiftsModel(e_id, dateIds);
-        return shifts;
-    } catch (error) {
-        throw new Error('Failed to fetch shifts');
-    }
-};
 
 // Logic to get unassigned shifts
 export const getUnassignedShiftsLogic = async () => {

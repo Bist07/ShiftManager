@@ -66,14 +66,42 @@ export const getDatesIdForShiftModel = async (dates) => {
 };
 
 
-export const insertDateModel = async (fullDate, dayOfWeek, isHoliday, isWeekend) => {
-    const insertQuery = `
-        INSERT INTO dim_Date (full_date, day_of_week, is_Holiday, is_Weekend)
-        VALUES (?, ?, ?, ?);
-    `;
-    const result = await query(insertQuery, [fullDate, dayOfWeek, isHoliday, isWeekend]);
-    const dateIds = result?.insertId.map(row => row.date_id);
+export const insertDateModel = async (fullDates, dayOfWeek, isHoliday, isWeekend) => {
+    const dateIds = [];
 
-    console.log("Date IDs for shift:", dateIds);
+    // Loop through each date in the array
+    for (const date of fullDates) {
+
+
+        // Query to check if the date already exists
+        const checkQuery = `
+            SELECT date_id
+            FROM dim_Date
+            WHERE full_date = ?;
+        `;
+
+        // Check if the date exists
+        const existingDates = await query(checkQuery, [date]);
+
+        if (existingDates.length > 0) {
+            // If the date exists, add the existing date_id to the list
+            const existingDateIds = existingDates.map(row => row.date_id);
+            dateIds.push(...existingDateIds);
+            console.log(`Date already exists: ${date}. Date IDs for shift:`, existingDateIds);
+        } else {
+            // Insert the new date if it does not exist
+            const insertQuery = `
+                INSERT INTO dim_Date (full_date, day_of_week, is_Holiday, is_Weekend)
+                VALUES (?, ?, ?, ?);
+            `;
+            dayOfWeek = new Date(date).getDay();
+            const result = await query(insertQuery, [date, dayOfWeek, isHoliday, isWeekend]);
+
+            // Add the new date_id to the list
+            dateIds.push(result.insertId);
+            console.log(`New date created: ${date}. Date ID:`, result.insertId);
+        }
+    }
+
     return dateIds;
 };
