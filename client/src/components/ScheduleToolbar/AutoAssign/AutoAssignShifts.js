@@ -1,7 +1,7 @@
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import { IconButton } from '@mui/material';
 import { useState } from 'react';
-import AutoAssignDialog from '../ShiftDialog/AutoAssignDialog';
+import AutoAssignDialog from './AutoAssignDialog';
 
 const AutoAssignShifts = ({ unassignedShiftsByDate }) => {
 

@@ -2,19 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box, TextField } from '@mui/material';
 // Import form selector components
 import { DatePicker } from '@mui/x-date-pickers';
-import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
+import EmployeeSelector from '../../ShiftDialog/ShiftDialogFields/EmployeeSelector';
 // import { assignShiftsToEmployees } from '../../services/api/shiftBulkOperationsApi';
-import usePreference from '../../hooks/usePreference';
+import usePreference from '../../../hooks/usePreference';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { validateAvailability } from '../../utils/availabilityUtils';
-import { ValidateShift } from '../../utils/shiftUtils';
-import { getHours } from '../../utils/dateUtils';
+import { validateAvailability } from '../../../utils/availabilityUtils';
+import { ValidateShift } from '../../../utils/shiftUtils';
+import { getHours } from '../../../utils/dateUtils';
 import dayjs from 'dayjs';
-import useUnassignedShifts from '../../hooks/useUnassignedShifts';
-import useAvailability from '../../hooks/useAvailability';
-import useShifts from '../../hooks/useShifts';
-import { createAssignment } from '../../services/api/assignmentApi';
+import useUnassignedShifts from '../../../hooks/useUnassignedShifts';
+import useAvailability from '../../../hooks/useAvailability';
+import useShifts from '../../../hooks/useShifts';
+import { createAssignment } from '../../../services/api/assignmentApi';
 
 const AutoAssignDialog = ({ open, onClose, onSave }) => {
     const { shifts, refetchShifts } = useShifts();

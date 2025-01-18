@@ -127,7 +127,6 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                 startDate: shiftData.date,
                 endDate: endOfWeek,
             };
-
         }
 
         shiftData.dates = generateValidDates(shiftData.repeat.days, shiftData.repeat.startDate, shiftData.repeat.endDate, shiftData.repeat.frequency);
@@ -144,7 +143,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
 
             const { ScheduleConflict, IsAlreadyScheduled } = ValidateShift(shifts, shiftData.e_id, shiftData.dates, shiftData.start_time, shiftData.end_time)
 
-            const isAvailable = validateAvailability(shiftData.e_id, dayOfWeekIndex, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
+            const isAvailable = validateAvailability(shiftData.e_id, shiftData.repeat.days, shiftData.start_time, shiftData.end_time, availability);
             const hasConflicts = !isAvailable || IsAlreadyScheduled;
             if (hasConflicts && !ignoreConflict) {
                 const conflicts = findConflictingSlots(

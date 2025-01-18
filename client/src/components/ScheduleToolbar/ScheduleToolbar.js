@@ -16,7 +16,7 @@ import ShiftDialog from '../ShiftDialog/ShiftDialog';
 import dayjs from 'dayjs';
 import ShiftTable from '../ShiftTable';
 import MonthlyShiftTable from '../MonthlyShiftTable';
-import AutoAssignButton from './AutoAssignShifts';
+import AutoAssignButton from './AutoAssign/AutoAssignShifts';
 
 const ScheduleToolbar = () => {
     const [weeks, setWeeks] = useState([]);

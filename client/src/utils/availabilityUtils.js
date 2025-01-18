@@ -68,7 +68,6 @@ export const getEmployeeAvailabilityForDays = (e_ids, days, availability) => {
     if (!e_ids || !days || !availability) {
         return [];
     }
-
     // Ensure e_ids and days are arrays
     const employeeIds = Array.isArray(e_ids) ? e_ids : [e_ids];
     const daysArray = Array.isArray(days) ? days : [days];
