@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box, TextField } from '@mui/material';
 // Import form selector components
 import { DatePicker } from '@mui/x-date-pickers';
-import EmployeeSelector from '../../ShiftDialog/ShiftDialogFields/EmployeeSelector';
+import { EmployeeSelector } from '../../../DialogFields';
 import usePreference from '../../../../hooks/usePreference';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';

@@ -19,6 +19,7 @@ import {
 import EmployeeCard from '../EmployeeCard';
 import { deleteShiftsAndAssignments } from '../../services/api';
 import { isInvalid } from '../../utils';
+import { LocationSelector, RoleSelector } from '../DialogFields';
 
 const EmployeeDialog = ({
     e_id,
@@ -190,34 +191,10 @@ const EmployeeDialog = ({
                     <Box mt={2}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel>Role</InputLabel>
-                                    <Select
-                                        value={formData.preferences.role_id || ''}
-                                        onChange={(e) => handleFormChange('preferences.role_id', e.target.value)}
-                                    >
-                                        {roles.map((role) => (
-                                            <MenuItem key={role.id} value={role.id}>
-                                                {role.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                <RoleSelector formData={formData.preferences.role_id || ''} handleChange={(e) => handleFormChange('preferences.role_id', e.target.value)}></RoleSelector>
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <FormControl fullWidth>
-                                    <InputLabel>Location</InputLabel>
-                                    <Select
-                                        value={formData.preferences.location_id || ''}
-                                        onChange={(e) => handleFormChange('preferences.location_id', e.target.value)}
-                                    >
-                                        {locations.map((location) => (
-                                            <MenuItem key={location.id} value={location.id}>
-                                                {location.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                <LocationSelector formData={formData.preferences.location_id || ''} handleChange={(e) => handleFormChange('preferences.location_id', e.target.value)}></LocationSelector>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField

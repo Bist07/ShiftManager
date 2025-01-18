@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import useRoles from '../../../../hooks/useRoles';
+import useRoles from '../../hooks/useRoles';
 import { FormControl } from '@mui/material';
 
 const RoleSelector = ({ formData, handleChange }) => {
@@ -40,7 +40,7 @@ const RoleSelector = ({ formData, handleChange }) => {
                     options={roleOptions}
                     value={selectedRole}
                     onChange={handleRoleChange}
-                    placeholder="Select or create role"
+                    placeholder="Select role"
                     menuPortalTarget={document.body} // Render dropdown outside parent container
                     styles={{
                         menuPortal: (base) => ({

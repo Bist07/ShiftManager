@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import useEmployee from '../../../../hooks/useEmployee';
+import useEmployee from '../../hooks/useEmployee';
 import { FormControl } from '@mui/material';
 
 const EmployeeSelector = ({ formData, handleChange }) => {

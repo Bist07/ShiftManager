@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import useLocations from '../../../../hooks/useLocations';
+import useLocations from '../../hooks/useLocations';
 import { FormControl } from '@mui/material';
 
 const LocationSelector = ({ formData, handleChange }) => {
@@ -40,7 +40,7 @@ const LocationSelector = ({ formData, handleChange }) => {
                     options={locationOptions}
                     value={selectedLocation}
                     onChange={handleLocationChange}
-                    placeholder="Select or create location"
+                    placeholder="Select location"
                     menuPortalTarget={document.body} // Render dropdown outside parent container
                     styles={{
                         menuPortal: (base) => ({

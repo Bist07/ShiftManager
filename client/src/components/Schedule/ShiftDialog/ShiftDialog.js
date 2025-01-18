@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box } from '@mui/material';
-import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, RoleSelector } from './ShiftDialogFields';
+import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, RoleSelector } from '../../DialogFields';
 import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api';
 import { handleShiftChanges } from '../../../services/shiftService';
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
