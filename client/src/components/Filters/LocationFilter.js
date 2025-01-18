@@ -1,50 +1,52 @@
 import React from 'react';
 import { Menu, MenuItem, Checkbox, ListItemText, IconButton, Button } from '@mui/material';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import { renderButtonText } from '../../../../utils/utils';
+import PlaceIcon from '@mui/icons-material/Place';
+import { renderButtonText } from '../../utils/utils';
 
-const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles, clearFilters }) => {
-    const handleToggle = (role) => {
-        handleSelectFilter('roleFilters', role.role_id);
+const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, locations }) => {
+    const handleToggle = (location) => {
+        handleSelectFilter('locationFilters', location.location_id);
     };
 
     const handleClear = () => {
-        handleSelectFilter('roleFilters', 'clear'); // Custom logic to clear all
+        handleSelectFilter('locationFilters', 'clear'); // Custom logic to clear all
         setAnchorEl(null);
     };
 
     return (
         <>
             <IconButton
-                aria-controls="role-menu"
+                aria-controls="location-menu"
                 aria-haspopup="true"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 variant='outlined'
                 sx={{
-                    color: filters.roleFilters.length > 0 ? 'primary.main' : '#626262',
+                    color: Object.keys(filters.locationFilters).length > 0 ? 'primary.main' : '#626262',
                     fontSize: '15px',
                     textTransform: 'none',
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                     gap: '8px',
                     borderRadius: '5px',
-                    border: '1px solid #bcbcbc',
+                    border: '1px solid #bcbcbc', // Add border to mimic outlined style
                     borderColor: '#bcbcbc',
                     '&:hover': {
-                        borderColor: Object.keys(filters.roleFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
+                        borderColor: Object.keys(filters.locationFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
                     },
                 }}
             >
-                <AssignmentIcon sx={{ fontSize: '20px' }} />
-                {renderButtonText(filters.roleFilters, 'Role')}
+                <PlaceIcon />
+                {renderButtonText(filters.locationFilters, 'Location')}
+
             </IconButton>
             <Menu
-                id="role-menu"
+                id="location-menu"
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
             >
+
                 {/* Clear button */}
-                {filters.roleFilters.length > 0 && (
+                {filters.locationFilters.length > 0 && (
                     <MenuItem onClick={handleClear} sx={{ justifyContent: 'center', color: 'error.main' }}>
                         <Button variant="text" color="error">
                             Clear
@@ -52,10 +54,10 @@ const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles,
                     </MenuItem>
                 )}
 
-                {roles.map((role) => (
-                    <MenuItem key={role.role_id} onClick={() => handleToggle(role)}>
-                        <Checkbox checked={filters.roleFilters.includes(role.role_id)} />
-                        <ListItemText primary={role.name} />
+                {locations.map((location) => (
+                    <MenuItem key={location.location_id} onClick={() => handleToggle(location)}>
+                        <Checkbox checked={filters.locationFilters.includes(location.location_id)} />
+                        <ListItemText primary={location.name} />
                     </MenuItem>
                 ))}
             </Menu>
@@ -63,4 +65,4 @@ const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles,
     );
 };
 
-export default RoleFilter;
+export default LocationFilter;

@@ -9,7 +9,7 @@ import {
     Paper,
     Button,
 } from '@mui/material';
-import EmployeeCard from './EmployeeCard';
+import EmployeeCard from '../EmployeeCard';
 import { getLocalDate, mapWeekToDays, transformShifts, GroupUnassignedShiftsByDate } from '../../utils';
 import { useShifts, useEmployee, useUnassignedShifts } from '../../hooks';
 import WeeklyShiftCard from './ShiftDetailsCard/WeeklyShiftCard';

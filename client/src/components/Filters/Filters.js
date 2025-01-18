@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { Box, Toolbar } from '@mui/material';
-import EmployeeFilter from './EmployeeFilter';
-import RoleFilter from './RoleFilter';
-import LocationFilter from './LocationFilter';
-import useEmployee from '../../../../hooks/useEmployee';
-import useLocations from '../../../../hooks/useLocations';
-import useRoles from '../../../../hooks/useRoles';
+import { EmployeeFilter, RoleFilter, LocationFilter } from './';
+import { useEmployee, useLocations, useRoles } from '../../hooks';
+
 
 const Filters = ({ onFiltersChange }) => {
     const { employees = [] } = useEmployee();

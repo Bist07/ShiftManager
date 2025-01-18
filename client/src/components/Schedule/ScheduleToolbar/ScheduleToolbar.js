@@ -8,7 +8,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TuneIcon from '@mui/icons-material/Tune';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { Filter } from './Filters';
+import { Filter } from '../../Filters';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AddIcon from '@mui/icons-material/Add';
