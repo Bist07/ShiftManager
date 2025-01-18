@@ -11,7 +11,6 @@ export const transformAvailability = (availability) => {
             groupedAvailability[e_id] = { e_id, availability: {} };
         }
 
-
         // Initialize the day's data structure if it doesn't exist
         if (!groupedAvailability[e_id].availability[day_of_week]) {
             groupedAvailability[e_id].availability[day_of_week] = [];

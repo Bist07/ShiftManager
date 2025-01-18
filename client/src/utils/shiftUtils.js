@@ -86,7 +86,7 @@ export const ValidateShift = (shifts, e_id, dates, start_time, end_time) => {
 
         // Collect conflicts
         const conflicts = [];
-
+        let IsAlreadyScheduled = false;
         // Check for conflicts based on matching date
         shifts.forEach((shift) => {
             if (e_id.includes(shift.e_id) && dates.includes(shift.full_date)) {
@@ -108,12 +108,13 @@ export const ValidateShift = (shifts, e_id, dates, start_time, end_time) => {
                         conflictStart: start_time,
                         conflictEnd: end_time,
                     });
+                    IsAlreadyScheduled = true;
                 }
             }
         });
 
         // Group conflicts by employee ID
-        const groupedConflicts = conflicts.reduce((acc, detail) => {
+        const ScheduleConflict = conflicts.reduce((acc, detail) => {
             if (!acc[detail.e_id]) {
                 acc[detail.e_id] = [];
             }
@@ -123,10 +124,10 @@ export const ValidateShift = (shifts, e_id, dates, start_time, end_time) => {
         }, {});
 
         // Return grouped conflicts (if empty, no conflicts)
-        return groupedConflicts;
+        return { ScheduleConflict, IsAlreadyScheduled };
 
     } catch (error) {
         console.error('Error validating shift:', error);
-        return false;
+        return true;
     }
 };

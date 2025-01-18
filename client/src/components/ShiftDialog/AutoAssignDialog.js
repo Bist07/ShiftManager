@@ -106,20 +106,13 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
                         availability
                     );
 
-                    let isAlreadyScheduled;
-                    const ScheduleConflict = ValidateShift(shifts, e_id, currentShift.full_date, currentShift.start_time, currentShift.end_time)
-
-                    if (ScheduleConflict.length === 0) {
-                        isAlreadyScheduled = true;
-                    } else (
-                        isAlreadyScheduled = false
-                    )
+                    const { ScheduleConflict, IsAlreadyScheduled } = ValidateShift(shifts, e_id, currentShift.full_date, currentShift.start_time, currentShift.end_time)
 
                     const isEligibleForShift = employeePref &&
                         employeePref.role_id === currentShift.role_id &&
                         employeePref.location_id === currentShift.location_id &&
                         employeeHours[employeeId] + shiftDuration <= employeePref.MaxWeeklyHours; // Check if the employee can take more hours
-                    return isAvailable && !isAlreadyScheduled && isEligibleForShift;
+                    return isAvailable && !IsAlreadyScheduled && isEligibleForShift;
                 });
 
                 if (availableEmployees.length === 0) {
