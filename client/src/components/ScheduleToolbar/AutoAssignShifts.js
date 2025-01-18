@@ -15,6 +15,10 @@ const AutoAssignShifts = ({ unassignedShiftsByDate }) => {
         setOpenDialog(false);
     };
 
+    const handleSave = () => {
+        setOpenDialog(false);
+    };
+
     return (
         <div>
             {/* Button to trigger the dialog */}
@@ -22,7 +26,7 @@ const AutoAssignShifts = ({ unassignedShiftsByDate }) => {
             <AutoAssignButton onClick={handleClickOpen} />
 
             {/* Dialog for selecting employee and time */}
-            <AutoAssignDialog open={openDialog} onClose={handleClose} />
+            <AutoAssignDialog open={openDialog} onSave={handleSave} onClose={handleClose} />
 
         </div>
     );

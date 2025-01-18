@@ -23,13 +23,7 @@ export const deleteAssignmentModel = async (e_id, shift_id) => {
     }
 };
 
-const sqlAssignShift = `
-INSERT INTO assignments (employee_id, shift_id)
-VALUES ?
-`;
-
-
-export const assignShiftsToEmployeesBulkModel = async (employeeIds, shiftIds) => {
+export const assignShiftsToEmployeesModel = async (employeeIds, shiftIds) => {
     try {
         // Construct the values for the insert: each employeeId with each shiftId
         const values = [];
@@ -53,34 +47,3 @@ export const assignShiftsToEmployeesBulkModel = async (employeeIds, shiftIds) =>
         throw new Error('Failed to assign shifts in bulk.');
     }
 };
-
-
-// Function to assign a shift to an employee
-export const assignShiftToEmployeeModel = async (e_id, shift_id) => {
-
-    try {
-        await query(sqlAssignShift, [e_id, shift_id]);
-        return { success: true };
-    } catch (error) {
-        console.error('Error assigning shift:', error);
-        return { success: false, message: 'Failed to assign shift.', error };
-    }
-};
-
-
-
-export const deleteAssignmentsInBulkModel = async (employeeIds, shiftIds) => {
-    try {
-        for (let e_id of employeeIds) {
-            for (let shift_id of shiftIds) {
-                await deleteAssignmentInDB(e_id, shift_id);  // Reuse the delete function
-            }
-        }
-        console.log('Assignments deleted successfully.');
-        return { message: 'Assignments deleted successfully.' };
-    } catch (error) {
-        console.error('Error deleting assignments in bulk:', error);
-        throw new Error('Failed to delete assignments in bulk.');
-    }
-};
-

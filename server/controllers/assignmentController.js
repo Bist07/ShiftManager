@@ -1,5 +1,5 @@
 // controllers/assignmentController.js
-import { assignShiftsToEmployeesBulkLogic, deleteAssignmentLogic, assignShiftToEmployeeLogic, deleteAssignmentsInBulkLogic } from '../logic/assignmentLogic.js';
+import { assignShiftsToEmployeesLogic, deleteAssignmentLogic } from '../logic/assignmentLogic.js';
 
 export const deleteAssignment = async (req, res) => {
     try {
@@ -24,73 +24,19 @@ export const deleteAssignment = async (req, res) => {
     }
 };
 
-export const assignShiftsToEmployeesBulk = async () => {
-    const { employeeIds, shiftIds } = req.body;
+export const assignShiftsToEmployees = async () => {
+    const { e_id, shift_id } = req.body;
     try {
         // Validate inputs
-        if (!employeeIds || !Array.isArray(shiftIds)) {
+        if (!e_id || !Array.isArray(shift_id)) {
             throw new Error('No valid shifts found for the given parameters.');
         }
 
-        const result = await assignShiftsToEmployeesBulkLogic(employeeIds, shiftIds);
+        const result = await assignShiftsToEmployeesLogic(e_id, shift_id);
 
     } catch (error) {
         console.error('Error in assignShifts controller:', error);
         throw new Error('Failed to assign shifts in bulk.');
 
-    }
-};
-
-export const assignShift = async (req, res) => {
-    try {
-        const { employeeId, shiftId } = req.body;
-        // Validate inputs
-        if (!employeeId || !shiftId) {
-            return res.status(400).json({ error: 'employeeId and shiftId are required.' });
-        }
-
-        const result = await assignShiftToEmployeeLogic(employeeId, shiftId);
-        if (result.success) {
-            res.status(200).json({
-                success: true,
-                message: 'Shift assigned successfully.'
-            });
-        } else {
-            res.status(500).json({
-                success: false,
-                message: result.message,
-                error: result.error
-            });
-        }
-    } catch (error) {
-        console.error('Error in assignShift controller:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to assign shift.',
-            error: error.message
-        });
-    }
-};
-
-export const deleteAssignmentsInBulk = async (req, res) => {
-    try {
-        const { employeeIds, shiftIds } = req.body;
-        // Validate inputs
-        if (!Array.isArray(employeeIds) || !Array.isArray(shiftIds)) {
-            return res.status(400).json({ error: 'Invalid input. employeeIds and shiftIds must be arrays.' });
-        }
-
-        const result = await deleteAssignmentsInBulkLogic(employeeIds, shiftIds);
-        res.status(200).json({
-            success: true,
-            message: result.message
-        });
-    } catch (error) {
-        console.error('Error in deleteAssignments controller:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Failed to delete assignments.',
-            error: error.message
-        });
     }
 };

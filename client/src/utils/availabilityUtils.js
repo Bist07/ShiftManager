@@ -28,18 +28,12 @@ export const transformAvailability = (availability) => {
     return Object.values(groupedAvailability); // Convert the object to an array of grouped availabilities
 };
 
-export const validateAvailability = (e_id, day, days = [], start_time, end_time, availability) => {
+export const validateAvailability = (e_id, days = [], start_time, end_time, availability) => {
     // Ensure valid input
     if (!e_id || !days || !start_time || !end_time || !availability) {
+        console.log("no parameters found")
         return false;
     }
-
-    if (!day) {// Ensure the day is included in the days array
-        if (!days.includes(day)) {
-            days = [...days, day];
-        }
-    }
-
 
     // Get availability slots for the specified days using the helper function
     const employeeAvailability = getEmployeeAvailabilityForDays(e_id, days, availability);

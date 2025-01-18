@@ -30,6 +30,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
 
     useEffect(() => {
         refetchShifts();
+        refetchUnassignedShifts();
     }, [refetchTrigger]);
 
     const handleOpenDialog = (shift, date) => {
@@ -53,11 +54,13 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
 
     const handleSaveShift = () => {
         refetchShifts();
+        refetchUnassignedShifts();
         handleCloseDialog();
     };
 
     const handleDeleteShift = () => {
         refetchShifts();
+        refetchUnassignedShifts();
         handleCloseDialog();
     };
 

@@ -1,5 +1,4 @@
-import { mapWeekToDays, formatDate } from "./dateUtils";
-import dayjs from 'dayjs';
+import { mapWeekToDays } from "./dateUtils";
 
 export const getShiftDetails = (shift, date, formatTime) => {
     const shiftDetails = shift.shiftDays[date];
@@ -9,9 +8,9 @@ export const getShiftDetails = (shift, date, formatTime) => {
 
 export const GroupUnassignedShiftsByDate = (unassignedShifts) => {
     return unassignedShifts.reduce((acc, shift) => {
-        const formattedDate = formatDate(shift.full_date);
-        acc[formattedDate] = acc[formattedDate] || [];
-        acc[formattedDate].push(shift);
+        const date = shift.full_date;
+        acc[date] = acc[date] || [];
+        acc[date].push(shift);
         return acc;
     }, {});
 };
@@ -130,31 +129,4 @@ export const ValidateShift = (shifts, e_id, dates, start_time, end_time) => {
         console.error('Error validating shift:', error);
         return false;
     }
-};
-
-export const getMaxDate = (unassignedShifts) => {
-    if (!unassignedShifts || unassignedShifts.length === 0) return null;
-
-    return unassignedShifts.reduce((maxDate, shift) => {
-        const shiftDate = new Date(shift.full_date); // Assuming `full_date` is a valid date string
-
-        if (!maxDate || shiftDate > maxDate) {
-            return shiftDate;
-        }
-
-        return maxDate;
-    }, null);
-};
-
-export const getMinDate = (unassignedShifts) => {
-    if (!unassignedShifts || unassignedShifts.length === 0) return null;
-    return unassignedShifts.reduce((minDate, shift) => {
-        const shiftDate = new Date(shift.full_date); // Assuming `full_date` is a valid date string
-
-        if (!minDate || shiftDate < minDate) {
-            return shiftDate;
-        }
-
-        return minDate;
-    }, null);
 };

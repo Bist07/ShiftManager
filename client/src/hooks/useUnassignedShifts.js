@@ -10,8 +10,13 @@ const useUnassignedShifts = () => {
         setLoading(true);
         setError(null);
         try {
-            const data = await fetchUnassignedShifts();
-            setUnassignedShifts(data);
+            const shifts = await fetchUnassignedShifts();
+            const formattedShifts = shifts.map(shift => ({
+                ...shift,  // Keep all the other properties the same
+                full_date: new Date(shift.full_date).toLocaleDateString(),
+            }));
+
+            setUnassignedShifts(formattedShifts);
         } catch (err) {
             setError('Failed to load data. Please try again later.');
         } finally {

@@ -47,22 +47,6 @@ export const updateShiftModel = async (start_time, end_time, location_id, role_i
     }
 };
 
-export const createShiftModel = async (date, location_id, role_id, start_time, end_time) => {
-    const sqlCreateShift = `
-        INSERT INTO shifts (location_id,role_id, start_time, end_time, date_id)
-        VALUES (?,?, ?, ?, ?)
-    `;
-
-    try {
-        const result = await query(sqlCreateShift, [location_id, role_id, start_time, end_time, date]);
-        const shift_ids = result?.insertId.map(row => row.shift_id);
-        return shift_ids;
-    } catch (error) {
-        console.error('Error creating shift:', error);
-        return { success: false, message: 'Failed to create shift.', error };
-    }
-};
-
 // Function to delete a shift in the database
 export const deleteShiftModel = async (shift_id) => {
     const sqlQuery = `
@@ -79,7 +63,7 @@ export const deleteShiftModel = async (shift_id) => {
     }
 };
 
-export const createShiftsForDatesBulkModel = async (locationId, role_id, startTime, endTime, dates) => {
+export const createShiftsModel = async (locationId, role_id, startTime, endTime, dates) => {
     try {
         // Construct the values for the insert
 

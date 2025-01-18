@@ -1,4 +1,4 @@
-import { updateShiftLogic, deleteShiftLogic, createShiftLogic, createShiftsForDatesBulkLogic, getShiftsLogic, getUnassignedShiftsLogic } from '../logic/shiftLogic.js';
+import { updateShiftLogic, deleteShiftLogic, createShiftsLogic, getShiftsLogic, getUnassignedShiftsLogic } from '../logic/shiftLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 
 // Middleware for validating request fields
@@ -45,28 +45,6 @@ export const updateShift = async (req, res) => {
     }
 };
 
-// Controller to create a shift
-export const createShift = async (req, res) => {
-    const { date, repeat, e_id, role_id, location_id, start_time, end_time } = req.body;
-
-    if (validateRequest({ date, e_id, role_id, location_id, start_time, end_time }, res)) return;
-
-    try {
-        const result = await createShiftLogic(date, repeat, e_id, role_id, location_id, start_time, end_time);
-
-        if (result.success) {
-            return res.status(200).json({
-                message: 'Shift created successfully',
-                shift_id: result.shift_id.toString(),
-            });
-        } else {
-            return res.status(500).send('An error occurred while creating the shift');
-        }
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('An error occurred while creating the shift');
-    }
-};
 
 // Controller to delete a shift
 export const deleteShift = async (shift_id) => {
@@ -90,7 +68,7 @@ export const deleteShift = async (shift_id) => {
 }
 
 
-export const createShiftsForDatesBulk = async (req, res) => {
+export const createShifts = async (req, res) => {
     const { locationId, role_id, startTime, endTime, dateIds } = req.body;
     try {
 
@@ -100,7 +78,7 @@ export const createShiftsForDatesBulk = async (req, res) => {
         }
 
         // Call the createShiftsForDatesBulk function from the model
-        const shiftIds = await createShiftsForDatesBulkLogic(locationId, role_id, startTime, endTime, dateIds);
+        const shiftIds = await createShiftsLogic(locationId, role_id, startTime, endTime, dateIds);
         if (shiftIds.length === 0) {
             return res.status(404).send('No shifts found for the selected month and year');
         }

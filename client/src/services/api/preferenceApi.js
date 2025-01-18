@@ -1,4 +1,4 @@
-// src/api/prefrenceApi.js
+// src/api/preferenceApi.js
 import axiosInstance from './axiosInstance';
 
 export const fetchPreference = async () => {
