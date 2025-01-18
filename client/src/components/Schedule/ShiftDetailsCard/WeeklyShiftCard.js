@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Card, CardActionArea, CardContent, Typography, Box } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { formatTime } from '../../utils/dateUtils';
-import { getHours } from '../../utils/dateUtils';
+import { formatTime, getHours } from '../../../utils/dateUtils';
+
 
 const ShiftDetails = ({ shift, date, onClick }) => {
     if (shift) {

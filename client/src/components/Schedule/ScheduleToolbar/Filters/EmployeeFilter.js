@@ -1,50 +1,49 @@
 import React from 'react';
 import { Menu, MenuItem, Checkbox, ListItemText, IconButton, Button } from '@mui/material';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import { renderButtonText } from '../../../utils/utils';
+import PersonIcon from '@mui/icons-material/Person';
+import { renderButtonText } from '../../../../utils/utils';
 
-const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles, clearFilters }) => {
-    const handleToggle = (role) => {
-        handleSelectFilter('roleFilters', role.role_id);
+const EmployeeFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, employees }) => {
+    const handleToggle = (employee) => {
+        handleSelectFilter('employeeFilters', employee.e_id);
     };
 
     const handleClear = () => {
-        handleSelectFilter('roleFilters', 'clear'); // Custom logic to clear all
+        handleSelectFilter('employeeFilters', 'clear'); // Custom logic to clear all
         setAnchorEl(null);
     };
 
     return (
         <>
             <IconButton
-                aria-controls="role-menu"
+                aria-controls="employee-menu"
                 aria-haspopup="true"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
-                variant='outlined'
                 sx={{
-                    color: filters.roleFilters.length > 0 ? 'primary.main' : '#626262',
+                    color: filters.employeeFilters.length > 0 ? 'primary.main' : '#626262',
                     fontSize: '15px',
                     textTransform: 'none',
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                     gap: '8px',
                     borderRadius: '5px',
-                    border: '1px solid #bcbcbc',
+                    border: '1px solid #bcbcbc', // Add border to mimic outlined style
                     borderColor: '#bcbcbc',
                     '&:hover': {
-                        borderColor: Object.keys(filters.roleFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
+                        borderColor: filters.employeeFilters.length > 0 ? '#1c74d4' : '#bcbcbc',
                     },
                 }}
             >
-                <AssignmentIcon sx={{ fontSize: '20px' }} />
-                {renderButtonText(filters.roleFilters, 'Role')}
+                <PersonIcon />
+                {renderButtonText(filters.employeeFilters, 'Employee')}
             </IconButton>
             <Menu
-                id="role-menu"
+                id="employee-menu"
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
             >
                 {/* Clear button */}
-                {filters.roleFilters.length > 0 && (
+                {filters.employeeFilters.length > 0 && (
                     <MenuItem onClick={handleClear} sx={{ justifyContent: 'center', color: 'error.main' }}>
                         <Button variant="text" color="error">
                             Clear
@@ -52,10 +51,10 @@ const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles,
                     </MenuItem>
                 )}
 
-                {roles.map((role) => (
-                    <MenuItem key={role.role_id} onClick={() => handleToggle(role)}>
-                        <Checkbox checked={filters.roleFilters.includes(role.role_id)} />
-                        <ListItemText primary={role.name} />
+                {employees.map((employee) => (
+                    <MenuItem key={employee.e_id} onClick={() => handleToggle(employee)}>
+                        <Checkbox checked={filters.employeeFilters.includes(employee.e_id)} />
+                        <ListItemText primary={employee.name} />
                     </MenuItem>
                 ))}
             </Menu>
@@ -63,4 +62,4 @@ const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles,
     );
 };
 
-export default RoleFilter;
+export default EmployeeFilter;

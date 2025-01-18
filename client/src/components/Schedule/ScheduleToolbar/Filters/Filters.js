@@ -3,9 +3,9 @@ import { Box, Toolbar } from '@mui/material';
 import EmployeeFilter from './EmployeeFilter';
 import RoleFilter from './RoleFilter';
 import LocationFilter from './LocationFilter';
-import useEmployee from '../../../hooks/useEmployee';
-import useLocations from '../../../hooks/useLocations';
-import useRoles from '../../../hooks/useRoles';
+import useEmployee from '../../../../hooks/useEmployee';
+import useLocations from '../../../../hooks/useLocations';
+import useRoles from '../../../../hooks/useRoles';
 
 const Filters = ({ onFiltersChange }) => {
     const { employees = [] } = useEmployee();

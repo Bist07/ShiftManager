@@ -8,17 +8,17 @@ import LocationSelector from './ShiftDialogFields/LocationSelector';
 import EmployeeSelector from './ShiftDialogFields/EmployeeSelector';
 import RoleSelector from './ShiftDialogFields/RoleSelector';
 //Api imports
-import { createBulkShift, deleteShiftsAndAssignments } from '../../services/api/shiftBulkOperationsApi';
-import { handleShiftChanges } from '../../services/shiftService';
+import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api/shiftBulkOperationsApi';
+import { handleShiftChanges } from '../../../services/shiftService';
 //Icons import
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
 //Utils import
-import { isInvalid } from '../../utils/utils';
-import { validateAvailability, findConflictingSlots } from '../../utils/availabilityUtils';
-import { ValidateShift } from '../../utils/shiftUtils';
-import { generateValidDates } from '../../utils/dateUtils';
+import { isInvalid } from '../../../utils/utils';
+import { validateAvailability, findConflictingSlots } from '../../../utils/availabilityUtils';
+import { ValidateShift } from '../../../utils/shiftUtils';
+import { generateValidDates } from '../../../utils/dateUtils';
 //Hooks import
-import useAvailability from '../../hooks/useAvailability';
+import useAvailability from '../../../hooks/useAvailability';
 //Misc
 import ConflictDialog from './ConflictDialog';
 import dayjs from 'dayjs';

@@ -44,6 +44,11 @@ const Header = () => {
                             Schedule
                         </Button>
                     </Box>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 5 }}>
+                        <Button color="inherit" onClick={() => handleRoute('/employee')}>
+                            Employee
+                        </Button>
+                    </Box>
                 </Toolbar>
             </AppBar>
 

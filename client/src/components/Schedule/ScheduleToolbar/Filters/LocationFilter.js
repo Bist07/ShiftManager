@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu, MenuItem, Checkbox, ListItemText, IconButton, Button } from '@mui/material';
 import PlaceIcon from '@mui/icons-material/Place';
-import { renderButtonText } from '../../../utils/utils';
+import { renderButtonText } from '../../../../utils/utils';
 
 const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, locations }) => {
     const handleToggle = (location) => {

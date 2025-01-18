@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
-import useLocations from '../../../hooks/useLocations';
+import useLocations from '../../../../hooks/useLocations';
 import { FormControl } from '@mui/material';
 
 const LocationSelector = ({ formData, handleChange }) => {
