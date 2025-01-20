@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import useEmployee from '../../hooks/useEmployee';
-import { FormControl } from '@mui/material';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import { FormControl, Box, Typography } from '@mui/material';
 
 const EmployeeSelector = ({ formData, handleChange }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
@@ -33,24 +34,36 @@ const EmployeeSelector = ({ formData, handleChange }) => {
 
     return (
         <div>
-            <FormControl fullWidth margin="normal">
-                <CreatableSelect
-                    isMulti
-                    isClearable
-                    isLoading={loading}
-                    options={employeeOptions}
-                    value={selectedEmployees}
-                    onChange={handleEmployeeChange}
-                    placeholder="Select or create employees"
-                    menuPortalTarget={document.body} // Render dropdown outside parent container
-                    styles={{
-                        menuPortal: (base) => ({
-                            ...base,
-                            zIndex: 1300, // Adjust z-index to make dropdown appear on top
-                        }),
-                    }}
-                />
-            </FormControl>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <Typography sx={{ ml: 2, mr: 1, my: 2, fontSize: '15px', fontWeight: 600, color: 'action.active' }}>Employee</Typography>
+                <PersonOutlineRoundedIcon sx={{
+                    color: 'action.active', mr: 1, my: 1,
+                    fontSize: '36px',
+                    stroke: "#ffffff", strokeWidth: 0.5,
+                    borderRadius: '50px',
+                    border: '2px solid #bcbcbc',
+                    borderColor: 'action.active',
+
+                }} />
+                <FormControl fullWidth margin="normal">
+                    <CreatableSelect
+                        isMulti
+                        isClearable
+                        isLoading={loading}
+                        options={employeeOptions}
+                        value={selectedEmployees}
+                        onChange={handleEmployeeChange}
+                        placeholder="Add employee(s)"
+                        menuPortalTarget={document.body} // Render dropdown outside parent container
+                        styles={{
+                            menuPortal: (base) => ({
+                                ...base,
+                                zIndex: 1300, // Adjust z-index to make dropdown appear on top
+                            }),
+                        }}
+                    />
+                </FormControl>
+            </Box>
         </div>
     );
 };

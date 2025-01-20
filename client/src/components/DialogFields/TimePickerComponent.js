@@ -1,83 +1,479 @@
-import React, { useState, useEffect } from 'react';
-import { DesktopTimePicker } from '@mui/x-date-pickers';
-import { FormControl, TextField, Box } from '@mui/material';
-import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import React, { useState, useEffect } from "react";
+import {
+    FormControl,
+    TextField,
+    Box,
+    Typography,
+    InputAdornment,
+    Popover,
+    MenuList,
+    MenuItem,
+    Alert,
+} from "@mui/material";
+import dayjs from "dayjs";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 
 const TimePickerComponent = ({ formData, handleChange }) => {
-
     const [startTime, setStartTime] = useState(
-        formData.start_time ? dayjs(formData.start_time, 'HH:mm') : null
+        formData.start_time ? dayjs(formData.start_time, "hh:mm") : null
     );
 
-    const [endTime, setEndTime] = useState(dayjs(formData.end_time, 'HH:mm') || null);
+    const [endTime, setEndTime] = useState(
+        formData.end_time ? dayjs(formData.end_time, "hh:mm") : null
+    );
+
+    const [breakLength, setBreakLength] = useState(
+        formData.breakLength || ''
+    );
+
+    const [tempInput, setTempInput] = useState({ start: "", end: "", break: "" }); // Temporary input for typing
+    const [error, setError] = useState({ start: false, end: false, break: false }); // Validation errors
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [dropdownType, setDropdownType] = useState("");
+    const [tempSelection, setTempSelection] = useState({ hours: "", minutes: "", period: "" });
+    const [startSelection, setStartSelection] = useState({ hours: "", minutes: "", period: "" });
+    const [endSelection, setEndSelection] = useState({ hours: "", minutes: "", period: "" });
+    const [breakLengthSelection, setBreakLengthSelection] = useState("");
+
+    const hours = [...Array(12).keys()].map((n) => String(n + 1).padStart(2, "0")); // "01" to "12"
+    const minutes = [...Array(4).keys()].map((n) => String(n * 15).padStart(2, "0"));
+    const periods = ["AM", "PM"];
+    const breakLengthOptions = ["None", "10min", "15min", "20min", "30min", "45min", "60min"];
 
     useEffect(() => {
-        setStartTime(dayjs(formData.start_time, 'HH:mm') || null);
-        setEndTime(dayjs(formData.end_time, 'HH:mm') || null);
-    }, []);
+        setStartTime(dayjs(formData.start_time, "hh:mm") || null);
+        setEndTime(dayjs(formData.end_time, "hh:mm") || null);
+    }, [formData]);
 
-    const handleStartTimeChange = (value) => {
-        setStartTime(value);
-        handleChange('start_time', value?.format('HH:mm') || '');
+    const handleDropdownOpen = (type, event) => {
+        setDropdownType(type);
+        setAnchorEl(event.currentTarget);
     };
 
-    const handleEndTimeChange = (value) => {
-        setEndTime(value);
-        handleChange('end_time', value?.format('HH:mm') || '');
+    const handleDropdownClose = () => {
+        if (
+            tempSelection.hours &&
+            tempSelection.minutes &&
+            tempSelection.period
+        ) {
+            const formattedTime = `${tempSelection.hours}:${tempSelection.minutes} ${tempSelection.period}`;
+            if (dropdownType === "start") {
+                setStartTime(dayjs(formattedTime, "hh:mm A"));
+                handleChange("start_time", dayjs(formattedTime, "hh:mm A").format("HH:mm"));
+            } else {
+                setEndTime(dayjs(formattedTime, "hh:mm A"));
+                handleChange("end_time", dayjs(formattedTime, "hh:mm A").format("HH:mm"));
+            }
+        }
+        setAnchorEl(null);
+        setDropdownType("");
     };
+
+    const handleSelect = (type, value) => {
+        const updatedSelection = { ...tempSelection, [type]: value };
+
+        // Retain existing values if not overwritten
+        if (!updatedSelection.hours && startTime) {
+            updatedSelection.hours = startTime.format("hh");
+        }
+        if (!updatedSelection.minutes && startTime) {
+            updatedSelection.minutes = startTime.format("mm");
+        }
+        if (!updatedSelection.period && startTime) {
+            updatedSelection.period = startTime.format("A");
+        }
+
+        setTempSelection(updatedSelection);
+        if (dropdownType === "start") {
+            setStartSelection(updatedSelection);
+        } else {
+            setEndSelection(updatedSelection);
+        }
+
+        const partialTime = `${updatedSelection.hours || "HH"}:${updatedSelection.minutes || "MM"
+            } ${updatedSelection.period || "AM/PM"}`;
+
+        handleChange(dropdownType === "start" ? "start_time" : "end_time", dayjs(partialTime, "hh:mm A").format("HH:mm"));
+
+        // Check if all fields are filled before closing the dropdown
+        if (
+            updatedSelection.hours &&
+            updatedSelection.minutes &&
+            updatedSelection.period
+        ) {
+            const formattedTime = `${updatedSelection.hours}:${updatedSelection.minutes} ${updatedSelection.period}`;
+            if (dropdownType === "start") {
+                setStartTime(dayjs(formattedTime, "HH:mm"));
+                setTempInput({ ...tempInput, start: formattedTime });
+            } else {
+                setEndTime(dayjs(formattedTime, "HH:mm"));
+                setTempInput({ ...tempInput, end: formattedTime });
+            }
+            handleDropdownClose();
+        }
+    };
+
+    const handleBreakLengthSelect = (value) => {
+        setBreakLengthSelection(value);
+        handleChange("break_length", value);
+        setAnchorEl(null);
+    };
+
+    const handleTextFieldChange = (type, value) => {
+        setTempInput((prev) => ({ ...prev, [type]: value })); // Update temporary input
+    };
+
+    const handleTextFieldBlur = (type) => {
+        if (type === "breakLength") {
+            // Validate breakLength input
+            const value = tempInput.breakLength;
+            if (value === "None" || /^\d+$/.test(value)) {
+                setError((prev) => ({ ...prev, [type]: false }));
+            } else {
+                setError((prev) => ({ ...prev, [type]: true }));
+            }
+        } else if (type === "start" || type === "end") {
+            // Validate and format time input
+            const timePattern = /^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i;
+            const match = tempInput[type]?.match(timePattern);
+
+            if (match) {
+                let [_, hours, minutes, period] = match;
+
+                // Default to AM if period is missing
+                period = period ? period.toUpperCase() : "AM";
+
+                // Ensure hours and minutes are within valid ranges
+                if (parseInt(hours, 10) <= 12 && parseInt(minutes, 10) < 60) {
+                    const formattedTime = `${hours.padStart(2, "0")}:${minutes} ${period}`;
+                    const dayjsTime = dayjs(formattedTime, "hh:mm A");
+
+                    // Update start or end time
+                    if (type === "start") {
+                        setStartTime(dayjsTime);
+                        handleChange("start_time", dayjsTime.format("HH:mm"));
+                    } else {
+                        setEndTime(dayjsTime);
+                        handleChange("end_time", dayjsTime.format("HH:mm"));
+                    }
+
+                    // Clear any errors for this field
+                    setError((prev) => ({ ...prev, [type]: false }));
+                } else {
+                    // Invalid hours or minutes
+                    setError((prev) => ({ ...prev, [type]: true }));
+                }
+            } else {
+                // Invalid time format
+                setError((prev) => ({ ...prev, [type]: true }));
+            }
+        }
+    };
+
 
     return (
-        <FormControl fullWidth margin="normal">
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Box
-                    display="flex"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    gap={2}
-                    flexWrap="wrap"
-                >
-
-                    <DesktopTimePicker
-                        label="Start Time"
-                        value={startTime}
-                        onChange={handleStartTimeChange}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                error={!!(startTime && endTime && endTime.isBefore(startTime))}
-                                helperText={
-                                    startTime && endTime && endTime.isBefore(startTime)
-                                        ? 'End Time must be after Start Time'
-                                        : ''
-                                }
-                            />
-                        )}
+        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
+            <Typography
+                sx={{ ml: 2, mr: 1, my: 2, fontSize: "15px", fontWeight: 600, color: "action.active" }}
+            >
+                Time
+            </Typography>
+            <AccessTimeRoundedIcon
+                sx={{
+                    color: "action.active",
+                    mr: 1,
+                    my: 1,
+                    fontSize: "36px",
+                    stroke: "#ffffff",
+                    strokeWidth: 0.5,
+                    borderRadius: "50px",
+                    border: "2px solid #bcbcbc",
+                    borderColor: "action.active",
+                }}
+            />
+            <FormControl fullWidth margin="normal">
+                <Box display="flex" justifyContent="space-between" alignItems="center" gap={2}>
+                    {/* Start Time */}
+                    <TextField
+                        value={tempInput.start || (startTime ? startTime.format("hh:mm A") : "")}
+                        onClick={(e) => handleDropdownOpen("start", e)}
+                        onChange={(e) => handleTextFieldChange("start", e.target.value)}
+                        onBlur={() => handleTextFieldBlur("start")}
+                        placeholder="HH:mm AM"
+                        error={error.start}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">Start</InputAdornment>,
+                            endAdornment: error.start ? (
+                                <InputAdornment position="end">
+                                    <Alert severity="error" sx={{
+                                        backgroundColor: "transparent",
+                                        boxShadow: "none",
+                                        border: "none",
+                                        padding: "0",
+                                    }} />
+                                </InputAdornment>
+                            ) : null,
+                        }}
                     />
-
-                    <DesktopTimePicker
-                        label="End Time"
-                        value={endTime}
-                        onChange={handleEndTimeChange}
-                        disabled={!startTime}
-                        minTime={startTime}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                error={!!(startTime && endTime && endTime.isBefore(startTime))}
-                                helperText={
-                                    startTime && endTime && endTime.isBefore(startTime)
-                                        ? 'End Time must be after Start Time'
-                                        : ''
-                                }
-                            />
-                        )}
+                    {/* End Time */}
+                    <TextField
+                        value={tempInput.end || (endTime ? endTime.format("hh:mm A") : "")}
+                        onClick={(e) => handleDropdownOpen("end", e)}
+                        onChange={(e) => handleTextFieldChange("end", e.target.value)}
+                        onBlur={() => handleTextFieldBlur("end")}
+                        placeholder="HH:mm AM"
+                        error={error.end}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">End</InputAdornment>,
+                            endAdornment: error.end ? (
+                                <InputAdornment position="end">
+                                    <Alert severity="error" sx={{
+                                        backgroundColor: "transparent",
+                                        boxShadow: "none",
+                                        border: "none",
+                                        padding: "0",
+                                    }} />
+                                </InputAdornment>
+                            ) : null,
+                        }}
+                    />
+                    {/* Break */}
+                    <TextField
+                        value={tempInput.breakLength}
+                        onClick={(e) => handleDropdownOpen("breakLength", e)}
+                        onChange={(e) => handleTextFieldChange("breakLength", e.target.value)}
+                        onBlur={() => handleTextFieldBlur("breakLength")}
+                        error={error.breakLength}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">Break</InputAdornment>,
+                            endAdornment: error.breakLength ? (
+                                <InputAdornment position="end">
+                                    <Alert severity="error" sx={{
+                                        backgroundColor: "transparent",
+                                        boxShadow: "none",
+                                        border: "none",
+                                        padding: "0",
+                                    }} />
+                                </InputAdornment>
+                            ) : null,
+                        }}
                     />
                 </Box>
-            </LocalizationProvider>
-        </FormControl>
+            </FormControl>
+
+            {/* Dropdown Menu for Break */}
+            <Popover
+                open={dropdownType === "breakLength"}
+                anchorEl={anchorEl}
+                onClose={handleDropdownClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                }}
+                sx={{
+                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
+                    padding: "0", // Remove unnecessary padding
+                    marginTop: "6px", // Adjust margin to prevent overlap
+                    width: "auto",
+                }}
+            >
+                <Box
+                    sx={{
+                        display: "flex",
+                        gap: 0,
+                        padding: 0,
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "4px",
+                        backgroundColor: "#fff",
+                        width: 'auto'
+
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: "flex",
+                            gap: 0, // Remove the gap between columns
+                            mt: 0.5,
+                            mb: 0.5,
+                            width: '100%'
+                        }}
+                    >
+                        <MenuList
+                            sx={{
+                                maxHeight: 300,
+                                overflowY: "auto",
+                                padding: "0", // Remove padding
+                                backgroundColor: "#fff",
+                                flex: 1,
+                            }}>
+                            {breakLengthOptions.map((option) => (
+                                <MenuItem key={option} onClick={() => handleBreakLengthSelect(option)}
+                                    sx={{
+                                        "&:hover": {
+                                            backgroundColor: "#deebff",
+                                        },
+                                        "&.Mui-selected": {
+                                            backgroundColor: "#2684ff",
+                                            color: "#fff",
+                                        },
+
+                                    }}>
+                                    {option}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+                    </Box></Box>
+            </Popover>
+
+            <Popover
+                open={dropdownType === "start" || dropdownType === "end"}
+                anchorEl={anchorEl}
+                onClose={handleDropdownClose}
+                anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                }}
+                transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                }}
+                sx={{
+                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
+                    padding: "0", // Remove unnecessary padding
+                    marginTop: "6px", // Adjust margin to prevent overlap
+                    width: "auto",
+                }}
+            >
+                <Box
+                    sx={{
+                        display: "flex",
+                        gap: 0,
+                        padding: 0,
+                        border: "1px solid #e0e0e0",
+                        borderRadius: "4px",
+                        backgroundColor: "#fff",
+                        width: 'auto'
+
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: "flex",
+                            gap: 0, // Remove the gap between columns
+                            mt: 0.5,
+                            mb: 0.5,
+                            width: '100%'
+                        }}
+                    >
+                        {/* Hours */}
+                        <MenuList
+                            sx={{
+                                maxHeight: 300,
+                                overflowY: "auto",
+                                padding: "0", // Remove padding
+                                backgroundColor: "#fff",
+                                width: "33.33%", // Make sure columns are evenly distributed
+                                flex: 1,
+                            }}
+                        >
+                            {hours.map((hour) => (
+                                <MenuItem
+                                    key={hour}
+                                    onClick={() => handleSelect("hours", hour)}
+                                    selected={
+                                        (dropdownType === "start" ? startSelection : endSelection).hours === hour
+                                    }
+                                    sx={{
+                                        "&:hover": {
+                                            backgroundColor: "#deebff",
+                                        },
+                                        "&.Mui-selected": {
+                                            backgroundColor: "#2684ff",
+                                            color: "#fff",
+                                        },
+
+                                    }}
+                                >
+                                    {hour}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+
+                        {/* Minutes */}
+                        <MenuList
+                            sx={{
+                                maxHeight: 300,
+                                overflowY: "auto",
+                                padding: "0",
+                                backgroundColor: "#fff",
+                                width: "33.33%",
+                                flex: 1,
+                            }}
+                        >
+                            {minutes.map((minute) => (
+                                <MenuItem
+                                    key={minute}
+                                    onClick={() => handleSelect("minutes", minute)}
+                                    selected={
+                                        (dropdownType === "start" ? startSelection : endSelection).minutes === minute
+                                    }
+                                    sx={{
+                                        "&:hover": {
+                                            backgroundColor: "#deebff",
+                                        },
+                                        "&.Mui-selected": {
+                                            backgroundColor: "#2684ff",
+                                            color: "#fff",
+                                        },
+
+                                    }}
+                                >
+                                    {minute}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+
+                        {/* Period */}
+                        <MenuList
+                            sx={{
+                                maxHeight: 300,
+                                overflowY: "auto",
+                                padding: "0",
+                                backgroundColor: "#fff",
+                                width: "33.33%",
+                                flex: 1,
+                            }}
+                        >
+                            {periods.map((period) => (
+                                <MenuItem
+                                    key={period}
+                                    onClick={() => handleSelect("period", period)}
+                                    selected={
+                                        (dropdownType === "start" ? startSelection : endSelection).period === period
+                                    }
+                                    sx={{
+                                        "&:hover": {
+                                            backgroundColor: "#deebff",
+                                        },
+                                        "&.Mui-selected": {
+                                            backgroundColor: "#2684ff",
+                                            color: "#fff",
+                                        },
+
+                                    }}
+                                >
+                                    {period}
+                                </MenuItem>
+                            ))}
+                        </MenuList>
+                    </Box>
+                </Box>
+            </Popover>
+        </Box>
     );
 };
 

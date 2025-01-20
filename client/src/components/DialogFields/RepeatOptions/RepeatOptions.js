@@ -9,10 +9,13 @@ import {
     TextField,
     ToggleButton,
     ToggleButtonGroup,
+    Typography
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import RepeatIcon from '@mui/icons-material/Repeat';
+import AddIcon from '@mui/icons-material/Add';
 import dayjs from 'dayjs';
 
 const RepeatOptions = ({ formData, handleChange }) => {
@@ -82,47 +85,74 @@ const RepeatOptions = ({ formData, handleChange }) => {
 
     return (
         <Box>
+
             <Box mt={2}>
-                <FormControl fullWidth margin="1">
-                    <InputLabel>Repeat Frequency</InputLabel>
-                    <Select
-                        value={reverseFrequencyMapping[repeatOptions.frequency] || ''}
-                        name="frequency"
-                        onChange={(e) => handleRepeatOptionsChange(e, e.target.value)}
-                    >
-                        {Object.keys(frequencyMapping).map((key) => (
-                            <MenuItem key={key} value={key}>
-                                {key.replace(/-/g, ' ')}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
+                <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                    <Typography sx={{ ml: 2, mr: 1, my: 2, fontSize: '15px', fontWeight: 600, color: 'action.active' }}>Repeat</Typography>
+                    <RepeatIcon sx={{
+                        color: 'action.active', mr: 1, my: 1.5,
+                        fontSize: '36px',
+                        stroke: "#ffffff", strokeWidth: 0.5,
+                        borderRadius: '50px',
+                        border: '2px solid #bcbcbc',
+                        borderColor: 'action.active',
+                        padding: 0.3
+
+                    }} />
+                    <FormControl fullWidth margin="1">
+                        <Select
+                            value={reverseFrequencyMapping[repeatOptions.frequency] || ''}
+                            name="frequency"
+                            onChange={(e) => handleRepeatOptionsChange(e, e.target.value)}
+                        >
+                            {Object.keys(frequencyMapping).map((key) => (
+                                <MenuItem key={key} value={key}>
+                                    {key.replace(/-/g, ' ')}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                </Box>
 
                 <Box mt={2}>
-                    <FormControl fullWidth margin="2">
-                        <Grid container spacing={2}>
-                            <Grid item xs={12}>
-                                <ToggleButtonGroup
-                                    value={repeatOptions.days}
-                                    onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
-                                    name="days"
-                                    aria-label="days of the week"
-                                    fullWidth
-                                >
-                                    {Object.keys(dayMapping).map((day) => (
-                                        <ToggleButton
-                                            name="days"
-                                            key={day}
-                                            value={dayMapping[day]}
-                                            aria-label={day}
-                                        >
-                                            {day}
-                                        </ToggleButton>
-                                    ))}
-                                </ToggleButtonGroup>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                        <Typography sx={{ ml: 2, mr: 1, my: 2, fontSize: '15px', fontWeight: 600, color: 'action.active' }}>Repeat</Typography>
+                        <AddIcon sx={{
+                            color: 'action.active', mr: 1, my: 1.5,
+                            fontSize: '36px',
+                            stroke: "#ffffff", strokeWidth: 0.5,
+                            borderRadius: '50px',
+                            border: '2px solid #bcbcbc',
+                            borderColor: 'action.active',
+                            padding: 0.3
+
+                        }} />
+                        <FormControl fullWidth margin="2">
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <ToggleButtonGroup
+                                        value={repeatOptions.days}
+                                        onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
+                                        name="days"
+                                        aria-label="days of the week"
+                                        fullWidth
+                                    >
+                                        {Object.keys(dayMapping).map((day) => (
+                                            <ToggleButton
+                                                name="days"
+                                                key={day}
+                                                value={dayMapping[day]}
+                                                aria-label={day}
+                                            >
+                                                {day}
+                                            </ToggleButton>
+                                        ))}
+                                    </ToggleButtonGroup>
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </FormControl>
+                        </FormControl>
+                    </Box>
                 </Box>
 
                 {repeatOptions.frequency > 1 && (

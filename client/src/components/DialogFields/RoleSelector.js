@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import CreatableSelect from 'react-select/creatable';
 import useRoles from '../../hooks/useRoles';
-import { FormControl } from '@mui/material';
+import { FormControl, Typography, Box } from '@mui/material';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 
 const RoleSelector = ({ formData, handleChange }) => {
     const { roles = [], loading } = useRoles(); // Ensure employees is always an array
@@ -33,23 +34,36 @@ const RoleSelector = ({ formData, handleChange }) => {
 
     return (
         <div>
-            <FormControl fullWidth margin="normal">
-                <CreatableSelect
-                    isClearable
-                    isLoading={loading}
-                    options={roleOptions}
-                    value={selectedRole}
-                    onChange={handleRoleChange}
-                    placeholder="Select role"
-                    menuPortalTarget={document.body} // Render dropdown outside parent container
-                    styles={{
-                        menuPortal: (base) => ({
-                            ...base,
-                            zIndex: 1300, // Adjust z-index to make dropdown appear on top
-                        }),
-                    }}
-                />
-            </FormControl>
+            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <Typography sx={{ ml: 2, mr: 1, my: 2, fontSize: '15px', fontWeight: 600, color: 'action.active' }}>Position</Typography>
+                <AssignmentOutlinedIcon sx={{
+                    color: 'action.active', mr: 1, my: 1,
+                    padding: 0.2,
+                    fontSize: '36px',
+                    stroke: "#ffffff", strokeWidth: 0.5,
+                    borderRadius: '50px',
+                    border: '2px solid #bcbcbc',
+                    borderColor: 'action.active',
+
+                }} />
+                <FormControl fullWidth margin="normal">
+                    <CreatableSelect
+                        isClearable
+                        isLoading={loading}
+                        options={roleOptions}
+                        value={selectedRole}
+                        onChange={handleRoleChange}
+                        placeholder="Add position"
+                        menuPortalTarget={document.body} // Render dropdown outside parent container
+                        styles={{
+                            menuPortal: (base) => ({
+                                ...base,
+                                zIndex: 1300, // Adjust z-index to make dropdown appear on top
+                            }),
+                        }}
+                    />
+                </FormControl>
+            </Box>
         </div>
     );
 };

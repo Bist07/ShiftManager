@@ -81,6 +81,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
         setRepeat((prev) => !prev);
     };
 
+    console.log(formData.start_time, formData.end_time)
     const handleSave = async () => {
         const { start_time, end_time, date, location_id, e_id, role_id } = formData;
 
