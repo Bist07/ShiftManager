@@ -37,6 +37,7 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                     <MobileDatePicker
                         value={selectedDate}
                         onChange={handleDateChange}
+                        format="DD MMMM YYYY"
 
                     />
                 </LocalizationProvider>
