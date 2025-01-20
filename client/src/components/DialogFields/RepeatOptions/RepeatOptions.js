@@ -35,20 +35,17 @@ const RepeatOptions = ({ formData, handleChange }) => {
     };
 
     const frequencyMapping = {
-        'this-week': 1,
-        'every-week': 7,
-        'every-2-weeks': 14,
-        'every-3-weeks': 21,
-        'every-4-weeks': 28,
-        'every-5-weeks': 35,
-        'every-6-weeks': 42,
-        'every-7-weeks': 49,
-        'every-8-weeks': 56,
+        'Never': 0,
+        'This week': 1,
+        'Every week': 7,
+        'Every 2 weeks': 14,
+        'Every 3 weeks': 21,
+        'Every 4 weeks': 28,
+        'Every 5 weeks': 35,
+        'Every 6 weeks': 42,
+        'Every 7 weeks': 49,
+        'Every 8 weeks': 56,
     };
-
-    const reverseFrequencyMapping = Object.fromEntries(
-        Object.entries(frequencyMapping).map(([key, value]) => [value, key])
-    );
 
     const frequencyOptions = Object.entries(frequencyMapping).map(([key, value]) => ({
         value,
@@ -63,7 +60,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
     }, [formData.date]);
 
     const handleRepeatOptionsChange = (event, newDays) => {
-        const { name, value } = event.target;
+        const { name, value } = event?.target;
 
         setRepeatOptions((prev) => {
             const updatedOptions = { ...prev };
@@ -72,11 +69,12 @@ const RepeatOptions = ({ formData, handleChange }) => {
             if (name === 'days') {
                 updatedOptions.days = newDays || [];
             } else if (name === 'frequency') {
-                updatedOptions.frequency = value || '';
+                if (value !== 0) {
+                    updatedOptions.frequency = value || '';
+                }
             } else {
                 updatedOptions[name] = value;
             }
-
             handleChange('repeat', updatedOptions);
             return updatedOptions;
         });
@@ -100,10 +98,9 @@ const RepeatOptions = ({ formData, handleChange }) => {
                 <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
                     <FormControl fullWidth>
                         <CreatableSelect
-                            isClearable
                             options={frequencyOptions}
                             value={frequencyOptions.find(option => option.value === repeatOptions.frequency)}
-                            onChange={(e) => handleRepeatOptionsChange({ target: { name: 'frequency', value: e.value } })}
+                            onChange={(e) => handleRepeatOptionsChange({ target: { name: 'frequency', value: e.value || '' } })}
                             placeholder="Select repeat frequency"
                             menuPortalTarget={document.body} // Render dropdown outside parent container
                             styles={{
@@ -124,56 +121,58 @@ const RepeatOptions = ({ formData, handleChange }) => {
                     </FormControl>
                 </Box>
             </Box>
-            <Box>
-                {/* Days of the Week Selection */}
-                <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                        <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Days</Typography>
-                        <AddIcon sx={{
-                            color: 'action.active',
-                            fontSize: '36px',
-                            borderRadius: '50px',
-                            border: '2px solid #bcbcbc',
-                            borderColor: 'action.active',
-                            padding: 0.5
-                        }} />
+
+            {/* Days of the Week Selection */}
+            {repeatOptions.frequency > 0 && (
+                <Box>
+                    <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
+                        <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
+                            <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Days</Typography>
+                            <AddIcon sx={{
+                                color: 'action.active',
+                                fontSize: '36px',
+                                borderRadius: '50px',
+                                border: '2px solid #bcbcbc',
+                                borderColor: 'action.active',
+                                padding: 0.5
+                            }} />
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
+                            <FormControl fullWidth>
+                                <ToggleButtonGroup
+                                    sx={{ bgcolor: '#ffff' }}
+                                    size='small'
+                                    value={repeatOptions.days}
+                                    onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
+                                    name="days"
+                                    fullWidth
+                                    aria-label="days of the week"
+                                >
+                                    {Object.keys(dayMapping).map((day) => (
+                                        <ToggleButton
+                                            name="days"
+                                            key={day}
+                                            value={dayMapping[day]}
+                                            aria-label={day}
+                                            sx={{
+                                                color: '#0085ff',
+                                                "&:hover": {
+                                                    backgroundColor: "#deebff",
+                                                },
+                                                "&.Mui-selected": {
+                                                    backgroundColor: "#2684ff",
+                                                    color: "#fff",
+                                                },
+                                            }}
+                                        >
+                                            {day}
+                                        </ToggleButton>
+                                    ))}
+                                </ToggleButtonGroup>
+                            </FormControl>
+                        </Box>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
-                        <FormControl fullWidth>
-                            <ToggleButtonGroup
-                                sx={{ bgcolor: '#ffff' }}
-                                size='small'
-                                value={repeatOptions.days}
-                                onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
-                                name="days"
-                                fullWidth
-                                aria-label="days of the week"
-                            >
-                                {Object.keys(dayMapping).map((day) => (
-                                    <ToggleButton
-                                        name="days"
-                                        key={day}
-                                        value={dayMapping[day]}
-                                        aria-label={day}
-                                        sx={{
-                                            color: '#0085ff',
-                                            "&:hover": {
-                                                backgroundColor: "#deebff",
-                                            },
-                                            "&.Mui-selected": {
-                                                backgroundColor: "#2684ff",
-                                                color: "#fff",
-                                            },
-                                        }}
-                                    >
-                                        {day}
-                                    </ToggleButton>
-                                ))}
-                            </ToggleButtonGroup>
-                        </FormControl>
-                    </Box>
-                </Box>
-            </Box>
+                </Box>)}
 
             {/* Start and End Dates */}
             {repeatOptions.frequency > 1 && (

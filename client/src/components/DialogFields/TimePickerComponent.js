@@ -70,6 +70,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
     };
 
     const handleSelect = (type, value) => {
+        const newSelection = { [type]: value };
         const updatedSelection = { ...tempSelection, [type]: value };
 
         // Retain existing values if not overwritten
@@ -96,11 +97,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
         handleChange(dropdownType === "start" ? "start_time" : "end_time", dayjs(partialTime, "hh:mm A").format("HH:mm"));
 
         // Check if all fields are filled before closing the dropdown
-        if (
-            updatedSelection.hours &&
-            updatedSelection.minutes &&
-            updatedSelection.period
-        ) {
+        if (newSelection.period) {
             const formattedTime = `${updatedSelection.hours}:${updatedSelection.minutes} ${updatedSelection.period}`;
             if (dropdownType === "start") {
                 setStartTime(dayjs(formattedTime, "HH:mm"));
@@ -118,12 +115,12 @@ const TimePickerComponent = ({ formData, handleChange }) => {
         setTempInput({ ...tempInput, breakLength: value });
         handleChange("break_length", FormatBreakLength(value));
         setAnchorEl(null);
+        handleDropdownClose();
     };
 
     const handleTextFieldChange = (type, value) => {
         setTempInput((prev) => ({ ...prev, [type]: value })); // Update temporary input
     };
-
 
     const FormatBreakLength = (value) => {
         let number = 0;
@@ -152,7 +149,6 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                 // Clear any errors for this field
                 setError((prev) => ({ ...prev, [type]: false }));
             } else {
-                console.log("Invalid break length");
                 setError((prev) => ({ ...prev, [type]: true }));
             }
         } else if (type === "start" || type === "end") {
@@ -378,8 +374,8 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                 }}
                 sx={{
                     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
-                    padding: "0", // Remove unnecessary padding
-                    marginTop: "6px", // Adjust margin to prevent overlap
+                    padding: "0",
+                    marginTop: "6px",
                     width: "auto",
 
                 }}
@@ -399,7 +395,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                     <Box
                         sx={{
                             display: "flex",
-                            gap: 0, // Remove the gap between columns
+                            gap: 0,
                             mt: 0.5,
                             mb: 0.5,
                             width: '100%'
@@ -409,7 +405,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             sx={{
                                 maxHeight: 300,
                                 overflowY: "auto",
-                                padding: "0", // Remove padding
+                                padding: "0",
                                 backgroundColor: "#fff",
                                 flex: 1,
 
@@ -451,8 +447,8 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                 }}
                 sx={{
                     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
-                    padding: "0", // Remove unnecessary padding
-                    marginTop: "6px", // Adjust margin to prevent overlap
+                    padding: "0",
+                    marginTop: "6px",
                     width: "auto",
                 }}
             >
@@ -471,7 +467,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                     <Box
                         sx={{
                             display: "flex",
-                            gap: 0, // Remove the gap between columns
+                            gap: 0,
                             mt: 0.5,
                             mb: 0.5,
                             width: '100%'
@@ -482,9 +478,9 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             sx={{
                                 maxHeight: 300,
                                 overflowY: "auto",
-                                padding: "0", // Remove padding
+                                padding: "0",
                                 backgroundColor: "#fff",
-                                width: "33.33%", // Make sure columns are evenly distributed
+                                width: "33.33%",
                                 flex: 1,
                             }}
                         >
