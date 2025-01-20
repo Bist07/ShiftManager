@@ -3,7 +3,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, 
 import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, RoleSelector } from '../../DialogFields';
 import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api';
 import { handleShiftChanges } from '../../../services/shiftService';
-import EventRepeatIcon from '@mui/icons-material/EventRepeat';
+import RepeatIcon from '@mui/icons-material/Repeat';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
+import CloseIcon from '@mui/icons-material/Close';
 import { validateAvailability, findConflictingSlots, generateValidDates, ValidateShift, isInvalid } from '../../../utils';
 import { useAvailability } from '../../../hooks';
 import ConflictDialog from './ConflictDialog';
@@ -81,7 +83,6 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
         setRepeat((prev) => !prev);
     };
 
-    console.log(formData.start_time, formData.end_time)
     const handleSave = async () => {
         const { start_time, end_time, date, location_id, e_id, role_id } = formData;
 
@@ -226,69 +227,109 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
 
 
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog open={open} onClose={onClose} >
             <Box
                 display="flex"
                 justifyContent="space-between"
                 alignItems="center"
                 gap={2}
                 flexWrap="wrap"
+                sx={{
+                    mt: 2
+                }}
             >
-                <DialogTitle
+                <Box
+                    display="flex"
+                    alignItems="center"
                     sx={{
-                        mt: 2,
-                        mb: -2,
-                    }}>
-                    {shift_id ? 'Edit Shift' : 'Create Shift'}
-                </DialogTitle>
-                {/* Toggle Repeat Options Button */}
-                <IconButton
-                    onClick={toggleRepeat}
-                    color="primary"
-                    aria-label={repeat ? "Hide Repeat Options" : "Show Repeat Options"}
+                        ml: 3.25
+                    }}
+
+                >
+                    <EditCalendarIcon sx={{
+                        color: "primary.main",
+                        fontSize: '36px',
+                        stroke: "#ffffff", strokeWidth: 0.5,
+                        borderRadius: '50px',
+                        border: '2px solid #bcbcbc',
+                        borderColor: "primary.main",
+                        padding: 0.5,
+
+                    }} />
+                    <DialogTitle
+                        sx={{
+                            color: "primary.main",
+                            ml: -1
+                        }}>
+                        {shift_id ? 'Edit Shift' : 'Create Shift'}
+                    </DialogTitle>
+                </Box>
+                <Box
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    flexWrap="wrap"
                     sx={{
-                        color: repeat ? 'light blue' : 'grey', // Change color based on the repeat state
-                        mt: 2,
                         mr: 3.25,
-                        mb: -2,
                     }}
                 >
-                    <EventRepeatIcon />
-                </IconButton>
+                    {/* Toggle Repeat Options Button */}
+                    <IconButton
+                        onClick={toggleRepeat}
+                        color="primary"
+                        aria-label={repeat ? "Hide Repeat Options" : "Show Repeat Options"}
+                        sx={{
+                            color: repeat ? 'light blue' : 'grey', // Change color based on the repeat state
+                        }}
+                    >
+                        <RepeatIcon />
+                    </IconButton>
+                    <IconButton
+                        onClick={onClose}
+                        aria-label={"close"}
+                        sx={{
+                            color: 'grey',
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </Box>
             </Box>
-            <DialogContent>
-                <DatePicker formData={formData} handleChange={handleFormChange} />
-                <TimePickerComponent formData={formData} handleChange={handleFormChange} />
-                <Collapse in={repeat}>
-                    <RepeatOptions formData={formData} handleChange={handleFormChange} />
-                </Collapse>
-                <LocationSelector formData={formData} handleChange={handleFormChange} />
-                <RoleSelector formData={formData} handleChange={handleFormChange} />
-                <EmployeeSelector formData={formData} handleChange={handleFormChange} />
-                {error && <Typography color="error">{error}</Typography>}
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose}>Cancel</Button>
-                {shift_id && (
-                    <Button onClick={() => handleDelete(shift_id)} color="error">
-                        Delete
+            <Box sx={{ bgcolor: '#f2f5f7' }}>
+                <DialogContent>
+                    <DatePicker formData={formData} handleChange={handleFormChange} />
+                    <TimePickerComponent formData={formData} handleChange={handleFormChange} />
+                    <Collapse in={repeat} >
+                        <RepeatOptions formData={formData} handleChange={handleFormChange} />
+                    </Collapse>
+                    <LocationSelector formData={formData} handleChange={handleFormChange} />
+                    <RoleSelector formData={formData} handleChange={handleFormChange} />
+                    <EmployeeSelector formData={formData} handleChange={handleFormChange} />
+                    {error && <Typography color="error">{error}</Typography>}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={onClose}>Cancel</Button>
+                    {shift_id && (
+                        <Button onClick={() => handleDelete(shift_id)} color="error">
+                            Delete
+                        </Button>
+                    )}
+                    <Button onClick={handleSave} disabled={isSaveDisabled}>
+                        {shift_id ? 'Update' : 'Save'}
                     </Button>
-                )}
-                <Button onClick={handleSave} disabled={isSaveDisabled}>
-                    {shift_id ? 'Update' : 'Save'}
-                </Button>
-            </DialogActions>
+                </DialogActions>
 
-            {/* Conflict Dialog */}
-            <ConflictDialog
-                open={openConflictDialog}
-                conflictDetails={conflictDetails}
-                ScheduleConflicts={ScheduleConflicts}
-                onIgnore={handleIgnoreConflict}
-                onEdit={handleEditConflict}
-                onClose={() => setOpenConflictDialog(false)}
-            />
-        </Dialog>
+                {/* Conflict Dialog */}
+                <ConflictDialog
+                    open={openConflictDialog}
+                    conflictDetails={conflictDetails}
+                    ScheduleConflicts={ScheduleConflicts}
+                    onIgnore={handleIgnoreConflict}
+                    onEdit={handleEditConflict}
+                    onClose={() => setOpenConflictDialog(false)}
+                />
+            </Box>
+        </Dialog >
     );
 };
 

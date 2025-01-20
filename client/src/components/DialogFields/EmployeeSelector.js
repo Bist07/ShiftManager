@@ -34,35 +34,46 @@ const EmployeeSelector = ({ formData, handleChange }) => {
 
     return (
         <div>
-            <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-                <Typography sx={{ ml: 2, mr: 1, my: 2, fontSize: '15px', fontWeight: 600, color: 'action.active' }}>Employee</Typography>
-                <PersonOutlineRoundedIcon sx={{
-                    color: 'action.active', mr: 1, my: 1,
-                    fontSize: '36px',
-                    stroke: "#ffffff", strokeWidth: 0.5,
-                    borderRadius: '50px',
-                    border: '2px solid #bcbcbc',
-                    borderColor: 'action.active',
-
-                }} />
-                <FormControl fullWidth margin="normal">
-                    <CreatableSelect
-                        isMulti
-                        isClearable
-                        isLoading={loading}
-                        options={employeeOptions}
-                        value={selectedEmployees}
-                        onChange={handleEmployeeChange}
-                        placeholder="Add employee(s)"
-                        menuPortalTarget={document.body} // Render dropdown outside parent container
-                        styles={{
-                            menuPortal: (base) => ({
-                                ...base,
-                                zIndex: 1300, // Adjust z-index to make dropdown appear on top
-                            }),
-                        }}
-                    />
-                </FormControl>
+            <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
+                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Employee</Typography>
+                    <PersonOutlineRoundedIcon sx={{
+                        color: 'action.active',
+                        fontSize: '36px',
+                        borderRadius: '50px',
+                        border: '2px solid #bcbcbc',
+                        borderColor: 'action.active',
+                        padding: 0.5,
+                    }} />
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
+                    <FormControl fullWidth >
+                        <CreatableSelect
+                            isMulti
+                            isClearable
+                            isLoading={loading}
+                            options={employeeOptions}
+                            value={selectedEmployees}
+                            onChange={handleEmployeeChange}
+                            placeholder="Add employee(s)"
+                            menuPortalTarget={document.body} // Render dropdown outside parent container
+                            styles={{
+                                control: (provided) => ({
+                                    ...provided,
+                                    fontSize: '14px', // Set font size for selected option
+                                }),
+                                menu: (provided) => ({
+                                    ...provided,
+                                    fontSize: '14px', // Set font size for items in the dropdown menu
+                                }),
+                                menuPortal: (base) => ({
+                                    ...base,
+                                    zIndex: 1300, // Adjust z-index to make dropdown appear on top
+                                }),
+                            }}
+                        />
+                    </FormControl>
+                </Box>
             </Box>
         </div>
     );

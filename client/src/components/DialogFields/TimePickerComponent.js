@@ -115,7 +115,8 @@ const TimePickerComponent = ({ formData, handleChange }) => {
 
     const handleBreakLengthSelect = (value) => {
         setBreakLengthSelection(value);
-        handleChange("break_length", value);
+        setTempInput({ ...tempInput, breakLength: value });
+        handleChange("break_length", FormatBreakLength(value));
         setAnchorEl(null);
     };
 
@@ -123,13 +124,35 @@ const TimePickerComponent = ({ formData, handleChange }) => {
         setTempInput((prev) => ({ ...prev, [type]: value })); // Update temporary input
     };
 
+
+    const FormatBreakLength = (value) => {
+        let number = 0;
+        if (value === "None") {
+            number = 0;
+        } else {
+            // Extract the number using a regex
+            const match = value.match(/\d+/); // This will capture the digits in the value
+            if (match) {
+                number = parseInt(match[0], 10); // Convert the matched digits to an integer
+            }
+        }
+        return number;
+    }
+
+
     const handleTextFieldBlur = (type) => {
         if (type === "breakLength") {
             // Validate breakLength input
             const value = tempInput.breakLength;
-            if (value === "None" || /^\d+$/.test(value)) {
+            const breakPattern = /^(?:None|\d+(?:\s?min)?)$/
+            const valid = tempInput[type]?.match(breakPattern);
+            if (valid) {
+                setBreakLength(value);
+                handleChange("break_length", FormatBreakLength(value));
+                // Clear any errors for this field
                 setError((prev) => ({ ...prev, [type]: false }));
             } else {
+                console.log("Invalid break length");
                 setError((prev) => ({ ...prev, [type]: true }));
             }
         } else if (type === "start" || type === "end") {
@@ -172,95 +195,174 @@ const TimePickerComponent = ({ formData, handleChange }) => {
 
 
     return (
-        <Box sx={{ display: "flex", alignItems: "flex-end" }}>
-            <Typography
-                sx={{ ml: 2, mr: 1, my: 2, fontSize: "15px", fontWeight: 600, color: "action.active" }}
-            >
-                Time
-            </Typography>
-            <AccessTimeRoundedIcon
-                sx={{
-                    color: "action.active",
-                    mr: 1,
-                    my: 1,
-                    fontSize: "36px",
-                    stroke: "#ffffff",
-                    strokeWidth: 0.5,
-                    borderRadius: "50px",
-                    border: "2px solid #bcbcbc",
-                    borderColor: "action.active",
-                }}
-            />
-            <FormControl fullWidth margin="normal">
-                <Box display="flex" justifyContent="space-between" alignItems="center" gap={2}>
-                    {/* Start Time */}
-                    <TextField
-                        value={tempInput.start || (startTime ? startTime.format("hh:mm A") : "")}
-                        onClick={(e) => handleDropdownOpen("start", e)}
-                        onChange={(e) => handleTextFieldChange("start", e.target.value)}
-                        onBlur={() => handleTextFieldBlur("start")}
-                        placeholder="HH:mm AM"
-                        error={error.start}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">Start</InputAdornment>,
-                            endAdornment: error.start ? (
-                                <InputAdornment position="end">
-                                    <Alert severity="error" sx={{
-                                        backgroundColor: "transparent",
-                                        boxShadow: "none",
-                                        border: "none",
-                                        padding: "0",
-                                    }} />
-                                </InputAdornment>
-                            ) : null,
-                        }}
-                    />
-                    {/* End Time */}
-                    <TextField
-                        value={tempInput.end || (endTime ? endTime.format("hh:mm A") : "")}
-                        onClick={(e) => handleDropdownOpen("end", e)}
-                        onChange={(e) => handleTextFieldChange("end", e.target.value)}
-                        onBlur={() => handleTextFieldBlur("end")}
-                        placeholder="HH:mm AM"
-                        error={error.end}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">End</InputAdornment>,
-                            endAdornment: error.end ? (
-                                <InputAdornment position="end">
-                                    <Alert severity="error" sx={{
-                                        backgroundColor: "transparent",
-                                        boxShadow: "none",
-                                        border: "none",
-                                        padding: "0",
-                                    }} />
-                                </InputAdornment>
-                            ) : null,
-                        }}
-                    />
-                    {/* Break */}
-                    <TextField
-                        value={tempInput.breakLength}
-                        onClick={(e) => handleDropdownOpen("breakLength", e)}
-                        onChange={(e) => handleTextFieldChange("breakLength", e.target.value)}
-                        onBlur={() => handleTextFieldBlur("breakLength")}
-                        error={error.breakLength}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">Break</InputAdornment>,
-                            endAdornment: error.breakLength ? (
-                                <InputAdornment position="end">
-                                    <Alert severity="error" sx={{
-                                        backgroundColor: "transparent",
-                                        boxShadow: "none",
-                                        border: "none",
-                                        padding: "0",
-                                    }} />
-                                </InputAdornment>
-                            ) : null,
-                        }}
-                    />
-                </Box>
-            </FormControl>
+        <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
+                <Typography
+                    sx={{ fontSize: "15px", fontWeight: 600, color: "action.active", textAlign: 'right', width: '50%' }}
+                >
+                    Time
+                </Typography>
+                <AccessTimeRoundedIcon
+                    sx={{
+                        color: "action.active",
+                        fontSize: "36px",
+                        borderRadius: "50px",
+                        padding: 0.5,
+                        border: "2px solid #bcbcbc",
+                        borderColor: "action.active",
+                    }}
+                />
 
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
+                <FormControl fullWidth>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" gap={1}>
+                        {/* Start Time */}
+                        <TextField
+                            value={tempInput.start || (startTime ? startTime.format("hh:mm A") : "")}
+                            onClick={!!(error.breakLength || error.end) ? null : (e) => handleDropdownOpen("start", e)}
+                            onChange={(e) => handleTextFieldChange("start", e.target.value)}
+                            onBlur={() => handleTextFieldBlur("start")}
+                            placeholder="HH:mm AM"
+                            error={error.start}
+                            size='small'
+                            disabled={!!(error.breakLength || error.end)}
+                            sx={{
+                                width: error.start
+                                    ? '50%'
+                                    : error.breakLength
+                                        ? '35%'
+                                        : error.end
+                                            ? '25%'
+                                            : '37.5%',
+                                bgcolor: '#fff',
+                                '& input': {
+                                    fontSize: '14px',
+                                },
+                                '& .MuiInputAdornment-root': {
+                                    fontSize: '14px',  // Adjust for adornment
+                                    '& .MuiTypography-root': {
+                                        fontSize: '14px',  // Specifically target text inside the adornment
+                                    }
+                                },
+                                '& .MuiInputAdornment-positionEnd': {
+                                    mr: -2,
+
+                                },
+                            }}
+                            InputProps={{
+                                startAdornment: <InputAdornment sx={{ fontSize: '14px' }} position="start">Start</InputAdornment>,
+                                endAdornment: error.start ? (
+                                    <InputAdornment position="end">
+                                        <Alert severity="error" sx={{
+                                            backgroundColor: "transparent",
+                                            boxShadow: "none",
+                                            border: "none",
+                                            padding: "0",
+                                        }} />
+                                    </InputAdornment>
+                                ) : null,
+                            }}
+                        />
+                        {/* End Time */}
+                        <TextField
+
+                            value={tempInput.end || (endTime ? endTime.format("hh:mm A") : "")}
+                            onClick={!!(error.start || error.breakLength) ? null : (e) => handleDropdownOpen("end", e)}
+                            onChange={(e) => handleTextFieldChange("end", e.target.value)}
+                            onBlur={() => handleTextFieldBlur("end")}
+                            placeholder="HH:mm AM"
+                            error={error.end}
+                            size='small'
+                            disabled={!!(error.start || error.breakLength)}
+                            sx={{
+                                width: error.end
+                                    ? '50%'
+                                    : error.breakLength
+                                        ? '35%'
+                                        : error.start
+                                            ? '25%'
+                                            : '37.5%',
+                                bgcolor: '#fff',
+                                '& input': {
+                                    fontSize: '14px',
+                                },
+                                '& .MuiInputAdornment-root': {
+                                    fontSize: '14px',  // Adjust for adornment
+                                    '& .MuiTypography-root': {
+                                        fontSize: '14px',  // Specifically target text inside the adornment
+                                    }
+                                },
+                                '& .MuiInputAdornment-positionEnd': {
+                                    mr: -2,
+
+                                },
+                            }}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">End</InputAdornment>,
+                                endAdornment: error.end ? (
+                                    <InputAdornment position="end">
+                                        <Alert severity="error" sx={{
+                                            backgroundColor: "transparent",
+                                            boxShadow: "none",
+                                            border: "none",
+                                            padding: "0",
+                                        }} />
+                                    </InputAdornment>
+                                ) : null,
+                            }}
+
+                        />
+                        {/* Break */}
+                        <TextField
+                            value={tempInput.breakLength}
+                            onClick={!!(error.start || error.end) ? null : (e) => handleDropdownOpen("breakLength", e)}
+                            onChange={(e) => handleTextFieldChange("breakLength", e.target.value)}
+                            onBlur={() => handleTextFieldBlur("breakLength")}
+                            error={error.breakLength}
+                            size='small'
+                            disabled={!!(error.start || error.end)}
+                            sx={{
+                                width: error.breakLength
+                                    ? '50%'
+                                    : error.start
+                                        ? '20%'
+                                        : error.end
+                                            ? '20%'
+                                            : '33.33%',
+                                bgcolor: '#fff',
+                                '& input': {
+                                    fontSize: '14px',
+                                },
+                                '& .MuiInputAdornment-root': {
+                                    fontSize: '14px',  // Adjust for adornment
+                                    '& .MuiTypography-root': {
+                                        fontSize: '14px',  // Specifically target text inside the adornment
+                                    }
+                                },
+                                '& .MuiInputAdornment-positionEnd': {
+                                    mr: -2,
+
+                                },
+                            }}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">Break</InputAdornment>,
+                                endAdornment: error.breakLength ? (
+                                    <InputAdornment position="end">
+                                        <Alert severity="error" sx={{
+                                            backgroundColor: "transparent",
+                                            boxShadow: "none",
+                                            border: "none",
+                                            padding: "0",
+                                        }} />
+                                    </InputAdornment>
+                                ) : null,
+                            }}
+
+                        />
+                    </Box>
+                </FormControl>
+            </Box>
             {/* Dropdown Menu for Break */}
             <Popover
                 open={dropdownType === "breakLength"}
@@ -279,6 +381,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                     padding: "0", // Remove unnecessary padding
                     marginTop: "6px", // Adjust margin to prevent overlap
                     width: "auto",
+
                 }}
             >
                 <Box
@@ -309,10 +412,15 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 padding: "0", // Remove padding
                                 backgroundColor: "#fff",
                                 flex: 1,
+
                             }}>
                             {breakLengthOptions.map((option) => (
-                                <MenuItem key={option} onClick={() => handleBreakLengthSelect(option)}
+                                <MenuItem
+                                    key={option}
+                                    onClick={() => handleBreakLengthSelect(option)}
+                                    selected={breakLengthSelection === option}
                                     sx={{
+                                        fontSize: '14px',
                                         "&:hover": {
                                             backgroundColor: "#deebff",
                                         },
@@ -327,7 +435,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             ))}
                         </MenuList>
                     </Box></Box>
-            </Popover>
+            </Popover >
 
             <Popover
                 open={dropdownType === "start" || dropdownType === "end"}
@@ -388,6 +496,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                         (dropdownType === "start" ? startSelection : endSelection).hours === hour
                                     }
                                     sx={{
+                                        fontSize: '14px',
                                         "&:hover": {
                                             backgroundColor: "#deebff",
                                         },
@@ -412,6 +521,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 backgroundColor: "#fff",
                                 width: "33.33%",
                                 flex: 1,
+
                             }}
                         >
                             {minutes.map((minute) => (
@@ -422,6 +532,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                         (dropdownType === "start" ? startSelection : endSelection).minutes === minute
                                     }
                                     sx={{
+                                        fontSize: '14px',
                                         "&:hover": {
                                             backgroundColor: "#deebff",
                                         },
@@ -456,6 +567,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                         (dropdownType === "start" ? startSelection : endSelection).period === period
                                     }
                                     sx={{
+                                        fontSize: '14px',
                                         "&:hover": {
                                             backgroundColor: "#deebff",
                                         },
@@ -473,7 +585,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                     </Box>
                 </Box>
             </Popover>
-        </Box>
+        </Box >
     );
 };
 

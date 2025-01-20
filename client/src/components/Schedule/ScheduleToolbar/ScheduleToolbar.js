@@ -9,8 +9,8 @@ import TuneIcon from '@mui/icons-material/Tune';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { Filter } from '../../Filters';
-import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import ViewWeekIcon from '@mui/icons-material/ViewWeek';
+import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 import AddIcon from '@mui/icons-material/Add';
 import { ShiftDialog } from '../ShiftDialog';
 import dayjs from 'dayjs';
@@ -158,12 +158,13 @@ const ScheduleToolbar = () => {
                         }}
                     >
                         {viewMode === 'week' ? (
+
                             <>
-                                Week <CalendarViewWeekIcon />
+                                Week <ViewWeekIcon />
                             </>
                         ) : (
                             <>
-                                Month <CalendarMonthIcon />
+                                Month <ViewModuleRoundedIcon />
                             </>
                         )}
 

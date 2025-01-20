@@ -4,7 +4,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { TextField, FormControl, Typography, Box } from '@mui/material';
 import dayjs from 'dayjs';
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import TodayIcon from '@mui/icons-material/Today';
 
 const DatePickerComponent = ({ formData, handleChange }) => {
     const [selectedDate, setSelectedDate] = useState(formData.date ? dayjs(formData.date) : null);
@@ -20,28 +20,40 @@ const DatePickerComponent = ({ formData, handleChange }) => {
 
     return (
 
-        <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <Typography sx={{ ml: 2, mr: 1, my: 2, fontSize: '15px', fontWeight: 600, color: 'action.active' }}>Date</Typography>
-            <CalendarMonthIcon sx={{
-                color: 'action.active', mr: 1, my: 1.5,
-                fontSize: '36px',
-                stroke: "#ffffff", strokeWidth: 0.5,
-                borderRadius: '50px',
-                border: '2px solid #bcbcbc',
-                borderColor: 'action.active',
-                padding: 0.3
+        <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
+                <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Date</Typography>
+                <TodayIcon sx={{
+                    color: 'action.active',
+                    fontSize: '36px',
+                    borderRadius: '50px',
+                    border: '2px solid #bcbcbc',
+                    borderColor: 'action.active',
+                    padding: 0.5,
+                }} />
+            </Box>
+            <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
+                <FormControl fullWidth >
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <MobileDatePicker
+                            sx={{
+                                bgcolor: '#fff', '& input': {
+                                    fontSize: '14px',
+                                },
+                            }}
+                            value={selectedDate}
+                            onChange={handleDateChange}
+                            format="DD MMMM YYYY"
+                            slotProps={{
+                                textField: {
+                                    size: 'small',
+                                }
+                            }}
 
-            }} />
-            <FormControl fullWidth margin="normal">
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <MobileDatePicker
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        format="DD MMMM YYYY"
-
-                    />
-                </LocalizationProvider>
-            </FormControl>
+                        />
+                    </LocalizationProvider>
+                </FormControl>
+            </Box>
         </Box>
     );
 };
