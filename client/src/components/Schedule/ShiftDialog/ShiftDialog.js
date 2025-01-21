@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box, Tabs, Tab, Divider } from '@mui/material';
 import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, RoleSelector } from '../../DialogFields';
 import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api';
 import { handleShiftChanges } from '../../../services/shiftService';
@@ -20,6 +20,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
     const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
     const [ScheduleConflicts, setScheduleConflicts] = useState([]); // Store conflict details
     const [initialData, setInitialData] = useState(null); // Store initial data
+    const [selectedTab, setSelectedTab] = useState(0);
     let emp_id;
 
     if (typeof e_id === "undefined" || e_id === null) {
@@ -174,6 +175,11 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
         }
     };
 
+
+    const handleTabChange = (event, newValue) => {
+        setSelectedTab(newValue);
+    };
+
     const handleIgnoreConflict = async () => {
         setIgnoreConflict(true);
         setOpenConflictDialog(false);
@@ -247,18 +253,18 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
 
                 >
                     <EditCalendarIcon sx={{
-                        color: "primary.main",
+                        color: "#0085ff",
                         fontSize: '36px',
                         stroke: "#ffffff", strokeWidth: 0.5,
                         borderRadius: '50px',
                         border: '2px solid #bcbcbc',
-                        borderColor: "primary.main",
+                        borderColor: "#0085ff",
                         padding: 0.5,
 
                     }} />
                     <DialogTitle
                         sx={{
-                            color: "primary.main",
+                            color: "#0085ff",
                             ml: -1
                         }}>
                         {shift_id ? 'Edit Shift' : 'Create Shift'}
@@ -276,10 +282,10 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                     {/* Toggle Repeat Options Button */}
                     <IconButton
                         onClick={toggleRepeat}
-                        color="primary"
+                        color="#0085ff"
                         aria-label={repeat ? "Hide Repeat Options" : "Show Repeat Options"}
                         sx={{
-                            color: repeat ? 'light blue' : 'grey', // Change color based on the repeat state
+                            color: repeat ? '#0085ff' : 'grey', // Change color based on the repeat state
                         }}
                     >
                         <RepeatIcon />
@@ -294,12 +300,38 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                         <CloseIcon />
                     </IconButton>
                 </Box>
+                <Tabs
+                    value={selectedTab}
+                    onChange={handleTabChange}
+                    aria-label="tabs"
+                    sx={{
+                        borderBottom: 1,
+                        borderColor: 'divider',
+                        '& .MuiTab-root': {
+                            fontWeight: 600,
+                        },
+                        '& .Mui-selected': {
+                            color: '#0085ff',
+
+                        },
+                        '& .MuiTabs-indicator': {
+                            backgroundColor: '#0085ff',
+                        },
+                        '& .MuiTab-root:hover': {
+                            color: '#0085ff',
+                        },
+                    }}
+                >
+                    <Tab label="CUSTOM" disableRipple />
+                    <Tab label="TEMPLATES" disableRipple />
+                    <Tab label="TIME OFF" disableRipple />
+                </Tabs>
             </Box>
             <Box sx={{ bgcolor: '#f2f5f7' }}>
-                <DialogContent>
+                <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
                     <DatePicker formData={formData} handleChange={handleFormChange} />
                     <TimePickerComponent formData={formData} handleChange={handleFormChange} />
-                    <Collapse in={repeat} >
+                    <Collapse in={repeat}>
                         <RepeatOptions formData={formData} handleChange={handleFormChange} />
                     </Collapse>
                     <LocationSelector formData={formData} handleChange={handleFormChange} />
@@ -328,7 +360,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                     onEdit={handleEditConflict}
                     onClose={() => setOpenConflictDialog(false)}
                 />
-            </Box>
+            </Box >
         </Dialog >
     );
 };

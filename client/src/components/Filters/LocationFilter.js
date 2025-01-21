@@ -21,7 +21,7 @@ const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, lo
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 variant='outlined'
                 sx={{
-                    color: Object.keys(filters.locationFilters).length > 0 ? 'primary.main' : '#626262',
+                    color: Object.keys(filters.locationFilters).length > 0 ? '#0085ff' : '#626262',
                     fontSize: '15px',
                     textTransform: 'none',
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

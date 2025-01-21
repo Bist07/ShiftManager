@@ -81,8 +81,8 @@ const RepeatOptions = ({ formData, handleChange }) => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: '#eaeef2', width: '100%' }}>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1, }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: '#eaeef2', width: '100%', ml: 0, mr: 0 }}>
+            <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
                 {/* Frequency Selection */}
                 <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                     <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Repeat</Typography>
@@ -125,7 +125,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
             {/* Days of the Week Selection */}
             {repeatOptions.frequency > 0 && (
                 <Box>
-                    <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
+                    <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
                         <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                             <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Days</Typography>
                             <AddIcon sx={{
@@ -177,7 +177,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
             {/* Start and End Dates */}
             {repeatOptions.frequency > 1 && (
                 <Box>
-                    <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
+                    <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
                         <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: "center", width: "75%", gap: 2 }}>

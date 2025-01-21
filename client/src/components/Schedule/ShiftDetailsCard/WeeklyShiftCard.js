@@ -36,7 +36,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                         }}
                     >
                         <CardContent sx={{ padding: 2 }}>
-                            <Typography variant="h6" sx={{ fontWeight: 600, color: 'primary.main', fontSize: '14px' }}>
+                            <Typography variant="h6" sx={{ fontWeight: 600, color: '#0085ff', fontSize: '14px' }}>
                                 {formatTime(startTime)} - {formatTime(endTime)}
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -81,7 +81,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
             >
                 <CardContent sx={{ paddingLeft: 2, paddingRight: 2, paddingTop: 0, paddingBottom: 0 }}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <AddIcon sx={{ fontSize: 40, color: 'primary.main' }} />
+                        <AddIcon sx={{ fontSize: 40, color: '#0085ff' }} />
                         <Typography variant="body1" sx={{ fontSize: '14px', color: 'text.secondary', mb: 1 }}>
                             No shift scheduled
                         </Typography>

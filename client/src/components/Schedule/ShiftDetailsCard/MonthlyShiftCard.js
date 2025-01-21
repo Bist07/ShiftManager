@@ -11,7 +11,7 @@ const MonthlyShiftCard = ({ shift, onClick }) => {
             <CardActionArea sx={{ width: '100%', height: '100%' }}>
                 <CardContent >
                     <Box sx={{ textAlign: 'left' }} >
-                        <Typography variant="body1" sx={{ fontSize: '12px', color: 'primary.main', display: "block" }}>
+                        <Typography variant="body1" sx={{ fontSize: '12px', color: '#0085ff', display: "block" }}>
                             {shift.name}
                         </Typography>
                         <Typography variant="body1" sx={{ fontSize: '12px', color: 'text.secondary', display: "block" }}>

@@ -66,7 +66,7 @@ const EmployeeToolbar = () => {
                     zIndex: 1000,
                 }}>
                 <Box sx={{ display: 'flex', gap: '16px', height: '40px' }}>
-                    <Typography variant="h5" sx={{ fontWeight: 600, color: 'primary.main' }}>Employees</Typography>
+                    <Typography variant="h5" sx={{ fontWeight: 600, color: '#0085ff' }}>Employees</Typography>
                 </Box>
 
                 {/* Add a Box with flexGrow to push Tune button to the right */}
@@ -83,7 +83,7 @@ const EmployeeToolbar = () => {
                         marginLeft: 'auto', // Push to the far right
                         backgroundColor: '#f5f5f5', // Match button background
                         '&:hover': { backgroundColor: '#f0f0f0' }, // Match hover style
-                        borderColor: isOpen ? 'primary.main' : '#bcbcbc',
+                        borderColor: isOpen ? '#0085ff' : '#bcbcbc',
                         overflow: 'hidden',
                     }}
                 >
@@ -106,12 +106,12 @@ const EmployeeToolbar = () => {
                         />
                     )}
                     <IconButton
-                        color="primary"
+                        color="#0085ff"
                         onClick={handleSearchClick}
                         sx={{
                             padding: '8px',
                             borderRadius: '5px',
-                            color: isOpen ? 'primary.main' : '#626262',
+                            color: isOpen ? '#0085ff' : '#626262',
                         }}
                     >
                         <SearchIcon />
@@ -128,7 +128,7 @@ const EmployeeToolbar = () => {
                         borderRadius: '5px',
                         border: '1px solid #bcbcbc', // Add border to mimic outlined style
                         marginLeft: '16px',
-                        color: filterOpen ? 'primary.main' : '#626262',
+                        color: filterOpen ? '#0085ff' : '#626262',
                         '&:hover': { backgroundColor: '#f0f0f0' },
                     }}
                 >
@@ -138,7 +138,7 @@ const EmployeeToolbar = () => {
                 <IconButton
                     onClick={handleOpenDialog}
                     sx={{
-                        bgcolor: 'primary.main',
+                        bgcolor: '#0085ff',
                         fontSize: '15px',
                         textTransform: 'none',
                         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

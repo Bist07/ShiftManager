@@ -217,7 +217,7 @@ const ScheduleToolbar = () => {
                                 fontSize: '17px',
                                 textWeight: 'bold',
                                 fontWeight: 600,
-                                color: selectedWeek ? 'primary.main' : '#626262',
+                                color: selectedWeek ? '#0085ff' : '#626262',
                                 textTransform: 'none',
                                 padding: '8px 16px',
                                 fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
@@ -261,7 +261,7 @@ const ScheduleToolbar = () => {
                         borderRadius: '5px',
                         border: '1px solid #bcbcbc', // Add border to mimic outlined style
                         marginLeft: '16px',
-                        color: filterOpen ? 'primary.main' : '#626262',
+                        color: filterOpen ? '#0085ff' : '#626262',
                         '&:hover': { backgroundColor: '#f0f0f0' },
                     }}
                 >
@@ -271,7 +271,7 @@ const ScheduleToolbar = () => {
                 <IconButton
                     onClick={handleOpenDialog}
                     sx={{
-                        bgcolor: 'primary.main',
+                        bgcolor: '#0085ff',
                         fontSize: '15px',
                         textTransform: 'none',
                         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

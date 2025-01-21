@@ -49,7 +49,7 @@ const ConflictDialog = ({ open, conflictDetails, ScheduleConflicts, onIgnore, on
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={onEdit} color="primary">Go Back and Edit</Button>
+                <Button onClick={onEdit} color="#0085ff">Go Back and Edit</Button>
                 <Button onClick={onIgnore} color="secondary">Ignore and Proceed</Button>
             </DialogActions>
         </Dialog>

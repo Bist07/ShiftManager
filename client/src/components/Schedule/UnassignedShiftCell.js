@@ -44,7 +44,7 @@ const UnassignedShiftCell = ({ date, shiftsForDate, onShiftClick }) => {
             {hovered && (
                 <Button
                     variant="contained"
-                    color="primary"
+                    color="#0085ff"
                     sx={{
                         position: 'absolute',
                         top: '50%',

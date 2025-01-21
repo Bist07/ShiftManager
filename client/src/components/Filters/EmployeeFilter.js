@@ -20,7 +20,7 @@ const EmployeeFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, em
                 aria-haspopup="true"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
                 sx={{
-                    color: filters.employeeFilters.length > 0 ? 'primary.main' : '#626262',
+                    color: filters.employeeFilters.length > 0 ? '#0085ff' : '#626262',
                     fontSize: '15px',
                     textTransform: 'none',
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',

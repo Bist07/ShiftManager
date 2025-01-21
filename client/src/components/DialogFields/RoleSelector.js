@@ -34,7 +34,7 @@ const RoleSelector = ({ formData, handleChange }) => {
 
     return (
         <div>
-            <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                     <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Position</Typography>
                     <AssignmentOutlinedIcon sx={{

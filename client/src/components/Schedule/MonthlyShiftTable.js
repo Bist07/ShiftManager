@@ -120,7 +120,7 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
                                 opacity: 0, // Hidden by default
                                 transition: 'opacity 0.3s ease', // Smooth transition to appear
                                 '&:hover': {
-                                    color: "primary.main",
+                                    color: "#0085ff",
                                 },
                             }}
                             onClick={() => handleOpenDialog(null, date)}
