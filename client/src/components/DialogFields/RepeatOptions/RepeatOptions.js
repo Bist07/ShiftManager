@@ -108,6 +108,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                     ...provided,
                                     fontSize: '14px', // Set font size for selected option
                                     color: '#5f7183',
+                                    borderColor: '#fff'
                                 }),
                                 singleValue: (provided) => ({
                                     ...provided,
@@ -146,7 +147,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                         <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
                             <FormControl fullWidth>
                                 <ToggleButtonGroup
-                                    sx={{ bgcolor: '#ffff' }}
+                                    sx={{ bgcolor: '#f2f5f7' }}
                                     size='small'
                                     value={repeatOptions.days}
                                     onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
@@ -161,7 +162,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                             value={dayMapping[day]}
                                             aria-label={day}
                                             sx={{
-                                                color: '#0085ff',
+                                                color: '#97a2ae',
                                                 "&:hover": {
                                                     backgroundColor: "#deebff",
                                                 },
@@ -189,31 +190,38 @@ const RepeatOptions = ({ formData, handleChange }) => {
                         <Box sx={{ display: 'flex', alignItems: "center", width: "75%", gap: 2 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <MobileDatePicker
-                                    sx={{
-                                        bgcolor: '#dee2e6', '& input': {
-                                            fontSize: '14px',
-                                            color: '#5f7183',
-
-                                        },
-                                        '& label': {
-                                            fontSize: '14px',
-                                            color: '#5f7183',
-
-                                        },
-                                        '& .MuiInputAdornment-root': {
-                                            fontSize: '14px',  // Adjust for adornment
-                                            '& .MuiTypography-root': {
-                                                fontSize: '14px',  // Specifically target text inside the adornment
-                                                color: '#b6c0c9'
-                                            }
-                                        },
-                                    }}
                                     value={repeatOptions.startDate ? dayjs(repeatOptions.startDate) : null}
                                     disabled // Lock the start date
                                     format="DD MMM YYYY"
                                     slotProps={{
                                         textField: {
-                                            size: 'small', InputProps: {
+                                            size: 'small', sx: {
+                                                '& .MuiOutlinedInput-root': {
+                                                    borderRadius: '4px', // Ensure the input field is rounded
+                                                    '& fieldset': {
+                                                        borderColor: '#dee2e6', // Border color when disabled
+                                                    },
+                                                    '&.Mui-disabled': {
+                                                        bgcolor: '#dee2e6', // Background color when disabled
+                                                        '& fieldset': {
+                                                            borderColor: '#dee2e6', // Change the border color
+                                                        },
+                                                        '& input': {
+                                                            color: '#5f7183', // Text color when disabled
+                                                        },
+                                                    }, '& input': {
+                                                        fontSize: '14px',
+
+                                                    },
+                                                    '& .MuiInputAdornment-root': {
+                                                        fontSize: '14px',  // Adjust for adornment
+                                                        '& .MuiTypography-root': {
+                                                            fontSize: '14px',  // Specifically target text inside the adornment
+                                                            color: '#b6c0c9'
+                                                        }
+                                                    },
+                                                },
+                                            }, InputProps: {
                                                 startAdornment: <InputAdornment position="start">Start</InputAdornment>,
                                             }
                                         }
@@ -223,6 +231,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
 
                                 <MobileDatePicker
                                     sx={{
+                                        borderRadius: '4px',
                                         bgcolor: '#fff', '& input': {
                                             fontSize: '14px',
                                             color: '#5f7183',
@@ -233,6 +242,14 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                                 fontSize: '14px',  // Specifically target text inside the adornment
                                                 color: '#b6c0c9'
                                             }
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#fff', // Change the border color
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#abb6ba', // Border color when hovering
+                                            },
                                         },
 
                                     }}

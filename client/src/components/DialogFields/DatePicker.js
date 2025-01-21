@@ -37,9 +37,19 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileDatePicker
                             sx={{
+                                borderRadius: '4px',
                                 bgcolor: '#fff', '& input': {
                                     fontSize: '14px',
                                     color: '#5f7183',
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#fff', // Change the border color
+                                        borderRadius: '4px',
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#abb6ba', // Border color when hovering
+                                    },
                                 },
                             }}
                             value={selectedDate}

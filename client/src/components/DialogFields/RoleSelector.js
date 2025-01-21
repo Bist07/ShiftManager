@@ -61,6 +61,7 @@ const RoleSelector = ({ formData, handleChange }) => {
                                 control: (provided) => ({
                                     ...provided,
                                     fontSize: '14px', // Set font size for selected option
+                                    borderColor: '#fff'
                                 }),
                                 singleValue: (provided) => ({
                                     ...provided,

@@ -57,10 +57,21 @@ const EmployeeSelector = ({ formData, handleChange }) => {
                             onChange={handleEmployeeChange}
                             placeholder="Add employee(s)"
                             menuPortalTarget={document.body} // Render dropdown outside parent container
+                            sx={{
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#fff', // Change the border color
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#b4b4b4', // Border color when hovering
+                                    },
+                                },
+                            }}
                             styles={{
                                 control: (provided) => ({
                                     ...provided,
                                     fontSize: '14px', // Set font size for selected option
+                                    borderColor: '#fff'
                                 }),
                                 menu: (provided) => ({
                                     ...provided,

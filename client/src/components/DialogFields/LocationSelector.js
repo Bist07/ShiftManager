@@ -62,6 +62,7 @@ const LocationSelector = ({ formData, handleChange }) => {
                                     ...provided,
                                     fontSize: '14px', // Set font size for selected option
                                     color: '#5f7183',
+                                    borderColor: '#fff'
 
                                 }),
                                 singleValue: (provided) => ({

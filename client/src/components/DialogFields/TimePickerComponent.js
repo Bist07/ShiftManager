@@ -224,6 +224,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             size='small'
                             disabled={!!(error.breakLength || error.end)}
                             sx={{
+                                borderRadius: '4px',
                                 width: error.start
                                     ? '50%'
                                     : error.breakLength
@@ -235,6 +236,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 '& input': {
                                     fontSize: '14px',
                                     color: '#5f7183',
+
                                 },
                                 '& .MuiInputAdornment-root': {
                                     fontSize: '14px',  // Adjust for adornment
@@ -247,6 +249,15 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                     mr: -2,
 
                                 },
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#fff', // Change the border color
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#b4b4b4', // Border color when hovering
+                                    },
+                                },
+
                             }}
                             InputProps={{
                                 startAdornment: <InputAdornment sx={{ fontSize: '14px' }} position="start">Start</InputAdornment>,
@@ -274,6 +285,8 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             size='small'
                             disabled={!!(error.start || error.breakLength)}
                             sx={{
+                                borderRadius: '4px',
+                                borderColor: '#fff',
                                 width: error.end
                                     ? '50%'
                                     : error.breakLength
@@ -285,6 +298,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 '& input': {
                                     fontSize: '14px',
                                     color: '#5f7183',
+
                                 },
                                 '& .MuiInputAdornment-root': {
                                     fontSize: '14px',  // Adjust for adornment
@@ -296,6 +310,14 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 '& .MuiInputAdornment-positionEnd': {
                                     mr: -2,
 
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#fff', // Change the border color
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#b4b4b4', // Border color when hovering
+                                    },
                                 },
                             }}
                             InputProps={{
@@ -323,6 +345,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             size='small'
                             disabled={!!(error.start || error.end)}
                             sx={{
+                                borderRadius: '4px',
                                 width: error.breakLength
                                     ? '50%'
                                     : error.start
@@ -344,7 +367,14 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 },
                                 '& .MuiInputAdornment-positionEnd': {
                                     mr: -2,
-
+                                },
+                                '& .MuiOutlinedInput-root': {
+                                    '& fieldset': {
+                                        borderColor: '#fff', // Change the border color
+                                    },
+                                    '&:hover fieldset': {
+                                        borderColor: '#b4b4b4', // Border color when hovering
+                                    },
                                 },
                             }}
                             InputProps={{
