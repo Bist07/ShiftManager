@@ -9,6 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { validateAvailability, findConflictingSlots, generateValidDates, ValidateShift, isInvalid } from '../../../utils';
 import { useAvailability } from '../../../hooks';
 import ConflictDialog from './ConflictDialog';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import dayjs from 'dayjs';
 
 const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
@@ -283,18 +284,35 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                         mr: 3.25,
                     }}
                 >
-                    {/* Toggle Repeat Options Button */}
-                    <IconButton
-                        onClick={toggleRepeat}
-                        color="#0085ff"
-                        aria-label={repeat ? "Hide Repeat Options" : "Show Repeat Options"}
-                        sx={{
-                            color: repeat ? '#0085ff' : '#c1cbd4',
-                            '&:hover': { color: '#a0afbe' }
-                        }}
-                    >
-                        <RepeatIcon />
-                    </IconButton>
+                    {tabIndex === 0 && (
+                        <>
+                            {/* Toggle Repeat Options Button */}
+                            <IconButton
+                                onClick={toggleRepeat}
+                                aria-label={repeat ? "Hide Repeat Options" : "Show Repeat Options"}
+                                sx={{
+                                    color: repeat ? '#0085ff' : '#c1cbd4',
+                                    '&:hover': { color: '#a0afbe' },
+                                }}
+                            >
+                                <RepeatIcon />
+                            </IconButton>
+
+                            {shift_id && (
+                                <IconButton
+                                    onClick={() => handleDelete(shift_id)}
+                                    aria-label="delete"
+                                    sx={{
+                                        color: '#c1cbd4',
+                                        '&:hover': { color: '#a0afbe' },
+                                    }}
+                                >
+                                    <DeleteOutlineIcon />
+                                </IconButton>
+                            )}
+                        </>
+                    )}
+
                     <IconButton
                         onClick={onClose}
                         aria-label={"close"}
@@ -342,6 +360,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                     <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
                         <DatePicker formData={formData} handleChange={handleFormChange} />
                         <TimePickerComponent formData={formData} handleChange={handleFormChange} />
+                        <Divider sx={{ ml: 23.25, mr: 3, mt: 2, mb: 1 }} />
                         <Collapse in={repeat}>
                             <RepeatOptions formData={formData} handleChange={handleFormChange} />
                         </Collapse>
@@ -351,17 +370,92 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                         {error && <Typography color="error">{error}</Typography>}
                     </DialogContent>
                 )}
-                <DialogActions>
-                    <Button onClick={onClose}>Cancel</Button>
-                    {shift_id && (
-                        <Button onClick={() => handleDelete(shift_id)} color="error">
-                            Delete
-                        </Button>
-                    )}
-                    <Button onClick={handleSave} disabled={isSaveDisabled}>
-                        {shift_id ? 'Update' : 'Save'}
-                    </Button>
-                </DialogActions>
+
+                <Box
+                    sx={{
+                        flex: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        mb: 1,
+                        pl: 4,
+                        pr: 2
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            width: '25%',
+                            gap: 2
+                        }}
+                    />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            width: '75%',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <DialogActions
+                            sx={{
+                                display: 'flex',
+                                gap: 2,
+                                width: '100%', // Ensure DialogActions spans full width of its parent
+                            }}
+                        >
+                            {/* Cancel Button */}
+                            <Button
+                                onClick={onClose}
+                                variant="outlined"
+                                sx={{
+                                    flex: 1, // Make button take equal space
+                                    borderRadius: '4px',
+                                    border: '1px solid',
+                                    borderColor: '#d8d8d8',
+                                    color: '#9ca6b0',
+                                    backgroundColor: '#f2f5f7',
+                                    textTransform: 'none',
+                                    '&:hover': {
+                                        backgroundColor: '#deebff',
+                                    },
+                                }}
+                            >
+                                Cancel
+                            </Button>
+
+                            {/* Save Button */}
+                            <Button
+                                onClick={handleSave}
+                                disabled={isSaveDisabled}
+                                variant="outlined"
+                                sx={{
+                                    flex: 1, // Make button take equal space
+                                    borderRadius: '4px',
+                                    border: '1px solid',
+                                    borderColor: '#1cc982',
+                                    color: '#fff',
+                                    backgroundColor: '#1cc982',
+                                    textTransform: 'none',
+                                    '&:hover': {
+                                        backgroundColor: '#1cb474',
+                                        borderColor: '#1cb474',
+                                    },
+                                    '&.Mui-disabled': {
+                                        backgroundColor: '#d8d8d8',
+                                        borderColor: '#d8d8d8',
+                                        color: '#9ca6b0',
+                                    },
+                                }}
+                            >
+                                Save
+                            </Button>
+                        </DialogActions>
+                    </Box>
+                </Box>
+
+
 
                 {/* Conflict Dialog */}
                 <ConflictDialog
