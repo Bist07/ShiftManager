@@ -20,7 +20,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
     const [conflictDetails, setConflictDetails] = useState([]); // Store conflict details
     const [ScheduleConflicts, setScheduleConflicts] = useState([]); // Store conflict details
     const [initialData, setInitialData] = useState(null); // Store initial data
-    const [selectedTab, setSelectedTab] = useState(0);
+    const [tabIndex, setTabIndex] = useState(0);
     let emp_id;
 
     if (typeof e_id === "undefined" || e_id === null) {
@@ -29,8 +29,8 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
         emp_id = [e_id];
     }
     const [formData, setFormData] = useState({
-        start_time: start_time || "",
-        end_time: end_time || "",
+        start_time: start_time || "09:00:00",
+        end_time: end_time || "17:00:00",
         date: date || "",
         repeat: "",
         role_id: role_id || '',
@@ -47,8 +47,8 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
             // If editing, initialize the form with the shift data
             const data = {
                 shift_id: shift_id || '',
-                start_time: start_time || '',
-                end_time: end_time || '',
+                start_time: start_time || "09:00:00",
+                end_time: end_time || "17:00:00",
                 date: date || '',
                 repeat: '',
                 location_id: location_id || '',
@@ -61,6 +61,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
             setError('');
         }
     }, [open]);
+
 
     useEffect(() => {
         dayOfWeekIndex = dayjs(formData.date).day();
@@ -177,7 +178,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
 
 
     const handleTabChange = (event, newValue) => {
-        setSelectedTab(newValue);
+        setTabIndex(newValue);
     };
 
     const handleIgnoreConflict = async () => {
@@ -241,7 +242,9 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                 gap={2}
                 flexWrap="wrap"
                 sx={{
-                    mt: 2
+                    mt: 2,
+                    borderBottom: 1,
+                    borderColor: 'divider',
                 }}
             >
                 <Box
@@ -285,7 +288,8 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                         color="#0085ff"
                         aria-label={repeat ? "Hide Repeat Options" : "Show Repeat Options"}
                         sx={{
-                            color: repeat ? '#0085ff' : 'grey', // Change color based on the repeat state
+                            color: repeat ? '#0085ff' : '#c1cbd4',
+                            '&:hover': { color: '#a0afbe' }
                         }}
                     >
                         <RepeatIcon />
@@ -294,21 +298,23 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                         onClick={onClose}
                         aria-label={"close"}
                         sx={{
-                            color: 'grey',
+                            color: '#abb3bc',
+                            '&:hover': { color: '#a0afbe' }
                         }}
                     >
                         <CloseIcon />
                     </IconButton>
                 </Box>
                 <Tabs
-                    value={selectedTab}
+                    value={tabIndex}
                     onChange={handleTabChange}
                     aria-label="tabs"
+
                     sx={{
-                        borderBottom: 1,
-                        borderColor: 'divider',
+                        ml: 3.25,
                         '& .MuiTab-root': {
                             fontWeight: 600,
+                            color: '#a3acb5',
                         },
                         '& .Mui-selected': {
                             color: '#0085ff',
@@ -325,20 +331,24 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                     <Tab label="CUSTOM" disableRipple />
                     <Tab label="TEMPLATES" disableRipple />
                     <Tab label="TIME OFF" disableRipple />
+
                 </Tabs>
+
             </Box>
             <Box sx={{ bgcolor: '#f2f5f7' }}>
-                <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
-                    <DatePicker formData={formData} handleChange={handleFormChange} />
-                    <TimePickerComponent formData={formData} handleChange={handleFormChange} />
-                    <Collapse in={repeat}>
-                        <RepeatOptions formData={formData} handleChange={handleFormChange} />
-                    </Collapse>
-                    <LocationSelector formData={formData} handleChange={handleFormChange} />
-                    <RoleSelector formData={formData} handleChange={handleFormChange} />
-                    <EmployeeSelector formData={formData} handleChange={handleFormChange} />
-                    {error && <Typography color="error">{error}</Typography>}
-                </DialogContent>
+                {tabIndex === 0 && (
+                    <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
+                        <DatePicker formData={formData} handleChange={handleFormChange} />
+                        <TimePickerComponent formData={formData} handleChange={handleFormChange} />
+                        <Collapse in={repeat}>
+                            <RepeatOptions formData={formData} handleChange={handleFormChange} />
+                        </Collapse>
+                        <LocationSelector formData={formData} handleChange={handleFormChange} />
+                        <RoleSelector formData={formData} handleChange={handleFormChange} />
+                        <EmployeeSelector formData={formData} handleChange={handleFormChange} />
+                        {error && <Typography color="error">{error}</Typography>}
+                    </DialogContent>
+                )}
                 <DialogActions>
                     <Button onClick={onClose}>Cancel</Button>
                     {shift_id && (

@@ -194,18 +194,18 @@ const TimePickerComponent = ({ formData, handleChange }) => {
         <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
             <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                 <Typography
-                    sx={{ fontSize: "15px", fontWeight: 600, color: "action.active", textAlign: 'right', width: '50%' }}
+                    sx={{ fontSize: "15px", fontWeight: 600, color: "#738190", textAlign: 'right', width: '50%' }}
                 >
                     Time
                 </Typography>
                 <AccessTimeRoundedIcon
                     sx={{
-                        color: "action.active",
+                        color: "#9ca6b0",
                         fontSize: "36px",
                         borderRadius: "50px",
                         padding: 0.5,
                         border: "2px solid #bcbcbc",
-                        borderColor: "action.active",
+                        borderColor: "#9ca6b0",
                     }}
                 />
 
@@ -234,11 +234,13 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 bgcolor: '#fff',
                                 '& input': {
                                     fontSize: '14px',
+                                    color: '#5f7183',
                                 },
                                 '& .MuiInputAdornment-root': {
                                     fontSize: '14px',  // Adjust for adornment
                                     '& .MuiTypography-root': {
                                         fontSize: '14px',  // Specifically target text inside the adornment
+                                        color: '#b6c0c9'
                                     }
                                 },
                                 '& .MuiInputAdornment-positionEnd': {
@@ -282,11 +284,13 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 bgcolor: '#fff',
                                 '& input': {
                                     fontSize: '14px',
+                                    color: '#5f7183',
                                 },
                                 '& .MuiInputAdornment-root': {
                                     fontSize: '14px',  // Adjust for adornment
                                     '& .MuiTypography-root': {
                                         fontSize: '14px',  // Specifically target text inside the adornment
+                                        color: '#b6c0c9'
                                     }
                                 },
                                 '& .MuiInputAdornment-positionEnd': {
@@ -329,11 +333,13 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 bgcolor: '#fff',
                                 '& input': {
                                     fontSize: '14px',
+                                    color: '#5f7183',
                                 },
                                 '& .MuiInputAdornment-root': {
                                     fontSize: '14px',  // Adjust for adornment
                                     '& .MuiTypography-root': {
                                         fontSize: '14px',  // Specifically target text inside the adornment
+                                        color: '#b6c0c9'
                                     }
                                 },
                                 '& .MuiInputAdornment-positionEnd': {

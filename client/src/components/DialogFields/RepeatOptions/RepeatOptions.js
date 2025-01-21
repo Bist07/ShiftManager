@@ -85,13 +85,13 @@ const RepeatOptions = ({ formData, handleChange }) => {
             <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
                 {/* Frequency Selection */}
                 <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Repeat</Typography>
+                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Repeat</Typography>
                     <EventRepeatIcon sx={{
-                        color: 'action.active',
+                        color: '#9ca6b0',
                         fontSize: '36px',
                         borderRadius: '50px',
                         border: '2px solid #bcbcbc',
-                        borderColor: 'action.active',
+                        borderColor: '#9ca6b0',
                         padding: 0.5
                     }} />
                 </Box>
@@ -107,10 +107,16 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                 control: (provided) => ({
                                     ...provided,
                                     fontSize: '14px', // Set font size for selected option
+                                    color: '#5f7183',
+                                }),
+                                singleValue: (provided) => ({
+                                    ...provided,
+                                    color: '#5f7183', // Set the color of the selected value
                                 }),
                                 menu: (provided) => ({
                                     ...provided,
                                     fontSize: '14px', // Set font size for items in the dropdown menu
+                                    color: '#5f7183',
                                 }),
                                 menuPortal: (base) => ({
                                     ...base,
@@ -127,13 +133,13 @@ const RepeatOptions = ({ formData, handleChange }) => {
                 <Box>
                     <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
                         <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                            <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Days</Typography>
+                            <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Days</Typography>
                             <AddIcon sx={{
-                                color: 'action.active',
+                                color: '#9ca6b0',
                                 fontSize: '36px',
                                 borderRadius: '50px',
                                 border: '2px solid #bcbcbc',
-                                borderColor: 'action.active',
+                                borderColor: '#9ca6b0',
                                 padding: 0.5
                             }} />
                         </Box>
@@ -186,16 +192,19 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                     sx={{
                                         bgcolor: '#dee2e6', '& input': {
                                             fontSize: '14px',
+                                            color: '#5f7183',
 
                                         },
                                         '& label': {
                                             fontSize: '14px',
+                                            color: '#5f7183',
 
                                         },
                                         '& .MuiInputAdornment-root': {
                                             fontSize: '14px',  // Adjust for adornment
                                             '& .MuiTypography-root': {
                                                 fontSize: '14px',  // Specifically target text inside the adornment
+                                                color: '#b6c0c9'
                                             }
                                         },
                                     }}
@@ -216,11 +225,13 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                     sx={{
                                         bgcolor: '#fff', '& input': {
                                             fontSize: '14px',
+                                            color: '#5f7183',
                                         },
                                         '& .MuiInputAdornment-root': {
                                             fontSize: '14px',  // Adjust for adornment
                                             '& .MuiTypography-root': {
                                                 fontSize: '14px',  // Specifically target text inside the adornment
+                                                color: '#b6c0c9'
                                             }
                                         },
 

@@ -36,13 +36,13 @@ const EmployeeSelector = ({ formData, handleChange }) => {
         <div>
             <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Employee</Typography>
+                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Employee</Typography>
                     <PersonOutlineRoundedIcon sx={{
-                        color: 'action.active',
+                        color: '#9ca6b0',
                         fontSize: '36px',
                         borderRadius: '50px',
                         border: '2px solid #bcbcbc',
-                        borderColor: 'action.active',
+                        borderColor: '#9ca6b0',
                         padding: 0.5,
                     }} />
                 </Box>
@@ -65,6 +65,10 @@ const EmployeeSelector = ({ formData, handleChange }) => {
                                 menu: (provided) => ({
                                     ...provided,
                                     fontSize: '14px', // Set font size for items in the dropdown menu
+                                }),
+                                multiValue: (provided) => ({
+                                    ...provided,
+                                    color: '#5f7183', // Set the color of the selected value
                                 }),
                                 menuPortal: (base) => ({
                                     ...base,

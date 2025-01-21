@@ -22,13 +22,13 @@ const DatePickerComponent = ({ formData, handleChange }) => {
 
         <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
             <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Date</Typography>
+                <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Date</Typography>
                 <TodayIcon sx={{
-                    color: 'action.active',
+                    color: '#9ca6b0',
                     fontSize: '36px',
                     borderRadius: '50px',
                     border: '2px solid #bcbcbc',
-                    borderColor: 'action.active',
+                    borderColor: '#9ca6b0',
                     padding: 0.5,
                 }} />
             </Box>
@@ -39,6 +39,7 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                             sx={{
                                 bgcolor: '#fff', '& input': {
                                     fontSize: '14px',
+                                    color: '#5f7183',
                                 },
                             }}
                             value={selectedDate}

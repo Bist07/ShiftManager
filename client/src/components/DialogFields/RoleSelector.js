@@ -36,14 +36,14 @@ const RoleSelector = ({ formData, handleChange }) => {
         <div>
             <Box sx={{ display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
                 <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'action.active', textAlign: 'right', width: '50%' }}>Position</Typography>
+                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Position</Typography>
                     <AssignmentOutlinedIcon sx={{
-                        color: 'action.active',
+                        color: '#9ca6b0',
                         padding: 0.5,
                         fontSize: '36px',
                         borderRadius: '50px',
                         border: '2px solid #bcbcbc',
-                        borderColor: 'action.active',
+                        borderColor: '#9ca6b0',
 
                     }} />
                 </Box>
@@ -61,6 +61,10 @@ const RoleSelector = ({ formData, handleChange }) => {
                                 control: (provided) => ({
                                     ...provided,
                                     fontSize: '14px', // Set font size for selected option
+                                }),
+                                singleValue: (provided) => ({
+                                    ...provided,
+                                    color: '#5f7183', // Set the color of the selected value
                                 }),
                                 menu: (provided) => ({
                                     ...provided,
