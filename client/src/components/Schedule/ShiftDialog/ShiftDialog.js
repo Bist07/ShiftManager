@@ -242,7 +242,8 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                 gap={2}
                 flexWrap="wrap"
                 sx={{
-                    mt: 2,
+                    mt: 1,
+                    mb: 0,
                     borderBottom: 1,
                     borderColor: 'divider',
                 }}
@@ -311,6 +312,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                     aria-label="tabs"
 
                     sx={{
+                        mt: -3,
                         ml: 3.25,
                         '& .MuiTab-root': {
                             fontWeight: 600,
