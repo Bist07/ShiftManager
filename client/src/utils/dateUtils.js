@@ -120,7 +120,7 @@ export const getHours = (startTime, endTime) => {
             ? `${diffRemainingMinutes}min`
             : diffRemainingMinutes === 0
                 ? `${diffHours}h`
-                : `${diffHours}h${diffRemainingMinutes}min`
+                : `${diffHours}h ${diffRemainingMinutes}min`
     };
 };
 

@@ -10,6 +10,7 @@ export const getShiftsModel = async () => {
             s.shift_id,
             s.full_date,  
             s.location_id,
+         l.name AS location_name,
             s.start_time, 
             s.end_time ,
             s.role_id,
@@ -18,6 +19,7 @@ export const getShiftsModel = async () => {
         LEFT JOIN assignments a ON a.employee_id = e.e_id
         LEFT JOIN shifts s ON a.shift_id = s.shift_id
         LEFT JOIN roles r ON s.role_id = r.role_id
+        LEFT JOIN locations l ON s.location_id = l.location_id
         ORDER BY e.e_id, s.full_date;
     `;
 
@@ -105,11 +107,12 @@ export const getUnassignedShiftsModel = async () => {
 
     const sqlQuery = `
         SELECT 
-        s.shift_id, NULL AS e_id, s.start_time, s.end_time, d.full_date, s.date_id, s.location_id, s.role_id, r.role_name
+        s.shift_id, NULL AS e_id, s.start_time, s.end_time, d.full_date, s.date_id, s.location_id, l.name AS location_name ,s.role_id, r.role_name
         FROM shifts s
         JOIN dim_Date d ON s.date_id = d.date_id
         LEFT JOIN assignments a ON a.shift_id = s.shift_id
         LEFT JOIN roles r ON s.role_id = r.role_id
+        LEFT JOIN locations l ON s.location_id = l.location_id
         WHERE a.shift_id IS NULL;
     `;
 

@@ -32,7 +32,7 @@ export const transformShifts = (shifts, filters) => {
     }) : shifts; // No filtering if filters are undefined
 
     // Iterate through each shift and group them by employee
-    filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, full_date, role_id, role_name }) => {
+    filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, full_date, role_id, role_name, location_name }) => {
         if (!groupedShifts[e_id]) {
             groupedShifts[e_id] = { e_id, name, shiftDays: {} };
         }
@@ -46,6 +46,7 @@ export const transformShifts = (shifts, filters) => {
             role_id,
             role_name,
             location_id,
+            location_name,
             start_time: start_time || 'N/A',
             end_time: end_time || 'N/A',
         });

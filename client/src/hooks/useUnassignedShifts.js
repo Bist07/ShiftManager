@@ -12,7 +12,7 @@ const useUnassignedShifts = () => {
         try {
             const shifts = await fetchUnassignedShifts();
             const formattedShifts = shifts.map(shift => ({
-                ...shift,  // Keep all the other properties the same
+                ...shift,
                 full_date: new Date(shift.full_date).toLocaleDateString(),
             }));
 

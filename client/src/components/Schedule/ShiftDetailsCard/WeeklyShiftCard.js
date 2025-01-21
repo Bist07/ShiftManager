@@ -10,6 +10,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
         const startTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].start_time : null;
         const endTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].end_time : null;
         const role = shiftForDay && shiftForDay[0] ? shiftForDay[0].role_name : null;
+        const location = shiftForDay && shiftForDay[0] ? shiftForDay[0].location_name : null;
 
         if (startTime && endTime) {
             const { diffHours, diffRemainingMinutes, formatted } = getHours(startTime, endTime);
@@ -19,31 +20,26 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                         width: '100%', // Ensure content takes full width
                         height: '100%', // Ensure content takes full height
                         borderRadius: 2,
-                        boxShadow: 3,
+                        boxShadow: 'none',
                         margin: 0,
                         padding: 0,
                         boxSizing: 'border-box', // Ensures padding is included in dimensions
                     }}
                 >
-                    <CardActionArea
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            width: '100%', // Ensure content takes full width
-                            height: '100%', // Ensure content takes full height
-                        }}
-                    >
-                        <CardContent sx={{ padding: 2 }}>
-                            <Typography variant="h6" sx={{ fontWeight: 600, color: '#0085ff', fontSize: '14px' }}>
-                                {formatTime(startTime)} - {formatTime(endTime)}
-                            </Typography>
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                                <Typography variant="body1" sx={{ fontSize: '12px', color: 'text.secondary' }}>
-                                    {role} • {formatted}
+
+                    <CardActionArea disableRipple disableFocusRipple sx={{ display: 'flex' }}>
+                        <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: 0.5, paddingLeft: 1, width: '100%' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5 }}>
+                                <Typography variant="body1" sx={{ fontWeight: 600, color: '#0085ff', fontSize: '11px', textAlign: 'left' }} >
+                                    {formatTime(startTime)} - {formatTime(endTime)}
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>
+                                    • {formatted}
                                 </Typography>
                             </Box>
+                            <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>
+                                {role} • {location}
+                            </Typography>
                         </CardContent>
                     </CardActionArea>
                 </Card>
@@ -58,7 +54,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                 width: '100%', // Ensure content takes full width
                 height: '100%', // Ensure content takes full height
                 borderRadius: 2,
-                boxShadow: 3,
+                boxShadow: 'none',
                 position: 'relative',
                 opacity: 0.1, // Start with reduced opacity
                 transition: 'opacity 0.3s ease', // Smooth transition

@@ -4,17 +4,35 @@ import { formatTime, getHours } from '../../../utils';
 
 const UnassignedShiftCard = ({ shift, onClick }) => {
     const { diffHours, diffRemainingMinutes, formatted } = getHours(shift.start_time, shift.end_time);
+
     return (
         <Card sx={{
-            boxShadow: 0, width: '100%', height: '100%', borderStyle: "dashed", borderColor: "#bda67f", borderRadius: 2, backgroundColor: 'transparent', margin: 0
+            width: '100%',
+            borderRadius: '2px',
+            backgroundColor: '#f19b72',
+            margin: 0,
+            minWidth: '150px',
+            maxHeight: '60px',
+            boxShadow: 'none',
+            display: 'flex',
+            alignItems: 'flex-start',
+            padding: 0,
+            '&:hover': {
+                backgroundColor: '#e9b298',
+            }
         }}>
-            <CardActionArea sx={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', }}>
-                <CardContent>
-                    <Typography variant="body1" sx={{ fontWeight: 600, color: '#bda67f', fontSize: '14px' }}>
-                        {formatTime(shift.start_time)} - {formatTime(shift.end_time)}
-                    </Typography>
-                    <Typography variant="body1" sx={{ color: '#bda67f', fontSize: '14px' }}>
-                        {formatted} • {shift.role_name}
+            <CardActionArea disableRipple disableFocusRipple sx={{ display: 'flex' }}>
+                <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: 0.5, paddingLeft: 1, width: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5 }}>
+                        <Typography variant="body1" sx={{ fontWeight: 600, color: '#fff', fontSize: '11px', textAlign: 'left' }} >
+                            {formatTime(shift.start_time)} - {formatTime(shift.end_time)}
+                        </Typography>
+                        <Typography variant="body1" sx={{ color: '#fff', fontSize: '11px', textAlign: 'left' }}>
+                            • {formatted}
+                        </Typography>
+                    </Box>
+                    <Typography variant="body1" sx={{ color: '#fff', fontSize: '11px', textAlign: 'left' }}>
+                        {shift.role_name} • {shift.location_name}
                     </Typography>
                 </CardContent>
             </CardActionArea>

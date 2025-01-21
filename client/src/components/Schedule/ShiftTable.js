@@ -8,6 +8,10 @@ import {
     TableRow,
     Paper,
     Button,
+    Box,
+    Typography,
+    ButtonBase
+
 } from '@mui/material';
 import EmployeeCard from '../EmployeeCard';
 import { getLocalDate, mapWeekToDays, transformShifts, GroupUnassignedShiftsByDate } from '../../utils';
@@ -15,6 +19,7 @@ import { useShifts, useEmployee, useUnassignedShifts } from '../../hooks';
 import WeeklyShiftCard from './ShiftDetailsCard/WeeklyShiftCard';
 import UnassignedShiftCard from './ShiftDetailsCard/UnassignedShiftCard';
 import ShiftDialog from './ShiftDialog/ShiftDialog';
+import AddShiftCard from './ShiftDetailsCard/AddShiftCard';
 
 
 const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger }) => {
@@ -23,7 +28,6 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
     const { shifts, refetchShifts } = useShifts(year, filter);
     const transformedShifts = transformShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
-    const [showUnassigned, setShowUnassigned] = useState(false); // Toggle for unassigned shifts
     const { unassignedShifts, refetchUnassignedShifts } = useUnassignedShifts();
 
     useEffect(() => {
@@ -62,28 +66,20 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
         handleCloseDialog();
     };
 
-    const toggleUnassignedShifts = async () => {
-        setShowUnassigned((prev) => !prev);
-        refetchUnassignedShifts();
-    };
-
     // Group unassigned shifts by formatted date
     const unassignedShiftsByDate = GroupUnassignedShiftsByDate(unassignedShifts);
 
     return (
         <>
-            <Button onClick={toggleUnassignedShifts}>
-                {showUnassigned ? 'Hide Unassigned Shifts' : 'Show Unassigned Shifts'}
-            </Button>
             <TableContainer component={Paper}
                 sx={{
-                    maxHeight: '700px', // Set a maxHeight for scrolling
+                    maxHeight: '800px', // Set a maxHeight for scrolling
                     overflow: 'auto', // Enable scrolling
                 }}>
-                <Table stickyHeader sx={{ minWidth: 650, tableLayout: 'fixed' }} aria-label="employee shift table">
+                <Table stickyHeader sx={{ minWidth: 650, tableLayout: 'auto' }} aria-label="employee shift table">
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ width: '15%', padding: 0 }} align="center"></TableCell>
+                            <TableCell sx={{ width: '15%', padding: 0, minWidth: 150, }} align="center"></TableCell>
                             {Object.keys(mappedWeek).map((day) => {
                                 const date = mappedWeek[day];
                                 const localDate = getLocalDate(date);
@@ -92,61 +88,84 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                     day: 'numeric',
                                 });
                                 return (
-                                    <TableCell key={localDate} align="center" sx={{ width: '12%', padding: 1 }}>
+                                    <TableCell key={localDate} align="center" sx={{ width: '12%', padding: 1, minWidth: 150, }}>
                                         <strong>{day}</strong> <br />
                                         {formattedDate}
                                     </TableCell>
                                 );
                             })}
                         </TableRow>
+                        <TableRow>
+                            <TableCell
+                                colSpan={Object.keys(mappedWeek).length + 1}
+                                sx={{ borderBottom: 2, borderBottomColor: "#0085ff" }}
+                            >
+                                <Typography sx={{ fontWeight: 600, color: '#0085ff' }}><strong>UNASSIGNED SHIFTS</strong></Typography>
 
-                        {/* Unassigned Shifts Header (Conditional display) */}
-                        {showUnassigned && (
-                            <TableRow>
-                                <TableCell
-                                    colSpan={Object.keys(mappedWeek).length + 1}
-                                    sx={{ borderBottom: 2, borderBottomColor: "#0085ff", color: '#0085ff' }}
-                                >
-                                    <strong>Unassigned Shifts</strong>
-                                </TableCell>
-                            </TableRow>
-                        )}
+
+                            </TableCell>
+                        </TableRow>
                     </TableHead>
 
                     <TableBody>
                         {/* Unassigned Shifts Row */}
-                        {showUnassigned && (
-                            <TableRow
-                                sx={{
-                                    backgroundColor: '#d7e6ee', // Tint for the entire unassigned row
-                                }}
-                            >
-                                <TableCell component="th" scope="row" sx={{ padding: 0, borderBottom: '1px solid #ccc' }}></TableCell>
-                                {Object.keys(mappedWeek).map((day) => {
-                                    const date = mappedWeek[day];
-                                    const shiftsForDate = unassignedShiftsByDate[date] || [];
-                                    return (
-                                        <TableCell key={date} align="center" sx={{ borderBottom: '1px solid #ccc', borderLeft: '1px solid #ccc', padding: 0 }}>
-                                            {shiftsForDate.map((shift) => (
+                        <TableRow
+                            sx={{
+                                backgroundColor: '#d7e6ee',
+                            }}
+                        >
+                            <TableCell component="th" scope="row" sx={{ border: '1px solid #ccc', padding: 0, minWidth: 150, }}></TableCell>
+                            {Object.keys(mappedWeek).map((day) => {
+                                const date = mappedWeek[day];
+                                const shiftsForDate = unassignedShiftsByDate[date] || [];
+                                return (
+                                    <TableCell key={date} sx={{ border: '1px solid #ccc', padding: 0, minWidth: 150, verticalAlign: "top" }}>
+                                        <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "wrap", alignContent: "flex-start" }}>
+                                            {shiftsForDate.length > 0 ? (
+                                                shiftsForDate.map((shift) => (
+                                                    <Button
+                                                        disableRipple
+                                                        disableFocusRipple
+                                                        key={shift.shift_id}
+                                                        sx={{
+                                                            padding: 0,
+                                                            margin: 0.5,
+                                                            width: '100%',
+                                                        }}
+                                                        onClick={() => handleOpenDialog(shift, date)}
+                                                    >
+                                                        <UnassignedShiftCard shift={shift} date={date} />
+                                                    </Button>
+                                                ))
+                                            ) : (
                                                 <Button
-                                                    key={shift.shift_id}
-                                                    sx={{ padding: 0, margin: 0.5 }}
-                                                    onClick={() => handleOpenDialog(shift, date)}
+                                                    disableRipple
+                                                    disableFocusRipple
+                                                    sx={{
+                                                        padding: 0,
+                                                        margin: 0.5,
+                                                        width: '100%',
+                                                        '&:hover': {
+                                                            backgroundColor: 'transparent',
+                                                        },
+                                                    }}
+                                                    onClick={() => handleOpenDialog(date)}
                                                 >
-                                                    <UnassignedShiftCard shift={shift} date={date} />
+                                                    <AddShiftCard />
                                                 </Button>
-                                            ))}
-                                        </TableCell>
-                                    );
-                                })}
-                            </TableRow>
-                        )}
+
+                                            )}
+                                        </Box>
+                                    </TableCell>
+                                );
+                            })}
+                        </TableRow>
                         <TableRow>
                             <TableCell
                                 colSpan={Object.keys(mappedWeek).length + 1}
-                                sx={{ borderBottom: 2, borderBottomColor: "#0085ff", color: '#0085ff' }}
                             >
-                                <strong>Assigned Shifts</strong>
+                                <Typography sx={{ fontWeight: 600, color: '#5f7183' }}><strong>SCHEDULED SHIFTS</strong></Typography>
+
                             </TableCell>
                         </TableRow>
                         {/* Assigned Shifts Rows (Always displayed) */}
@@ -155,25 +174,55 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                 <TableCell component="th" scope="row" sx={{ padding: 0 }}>
                                     <EmployeeCard title={emp.name} description="Employee" />
                                 </TableCell>
-
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
-                                    const shiftForDay = transformedShifts.find(shift => shift.e_id === emp.e_id);
+                                    const shiftForDay = transformedShifts.find(shift => shift.e_id === emp.e_id) || {};
                                     return (
-                                        <TableCell key={date} align="center" sx={{ padding: 0, margin: 0 }}>
-                                            <Button sx={{ padding: 0, margin: 0.5 }}
-                                                onClick={() => handleOpenDialog(shiftForDay, date)}
-                                            >
-                                                <WeeklyShiftCard shift={shiftForDay} date={date} />
-                                            </Button>
+                                        <TableCell key={date} sx={{ border: '1px solid #ccc', padding: 0, minWidth: 150, verticalAlign: "top" }}>
+                                            <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "wrap", alignContent: "flex-start" }}>
+                                                {Object.keys(shiftForDay).length > 0 ? (
+                                                    <Button
+                                                        disableRipple
+                                                        disableFocusRipple
+                                                        key={shiftForDay.shift_id}
+                                                        sx={{
+                                                            padding: 0,
+                                                            margin: 0.5,
+                                                            width: '100%',
+                                                        }}
+                                                        onClick={() => handleOpenDialog(shiftForDay, date)}
+                                                    >
+                                                        <WeeklyShiftCard shift={shiftForDay} date={date} />
+                                                    </Button>
+                                                )
+                                                    : (
+                                                        <Button
+                                                            disableRipple
+                                                            disableFocusRipple
+                                                            sx={{
+                                                                padding: 0,
+                                                                margin: 0.5,
+                                                                width: '100%',
+                                                                '&:hover': {
+                                                                    backgroundColor: 'transparent',
+                                                                },
+                                                            }}
+                                                            onClick={() => handleOpenDialog(date)}
+                                                        >
+                                                            <AddShiftCard />
+                                                        </Button>
+
+                                                    )}
+                                            </Box>
                                         </TableCell>
                                     );
                                 })}
+
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer >
 
 
             {currentShift && (
