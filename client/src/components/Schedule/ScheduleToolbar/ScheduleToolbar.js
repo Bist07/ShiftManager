@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography } from '@mui/material';
+import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography, Divider } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -136,9 +136,9 @@ const ScheduleToolbar = () => {
             <Toolbar
                 sx={{
                     justifyContent: 'space-between',
-                    backgroundColor: '#f5f5f5',
+                    backgroundColor: '#0f1214',
                     padding: '12px',
-                    borderBottom: '1px solid #bcbcbc',
+                    borderBottom: '1px solid #1d2126',
                     position: 'sticky', // Stick to the top
                     top: 0,
                     zIndex: 1000,
@@ -147,14 +147,19 @@ const ScheduleToolbar = () => {
                     <IconButton
                         onClick={() => setViewMode(viewMode === 'week' ? 'month' : 'week')}
                         sx={{
+                            backgroundColor: 'transparent',
                             fontSize: '15px',
                             textTransform: 'none',
                             fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                             gap: '8px',
                             borderRadius: '5px',
-                            color: '#626262',
-                            border: '1px solid #bcbcbc', // Add border to mimic outlined style
-                            '&:hover': { backgroundColor: '#f0f0f0' },
+                            color: '#ebf5ff',
+                            border: '1px solid transparent', // Add border to mimic outlined style
+                            '&:hover': {
+                                backgroundColor: '#1a1e22',
+                                borderColor: '#1d2126',
+
+                            },
                         }}
                     >
                         {viewMode === 'week' ? (
@@ -169,21 +174,48 @@ const ScheduleToolbar = () => {
                         )}
 
                     </IconButton>
-                    <Box sx={{ display: 'flex', height: '40px', borderRadius: '5px', border: '1px solid #bcbcbc' }}>
-                        <Box sx={{ borderRight: '1px solid #bcbcbc' }}>
-                            <IconButton
-                                onClick={handlePrev}
-                                sx={{
-                                    padding: '8px',
-                                }}
-                            >
-                                <ArrowLeftIcon />
-                            </IconButton>
-                        </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            height: '40px',
+                            borderRadius: '5px',
+                            border: '1px solid transparent',
+                            '&:hover': {
+                                borderColor: '#1d2126',
+                            },
+                        }}>
 
+                        <IconButton
+                            onClick={handlePrev}
+                            sx={{
+                                margin: 0,
+                                width: 'auto',
+                                color: '#ebf5ff',
+                                backgroundColor: 'transparent',
+                                borderRight: '1px solid transparent',
+                                '&:hover': {
+                                    backgroundColor: '#1a1e22',
+                                    borderColor: '#1d2126',
+
+                                },
+                                padding: '8px',
+                            }}
+                        >
+                            <ArrowLeftIcon />
+                        </IconButton>
+                        <Divider variant="inset" orientation="vertical" flexItem sx={{ bgcolor: '#1d2126', padding: 0, margin: 0 }} />
                         <IconButton
                             onClick={handleNext}
                             sx={{
+                                width: 'auto',
+                                color: '#ebf5ff',
+                                backgroundColor: 'transparent',
+                                borderLeft: '1px solid transparent',
+                                '&:hover': {
+                                    backgroundColor: '#1a1e22',
+                                    borderColor: '#1d2126',
+
+                                },
                                 padding: '8px',
                             }}
                         >
@@ -193,8 +225,6 @@ const ScheduleToolbar = () => {
 
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
                         <DatePicker
-                            slotProps={{ textField: { size: 'small' } }}
-                            label=""
                             views={['year', 'month']}
                             value={new Date(selectedYear, selectedMonth)}
                             onChange={(newDate) => {
@@ -203,7 +233,33 @@ const ScheduleToolbar = () => {
                                     setSelectedYear(newDate.getFullYear());
                                 }
                             }}
-                            renderInput={(params) => <TextField {...params} />}
+                            slotProps={{
+                                textField: {
+                                    size: 'small', sx: {
+                                        svg: { color: '#3399ff' }, borderRadius: '4px',
+                                        border: '1px solid #red',
+                                        bgcolor: '#15181b', '& input': {
+                                            fontSize: '14px',
+                                            color: '#98a4b3',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#20242a', // Change the border color
+                                                borderRadius: '4px',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#303840', // Border color when hovering
+                                            },
+                                        },
+                                        '& .MuiInputAdornment-positionEnd': {
+                                            '& .MuiTypography-root': {
+                                                fontSize: '14px',  // Specifically target text inside the adornment
+                                                color: '#b6c0c9'
+                                            }
+                                        },
+                                    }
+                                }
+                            }}
                         />
                     </LocalizationProvider>
 
@@ -217,19 +273,26 @@ const ScheduleToolbar = () => {
                                 fontSize: '17px',
                                 textWeight: 'bold',
                                 fontWeight: 600,
-                                color: selectedWeek ? '#0085ff' : '#626262',
+                                color: '#3399ff',
                                 textTransform: 'none',
                                 padding: '8px 16px',
                                 fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                                 display: 'flex',
                                 alignItems: 'center',
+                                borderRadius: '5px',
+                                border: '1px solid transparent',
                                 gap: '8px',
+                                '&:hover': {
+                                    backgroundColor: '#1a1e22',
+                                    borderColor: '#1d2126',
+
+                                },
                             }}
                         >
                             {selectedWeek
                                 ? `${formatWeek(selectedWeek[0])} - ${formatWeek(selectedWeek[selectedWeek.length - 1])}`
                                 : 'Select Week'}
-                            <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#bcbcbc' }} />
+                            <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#ebf5ff' }} />
                         </Button>
                     )}
 
@@ -259,10 +322,10 @@ const ScheduleToolbar = () => {
                         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                         gap: '8px',
                         borderRadius: '5px',
-                        border: '1px solid #bcbcbc', // Add border to mimic outlined style
+                        border: '1px solid transparent', // Add border to mimic outlined style
                         marginLeft: '16px',
-                        color: filterOpen ? '#0085ff' : '#626262',
-                        '&:hover': { backgroundColor: '#f0f0f0' },
+                        color: filterOpen ? '#3399ff' : '#ebf5ff',
+                        '&:hover': { backgroundColor: '#1a1e22', borderColor: '#1d2126', },
                     }}
                 >
                     Filters
@@ -271,14 +334,14 @@ const ScheduleToolbar = () => {
                 <IconButton
                     onClick={handleOpenDialog}
                     sx={{
-                        bgcolor: '#0085ff',
+                        bgcolor: '#3399ff',
                         fontSize: '15px',
                         textTransform: 'none',
                         fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                         gap: '6px',
                         borderRadius: '5px',
                         marginLeft: '16px',
-                        color: '#fff',
+                        color: '#ebf5ff',
                         '&:hover': { bgcolor: '#0077e5' },
                     }}
                 >
@@ -286,15 +349,17 @@ const ScheduleToolbar = () => {
                     <Typography sx={{ marginRight: '4px', }}>Create shift</Typography>
 
                 </IconButton>
-                {currentShift && (
-                    <ShiftDialog
-                        date={dayjs().format('YYYY-MM-DD')}
-                        onSave={handleSaveShift}
-                        open={handleOpenDialog}
-                        onClose={handleCloseDialog}
-                    />
-                )}
-            </Toolbar>
+                {
+                    currentShift && (
+                        <ShiftDialog
+                            date={dayjs().format('YYYY-MM-DD')}
+                            onSave={handleSaveShift}
+                            open={handleOpenDialog}
+                            onClose={handleCloseDialog}
+                        />
+                    )
+                }
+            </Toolbar >
             <Collapse in={filterOpen}>
                 <Filter onFiltersChange={handleFiltersChange} />
             </Collapse>

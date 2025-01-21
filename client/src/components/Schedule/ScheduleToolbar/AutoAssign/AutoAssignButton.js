@@ -41,9 +41,9 @@ const AutoAssignButton = ({ shift, onClick }) => (
             fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
             gap: '8px',
             borderRadius: '5px',
-            border: '1px solid #bcbcbc', // Add border to mimic outlined style
-            color: '#626262',
-            '&:hover': { backgroundColor: '#f0f0f0' },
+            border: '1px solid transparent', // Add border to mimic outlined style
+            color: '#ebf5ff',
+            '&:hover': { backgroundColor: '#1a1e22', borderColor: '#1d2126', },
         }}
     >
         <AutoFixHighIcon />
