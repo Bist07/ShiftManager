@@ -128,10 +128,10 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
                             <AddIcon onClick={() => handleOpenDialog('', date)} fontSize="medium" />
                         </Box>
 
-                        <Box sx={{ marginTop: '20px', mr: 0, ml: 0, padding: 0 }}>
+                        <Box sx={{ marginTop: '20px', mr: 0, ml: 0, padding: 0, width: "90%" }}>
                             {hasShift && shiftsForDay.map((shiftDetail, idx) => (
-                                <Button onClick={() => handleOpenDialog(shiftDetail, date)} sx={{ margin: 0 }} >
-                                    <Box key={idx}>
+                                <Button onClick={() => handleOpenDialog(shiftDetail, date)} sx={{ margin: 0.5, padding: 0, width: "100%" }} >
+                                    <Box key={idx} sx={{ margin: 0, padding: 0, width: "100%" }}>
                                         <MonthlyShiftCard shift={shiftDetail} />
                                     </Box>
                                 </Button>

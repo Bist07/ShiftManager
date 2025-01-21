@@ -19,7 +19,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                     sx={{
                         width: '100%', // Ensure content takes full width
                         height: '100%', // Ensure content takes full height
-                        borderRadius: 2,
+                        borderRadius: '2px',
                         boxShadow: 'none',
                         margin: 0,
                         padding: 0,
@@ -37,7 +37,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                                     • {formatted}
                                 </Typography>
                             </Box>
-                            <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>
+                            <Typography variant="body1" sx={{ color: '', fontSize: '11px', textAlign: 'left' }}>
                                 {role} • {location}
                             </Typography>
                         </CardContent>
