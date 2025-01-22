@@ -60,20 +60,47 @@ const RoleSelector = ({ formData, handleChange }) => {
                             styles={{
                                 control: (provided) => ({
                                     ...provided,
-                                    fontSize: '14px', // Set font size for selected option
-                                    borderColor: '#fff'
+                                    fontSize: '14px',
+                                    backgroundColor: '#15181b',
+                                    color: '#98a4b3',
+                                    borderColor: '#20242a',
+                                    '&:hover': {
+                                        borderColor: '#303840',
+                                    },
                                 }),
                                 singleValue: (provided) => ({
                                     ...provided,
-                                    color: '#5f7183', // Set the color of the selected value
+                                    color: '#98a4b3',
+                                    '&:hover': {
+                                        backgroundColor: '#303840',
+                                    },
                                 }),
                                 menu: (provided) => ({
                                     ...provided,
-                                    fontSize: '14px', // Set font size for items in the dropdown menu
+                                    backgroundColor: '#15181b',
+                                    color: '#98a4b3',
+                                    fontSize: '14px',
+
+                                }),
+                                option: (provided, state) => ({
+                                    ...provided,
+                                    backgroundColor: state.isSelected
+                                        ? '#3399ff'
+                                        : state.isFocused
+                                            ? '#303840'
+                                            : '#15181b',
+                                    color: state.isSelected ? 'white' : '#98a4b3',
+                                    '&:hover': {
+                                        backgroundColor: '#303840',
+                                    },
                                 }),
                                 menuPortal: (base) => ({
                                     ...base,
-                                    zIndex: 1300, // Adjust z-index to make dropdown appear on top
+                                    zIndex: 1300,
+                                }),
+                                placeholder: (provided) => ({
+                                    ...provided,
+                                    color: '#5f7183',
                                 }),
                             }}
                         />

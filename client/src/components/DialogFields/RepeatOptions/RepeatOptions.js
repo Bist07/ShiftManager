@@ -81,17 +81,20 @@ const RepeatOptions = ({ formData, handleChange }) => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: '#eaeef2', width: '100%', ml: 0, mr: 0 }}>
+        <Box sx={{
+            display: 'flex', flexDirection: 'column', bgcolor: '#181818'
+            , width: '100%', ml: 0, mr: 0
+        }}>
             <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
                 {/* Frequency Selection */}
                 <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                     <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Repeat</Typography>
                     <EventRepeatIcon sx={{
-                        color: '#9ca6b0',
+                        color: 'secondary.main',
                         fontSize: '36px',
                         borderRadius: '50px',
                         border: '2px solid #bcbcbc',
-                        borderColor: '#9ca6b0',
+                        borderColor: 'secondary.main',
                         padding: 0.5
                     }} />
                 </Box>
@@ -106,22 +109,47 @@ const RepeatOptions = ({ formData, handleChange }) => {
                             styles={{
                                 control: (provided) => ({
                                     ...provided,
-                                    fontSize: '14px', // Set font size for selected option
-                                    color: '#5f7183',
-                                    borderColor: '#fff'
+                                    fontSize: '14px',
+                                    backgroundColor: '#15181b',
+                                    color: '#98a4b3',
+                                    borderColor: '#20242a',
+                                    '&:hover': {
+                                        borderColor: '#303840',
+                                    },
                                 }),
                                 singleValue: (provided) => ({
                                     ...provided,
-                                    color: '#5f7183', // Set the color of the selected value
+                                    color: '#98a4b3',
+                                    '&:hover': {
+                                        backgroundColor: '#303840',
+                                    },
                                 }),
                                 menu: (provided) => ({
                                     ...provided,
-                                    fontSize: '14px', // Set font size for items in the dropdown menu
-                                    color: '#5f7183',
+                                    backgroundColor: '#15181b',
+                                    color: '#98a4b3',
+                                    fontSize: '14px',
+
+                                }),
+                                option: (provided, state) => ({
+                                    ...provided,
+                                    backgroundColor: state.isSelected
+                                        ? '#3399ff'
+                                        : state.isFocused
+                                            ? '#303840'
+                                            : '#15181b',
+                                    color: state.isSelected ? 'white' : '#98a4b3',
+                                    '&:hover': {
+                                        backgroundColor: '#303840',
+                                    },
                                 }),
                                 menuPortal: (base) => ({
                                     ...base,
-                                    zIndex: 1300, // Adjust z-index to make dropdown appear on top
+                                    zIndex: 1300,
+                                }),
+                                placeholder: (provided) => ({
+                                    ...provided,
+                                    color: '#5f7183',
                                 }),
                             }}
                         />
@@ -130,148 +158,150 @@ const RepeatOptions = ({ formData, handleChange }) => {
             </Box>
 
             {/* Days of the Week Selection */}
-            {repeatOptions.frequency > 0 && (
-                <Box>
-                    <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                            <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Days</Typography>
-                            <AddIcon sx={{
-                                color: '#9ca6b0',
-                                fontSize: '36px',
-                                borderRadius: '50px',
-                                border: '2px solid #bcbcbc',
-                                borderColor: '#9ca6b0',
-                                padding: 0.5
-                            }} />
+            {
+                repeatOptions.frequency > 0 && (
+                    <Box>
+                        <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
+                                <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Days</Typography>
+                                <AddIcon sx={{
+                                    color: 'secondary.main',
+                                    fontSize: '36px',
+                                    borderRadius: '50px',
+                                    border: '2px solid #bcbcbc',
+                                    borderColor: 'secondary.main',
+                                    padding: 0.5
+                                }} />
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
+                                <FormControl fullWidth>
+                                    <ToggleButtonGroup
+                                        size='small'
+                                        value={repeatOptions.days}
+                                        onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
+                                        name="days"
+                                        fullWidth
+                                        aria-label="days of the week"
+                                    >
+                                        {Object.keys(dayMapping).map((day) => (
+                                            <ToggleButton
+                                                name="days"
+                                                key={day}
+                                                value={dayMapping[day]}
+                                                aria-label={day}
+                                                sx={{
+                                                    "&.Mui-selected": {
+                                                        backgroundColor: "#2684ff",
+                                                        color: "#fff",
+                                                    },
+                                                    "&.Mui-selected:hover": {
+                                                        bgcolor: '#0077e5', borderColor: '#0077e5',
+                                                    },
+                                                }}
+                                            >
+                                                {day}
+                                            </ToggleButton>
+                                        ))}
+                                    </ToggleButtonGroup>
+                                </FormControl>
+                            </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
-                            <FormControl fullWidth>
-                                <ToggleButtonGroup
-                                    sx={{ bgcolor: '#f2f5f7' }}
-                                    size='small'
-                                    value={repeatOptions.days}
-                                    onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
-                                    name="days"
-                                    fullWidth
-                                    aria-label="days of the week"
-                                >
-                                    {Object.keys(dayMapping).map((day) => (
-                                        <ToggleButton
-                                            name="days"
-                                            key={day}
-                                            value={dayMapping[day]}
-                                            aria-label={day}
-                                            sx={{
-                                                color: '#97a2ae',
-                                                "&:hover": {
-                                                    backgroundColor: "#deebff",
-                                                },
-                                                "&.Mui-selected": {
-                                                    backgroundColor: "#2684ff",
-                                                    color: "#fff",
-                                                },
-                                            }}
-                                        >
-                                            {day}
-                                        </ToggleButton>
-                                    ))}
-                                </ToggleButtonGroup>
-                            </FormControl>
-                        </Box>
-                    </Box>
-                </Box>)}
+                    </Box>)
+            }
 
             {/* Start and End Dates */}
-            {repeatOptions.frequency > 1 && (
-                <Box>
-                    <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
-                        <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: "center", width: "75%", gap: 2 }}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <MobileDatePicker
-                                    value={repeatOptions.startDate ? dayjs(repeatOptions.startDate) : null}
-                                    disabled // Lock the start date
-                                    format="DD MMM YYYY"
-                                    slotProps={{
-                                        textField: {
-                                            size: 'small', sx: {
-                                                '& .MuiOutlinedInput-root': {
-                                                    borderRadius: '4px', // Ensure the input field is rounded
-                                                    '& fieldset': {
-                                                        borderColor: '#dee2e6', // Border color when disabled
-                                                    },
-                                                    '&.Mui-disabled': {
-                                                        bgcolor: '#dee2e6', // Background color when disabled
-                                                        '& fieldset': {
-                                                            borderColor: '#dee2e6', // Change the border color
+            {
+                repeatOptions.frequency > 1 && (
+                    <Box>
+                        <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
+                            <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
+                            </Box>
+                            <Box sx={{ display: 'flex', alignItems: "center", width: "75%", gap: 2 }}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                    <MobileDatePicker
+                                        value={repeatOptions.startDate ? dayjs(repeatOptions.startDate) : null}
+                                        disabled // Lock the start date
+                                        format="DD MMM YYYY"
+                                        slotProps={{
+                                            textField: {
+                                                size: 'small',
+                                                sx: {
+                                                    '& .MuiOutlinedInput-root': {
+                                                        // Disabled state customization
+                                                        '&.Mui-disabled': {
+                                                            backgroundColor: '#15181b',
+                                                            '& input': {
+                                                                fontSize: '14px',
+                                                            },
+                                                            '& fieldset': {
+                                                                borderColor: '#20242a', // Change the border color
+                                                                borderRadius: '4px',
+                                                            },
                                                         },
-                                                        '& input': {
-                                                            color: '#5f7183', // Text color when disabled
-                                                        },
-                                                    }, '& input': {
-                                                        fontSize: '14px',
+                                                        '& .MuiInputAdornment-root': {
+                                                            '& .MuiTypography-root': {
+                                                                fontSize: '12px', // Specifically target text inside the adornment
+                                                                color: '#5f7183',
+                                                            },
+                                                        },    // Add direct targeting for native input in disabled state
 
                                                     },
-                                                    '& .MuiInputAdornment-root': {
-                                                        fontSize: '14px',  // Adjust for adornment
-                                                        '& .MuiTypography-root': {
-                                                            fontSize: '14px',  // Specifically target text inside the adornment
-                                                            color: '#b6c0c9'
-                                                        }
+
+                                                },
+                                                InputProps: {
+                                                    startAdornment: <InputAdornment position="start">Start</InputAdornment>,
+                                                },
+                                            },
+
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
+                                    />
+
+
+                                    <MobileDatePicker
+                                        minDate={dayjs(repeatOptions.startDate)}
+                                        value={repeatOptions.endDate ? dayjs(repeatOptions.endDate) : null}
+                                        onChange={(date) => handleRepeatOptionsChange({ target: { name: 'endDate', value: date ? date.format('YYYY-MM-DD') : '' } })}
+                                        format="DD MMM YYYY"
+                                        slotProps={{
+                                            textField: {
+                                                size: 'small', sx: {
+                                                    borderRadius: '4px',
+                                                    bgcolor: '#15181b', '& input': {
+                                                        fontSize: '14px',
+                                                        color: 'secondary.main',
+                                                    },
+                                                    '& .MuiOutlinedInput-root': {
+                                                        '& fieldset': {
+                                                            borderColor: '#20242a', // Change the border color
+                                                            borderRadius: '4px',
+                                                            width: '100%',
+                                                        },
+                                                        '&:hover fieldset': {
+                                                            borderColor: '#303840', // Border color when hovering
+                                                        },
+                                                        '& .MuiInputAdornment-root': {
+                                                            '& .MuiTypography-root': {
+                                                                fontSize: '12px',  // Specifically target text inside the adornment
+                                                                color: '#5f7183'
+                                                            }
+                                                        },
                                                     },
                                                 },
-                                            }, InputProps: {
-                                                startAdornment: <InputAdornment position="start">Start</InputAdornment>,
+                                                InputProps: {
+                                                    startAdornment: <InputAdornment position="start" >End</InputAdornment>,
+                                                }
                                             }
-                                        }
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
-                                />
+                                        }}
+                                        renderInput={(params) => <TextField {...params} />}
 
-                                <MobileDatePicker
-                                    sx={{
-                                        borderRadius: '4px',
-                                        bgcolor: '#fff', '& input': {
-                                            fontSize: '14px',
-                                            color: '#5f7183',
-                                        },
-                                        '& .MuiInputAdornment-root': {
-                                            fontSize: '14px',  // Adjust for adornment
-                                            '& .MuiTypography-root': {
-                                                fontSize: '14px',  // Specifically target text inside the adornment
-                                                color: '#b6c0c9'
-                                            }
-                                        },
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-                                                borderColor: '#fff', // Change the border color
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: '#abb6ba', // Border color when hovering
-                                            },
-                                        },
-
-                                    }}
-                                    minDate={dayjs(repeatOptions.startDate)}
-                                    value={repeatOptions.endDate ? dayjs(repeatOptions.endDate) : null}
-                                    onChange={(date) => handleRepeatOptionsChange({ target: { name: 'endDate', value: date ? date.format('YYYY-MM-DD') : '' } })}
-                                    format="DD MMM YYYY"
-                                    slotProps={{
-                                        textField: {
-                                            size: 'small', InputProps: {
-                                                startAdornment: <InputAdornment position="start" >End</InputAdornment>,
-                                            }
-                                        }
-                                    }}
-                                    renderInput={(params) => <TextField {...params} />}
-
-                                />
-                            </LocalizationProvider>
+                                    />
+                                </LocalizationProvider>
+                            </Box>
                         </Box>
-                    </Box>
-                </Box>)}
-        </Box>
+                    </Box>)
+            }
+        </Box >
 
     );
 };

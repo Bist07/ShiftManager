@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Menu, Toolbar, Button, MenuItem, TextField, Collapse, IconButton, Typography, Divider } from '@mui/material';
+import {
+    Box, Menu, Toolbar, Button, MenuItem, Collapse, IconButton, Typography, MenuList, Popover
+} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -18,7 +20,6 @@ import ShiftTable from '../ShiftTable';
 import MonthlyShiftTable from '../MonthlyShiftTable';
 import { AutoAssignButton } from './AutoAssign';
 
-
 const ScheduleToolbar = () => {
     const [weeks, setWeeks] = useState([]);
     const [weekAnchorEl, setWeekAnchorEl] = useState(null);
@@ -26,8 +27,6 @@ const ScheduleToolbar = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Default to current month
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
     const [refetchTrigger, setRefetchTrigger] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
     const [filterOpen, setFilterOpen] = useState(false); // State for collapsible filter section
     const [currentFilters, setCurrentFilters] = useState({
         employeeFilters: [],
@@ -133,37 +132,12 @@ const ScheduleToolbar = () => {
 
     return (
         <Box>
-            <Toolbar
-                sx={{
-                    justifyContent: 'space-between',
-                    backgroundColor: '#0f1214',
-                    padding: '12px',
-                    borderBottom: '1px solid #1d2126',
-                    position: 'sticky', // Stick to the top
-                    top: 0,
-                    zIndex: 1000,
-                }}>
+            <Toolbar>
                 <Box sx={{ display: 'flex', gap: '16px', height: '40px' }}>
                     <IconButton
                         onClick={() => setViewMode(viewMode === 'week' ? 'month' : 'week')}
-                        sx={{
-                            backgroundColor: 'transparent',
-                            fontSize: '15px',
-                            textTransform: 'none',
-                            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                            gap: '8px',
-                            borderRadius: '5px',
-                            color: '#ebf5ff',
-                            border: '1px solid transparent', // Add border to mimic outlined style
-                            '&:hover': {
-                                backgroundColor: '#1a1e22',
-                                borderColor: '#1d2126',
-
-                            },
-                        }}
                     >
                         {viewMode === 'week' ? (
-
                             <>
                                 Week <ViewWeekIcon />
                             </>
@@ -178,45 +152,25 @@ const ScheduleToolbar = () => {
                         sx={{
                             display: 'flex',
                             height: '40px',
-                            borderRadius: '5px',
-                            border: '1px solid transparent',
-                            '&:hover': {
-                                borderColor: '#1d2126',
-                            },
                         }}>
 
                         <IconButton
+                            varient="contained"
                             onClick={handlePrev}
                             sx={{
-                                margin: 0,
-                                width: 'auto',
-                                color: '#ebf5ff',
-                                backgroundColor: 'transparent',
-                                borderRight: '1px solid transparent',
-                                '&:hover': {
-                                    backgroundColor: '#1a1e22',
-                                    borderColor: '#1d2126',
-
-                                },
-                                padding: '8px',
+                                borderTopRightRadius: '0px',
+                                borderBottomRightRadius: '0px',
                             }}
                         >
                             <ArrowLeftIcon />
                         </IconButton>
-                        <Divider variant="inset" orientation="vertical" flexItem sx={{ bgcolor: '#1d2126', padding: 0, margin: 0 }} />
+
                         <IconButton
+                            varient="contained"
                             onClick={handleNext}
                             sx={{
-                                width: 'auto',
-                                color: '#ebf5ff',
-                                backgroundColor: 'transparent',
-                                borderLeft: '1px solid transparent',
-                                '&:hover': {
-                                    backgroundColor: '#1a1e22',
-                                    borderColor: '#1d2126',
-
-                                },
-                                padding: '8px',
+                                borderTopLeftRadius: '0px',
+                                borderBottomLeftRadius: '0px',
                             }}
                         >
                             <ArrowRightIcon />
@@ -236,30 +190,39 @@ const ScheduleToolbar = () => {
                             slotProps={{
                                 textField: {
                                     size: 'small', sx: {
-                                        svg: { color: '#3399ff' }, borderRadius: '4px',
-                                        border: '1px solid #red',
+                                        borderRadius: '5px',
                                         bgcolor: '#15181b', '& input': {
                                             fontSize: '14px',
-                                            color: '#98a4b3',
+                                            color: 'secondary.main',
+
+                                        },
+                                        svg: {
+                                            color: '#3399ff',
                                         },
                                         '& .MuiOutlinedInput-root': {
                                             '& fieldset': {
+
                                                 borderColor: '#20242a', // Change the border color
                                                 borderRadius: '4px',
+                                                width: '100%',
+                                                height: '120%',
                                             },
                                             '&:hover fieldset': {
                                                 borderColor: '#303840', // Border color when hovering
                                             },
+
                                         },
-                                        '& .MuiInputAdornment-positionEnd': {
-                                            '& .MuiTypography-root': {
-                                                fontSize: '14px',  // Specifically target text inside the adornment
-                                                color: '#b6c0c9'
-                                            }
+                                        '& .MuiInputAdornment-positionEnd .MuiIconButton-root': {
+                                            // Target the icon button inside the adornment
+                                            '&:hover': {
+                                                borderColor: 'transparent',
+                                                backgroundColor: 'transparent', // Ensure no background color changes if you only want border effect
+                                            },
                                         },
                                     }
                                 }
-                            }}
+                            }
+                            }
                         />
                     </LocalizationProvider>
 
@@ -271,84 +234,100 @@ const ScheduleToolbar = () => {
                             onClick={(e) => setWeekAnchorEl(e.currentTarget)}
                             sx={{
                                 fontSize: '17px',
-                                textWeight: 'bold',
-                                fontWeight: 600,
-                                color: '#3399ff',
-                                textTransform: 'none',
+                                color: 'primary.main',
                                 padding: '8px 16px',
-                                fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                                display: 'flex',
-                                alignItems: 'center',
-                                borderRadius: '5px',
-                                border: '1px solid transparent',
-                                gap: '8px',
-                                '&:hover': {
-                                    backgroundColor: '#1a1e22',
-                                    borderColor: '#1d2126',
-
-                                },
                             }}
                         >
                             {selectedWeek
                                 ? `${formatWeek(selectedWeek[0])} - ${formatWeek(selectedWeek[selectedWeek.length - 1])}`
                                 : 'Select Week'}
-                            <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#ebf5ff' }} />
+                            <ArrowDropDownIcon sx={{ fontSize: '20px', color: 'secondary.main' }} />
                         </Button>
                     )}
 
-                    <Menu
+
+                    <Popover
                         id="week-menu"
                         anchorEl={weekAnchorEl}
                         open={openWeekMenu}
                         onClose={() => setWeekAnchorEl(null)}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        sx={{
+                            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
+                            padding: "0",
+                            marginTop: "6px",
+                            width: "auto",
+                        }}
+                    > <Box
+                        sx={{
+                            display: "flex",
+                            gap: 0,
+                            padding: 0,
+                            border: "1px solid #e0e0e0",
+                            borderColor: "#101010",
+                            borderRadius: "4px",
+                            backgroundColor: '#15181b',
+                        }}
                     >
-                        {weeks.map((week, index) => (
-                            <MenuItem key={index} onClick={() => handleSelectWeek(week)}>
-                                {`${formatWeek(week[0])} - ${formatWeek(week[week.length - 1])}`}
-                            </MenuItem>
-                        ))}
-                    </Menu>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    gap: 0,
+                                    mt: 0.5,
+                                    mb: 0.5,
+                                }}
+                            >
+                                <MenuList
+                                    sx={{
+                                        maxHeight: 300,
+                                        overflowY: "auto",
+                                        padding: "0",
+                                    }}
+                                >
+                                    {weeks.map((week, index) => (
+                                        <MenuItem key={index} onClick={() => handleSelectWeek(week)}>
+                                            {`${formatWeek(week[0])} - ${formatWeek(week[week.length - 1])}`}
+                                        </MenuItem>
+                                    ))}
+                                </MenuList>
+                            </Box>
+                        </Box>
+                    </Popover>
                 </Box>
 
-                {/* Add a Box with flexGrow to push Tune button to the right */}
-                <Box sx={{ display: 'flex', flexGrow: 1, gap: '16px' }} />
-                <AutoAssignButton onClick={handleAutoAssign} />
-                {/* Tune Button, flipped when filter is open */}
-                <IconButton
-                    onClick={handleToggleFilter}
-                    sx={{
-                        fontSize: '15px',
-                        textTransform: 'none',
-                        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                        gap: '8px',
-                        borderRadius: '5px',
-                        border: '1px solid transparent', // Add border to mimic outlined style
-                        marginLeft: '16px',
-                        color: filterOpen ? '#3399ff' : '#ebf5ff',
-                        '&:hover': { backgroundColor: '#1a1e22', borderColor: '#1d2126', },
-                    }}
-                >
-                    Filters
-                    <TuneIcon sx={{ transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', }} />
-                </IconButton>
-                <IconButton
-                    onClick={handleOpenDialog}
-                    sx={{
-                        bgcolor: '#3399ff',
-                        fontSize: '15px',
-                        textTransform: 'none',
-                        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                        gap: '6px',
-                        borderRadius: '5px',
-                        marginLeft: '16px',
-                        color: '#ebf5ff',
-                        '&:hover': { bgcolor: '#0077e5' },
-                    }}
-                >
-                    <AddIcon />
-                    <Typography sx={{ marginRight: '4px', }}>Create shift</Typography>
-
-                </IconButton>
+                {/* Box with flexGrow to push Tune button to the right */}
+                <Box sx={{ display: 'flex', flexGrow: 1 }} />
+                <Box sx={{ display: 'flex', gap: '16px' }}>
+                    <AutoAssignButton onClick={handleAutoAssign} />
+                    {/* Tune Button, flipped when filter is open */}
+                    <IconButton
+                        onClick={handleToggleFilter}
+                        sx={{
+                            color: filterOpen ? 'primary.main' : 'secondary.main',
+                        }}
+                    >
+                        Filters
+                        <TuneIcon sx={{ transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', }} />
+                    </IconButton>
+                    <IconButton
+                        onClick={handleOpenDialog}
+                        sx={{
+                            bgcolor: 'primary.main',
+                            color: 'white',
+                            '&:hover': { bgcolor: '#0077e5', borderColor: '#0077e5', },
+                        }}
+                    >
+                        <AddIcon />
+                        <Typography sx={{ marginRight: '4px', }}>Create shift</Typography>
+                    </IconButton>
+                </Box>
                 {
                     currentShift && (
                         <ShiftDialog

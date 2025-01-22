@@ -46,13 +46,7 @@ const Filters = ({ onFiltersChange }) => {
 
 
     return (
-        <Toolbar
-            sx={{
-                justifyContent: 'space-between',
-                backgroundColor: '#0f1214', padding: '12px',
-                borderBottom: '1px solid #1d2126',
-
-            }}>
+        <Toolbar>
             <Box
                 sx={{
                     display: 'flex',

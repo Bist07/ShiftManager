@@ -19,19 +19,8 @@ const LocationFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, lo
                 aria-controls="location-menu"
                 aria-haspopup="true"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
-                variant='outlined'
                 sx={{
-                    color: Object.keys(filters.locationFilters).length > 0 ? '#0085ff' : '#626262',
-                    fontSize: '15px',
-                    textTransform: 'none',
-                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                    gap: '8px',
-                    borderRadius: '5px',
-                    border: '1px solid #bcbcbc', // Add border to mimic outlined style
-                    borderColor: '#bcbcbc',
-                    '&:hover': {
-                        borderColor: Object.keys(filters.locationFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
-                    },
+                    color: filters.locationFilters.length > 0 ? 'primary.main' : 'secondary.main',
                 }}
             >
                 <PlaceIcon />

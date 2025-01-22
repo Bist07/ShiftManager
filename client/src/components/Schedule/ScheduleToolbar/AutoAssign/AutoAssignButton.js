@@ -35,16 +35,6 @@ const AutoAssignShifts = ({ unassignedShiftsByDate }) => {
 const AutoAssignButton = ({ shift, onClick }) => (
     <IconButton
         onClick={() => onClick(shift)}
-        sx={{
-            fontSize: '15px',
-            textTransform: 'none',
-            fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-            gap: '8px',
-            borderRadius: '5px',
-            border: '1px solid transparent', // Add border to mimic outlined style
-            color: '#ebf5ff',
-            '&:hover': { backgroundColor: '#1a1e22', borderColor: '#1d2126', },
-        }}
     >
         <AutoFixHighIcon />
         Auto Assign

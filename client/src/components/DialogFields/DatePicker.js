@@ -24,7 +24,7 @@ const DatePickerComponent = ({ formData, handleChange }) => {
             <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                 <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Date</Typography>
                 <TodayIcon sx={{
-                    color: '#9ca6b0',
+                    color: 'secondary.main',
                     fontSize: '36px',
                     borderRadius: '50px',
                     border: '2px solid #bcbcbc',
@@ -36,30 +36,43 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                 <FormControl fullWidth >
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <MobileDatePicker
-                            sx={{
-                                borderRadius: '4px',
-                                bgcolor: '#fff', '& input': {
-                                    fontSize: '14px',
-                                    color: '#5f7183',
-                                },
-                                '& .MuiOutlinedInput-root': {
-                                    '& fieldset': {
-                                        borderColor: '#fff', // Change the border color
-                                        borderRadius: '4px',
-                                    },
-                                    '&:hover fieldset': {
-                                        borderColor: '#abb6ba', // Border color when hovering
-                                    },
-                                },
-                            }}
                             value={selectedDate}
                             onChange={handleDateChange}
                             format="DD MMMM YYYY"
                             slotProps={{
                                 textField: {
-                                    size: 'small',
+                                    size: 'small', sx: {
+                                        borderRadius: '4px',
+                                        bgcolor: '#15181b', '& input': {
+                                            fontSize: '14px',
+                                            color: 'secondary.main',
+                                        },
+                                        svg: {
+                                            color: '#3399ff',
+                                        },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': {
+                                                borderColor: '#20242a', // Change the border color
+                                                borderRadius: '4px',
+                                                width: '100%',
+                                                height: '112%',
+                                            },
+                                            '&:hover fieldset': {
+                                                borderColor: '#303840', // Border color when hovering
+                                            },
+
+                                        },
+                                        '& .MuiInputAdornment-positionEnd .MuiIconButton-root': {
+                                            // Target the icon button inside the adornment
+                                            '&:hover': {
+                                                borderColor: 'transparent',
+                                                backgroundColor: 'transparent',
+                                            },
+                                        },
+                                    }
                                 }
-                            }}
+                            }
+                            }
 
                         />
                     </LocalizationProvider>

@@ -243,7 +243,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                 gap={2}
                 flexWrap="wrap"
                 sx={{
-                    mt: 1,
+                    bgcolor: 'background.default',
                     mb: 0,
                     borderBottom: 1,
                     borderColor: 'divider',
@@ -258,18 +258,17 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
 
                 >
                     <EditCalendarIcon sx={{
-                        color: "#0085ff",
+                        color: "primary.main",
                         fontSize: '36px',
-                        stroke: "#ffffff", strokeWidth: 0.5,
                         borderRadius: '50px',
                         border: '2px solid #bcbcbc',
-                        borderColor: "#0085ff",
+                        borderColor: "primary.main",
                         padding: 0.5,
 
                     }} />
                     <DialogTitle
                         sx={{
-                            color: "#0085ff",
+                            color: "primary.main",
                             ml: -1
                         }}>
                         {shift_id ? 'Edit Shift' : 'Create Shift'}
@@ -291,8 +290,11 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                                 onClick={toggleRepeat}
                                 aria-label={repeat ? "Hide Repeat Options" : "Show Repeat Options"}
                                 sx={{
-                                    color: repeat ? '#0085ff' : '#c1cbd4',
-                                    '&:hover': { color: '#a0afbe' },
+                                    color: repeat ? "primary.main" : 'secondary.main',
+                                    '&:hover': {
+                                        borderColor: 'transparent',
+                                        backgroundColor: 'transparent',
+                                    }
                                 }}
                             >
                                 <RepeatIcon />
@@ -303,8 +305,10 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                                     onClick={() => handleDelete(shift_id)}
                                     aria-label="delete"
                                     sx={{
-                                        color: '#c1cbd4',
-                                        '&:hover': { color: '#a0afbe' },
+                                        '&:hover': {
+                                            borderColor: 'transparent',
+                                            backgroundColor: 'transparent',
+                                        }
                                     }}
                                 >
                                     <DeleteOutlineIcon />
@@ -317,8 +321,11 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                         onClick={onClose}
                         aria-label={"close"}
                         sx={{
-                            color: '#abb3bc',
-                            '&:hover': { color: '#a0afbe' }
+                            '&:hover': {
+                                color: '#ff5733',
+                                borderColor: 'transparent',
+                                backgroundColor: 'transparent',
+                            }
                         }}
                     >
                         <CloseIcon />
@@ -334,17 +341,17 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                         ml: 3.25,
                         '& .MuiTab-root': {
                             fontWeight: 600,
-                            color: '#a3acb5',
+                            color: 'secondary.main',
                         },
                         '& .Mui-selected': {
-                            color: '#0085ff',
+                            color: 'primary.main',
 
                         },
                         '& .MuiTabs-indicator': {
-                            backgroundColor: '#0085ff',
+                            backgroundColor: 'primary.main',
                         },
                         '& .MuiTab-root:hover': {
-                            color: '#0085ff',
+                            color: 'primary.main',
                         },
                     }}
                 >
@@ -355,12 +362,17 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                 </Tabs>
 
             </Box>
-            <Box sx={{ bgcolor: '#f2f5f7' }}>
+            <Box
+                sx={{
+                    bgcolor: 'background.default',
+                }}
+            >
                 {tabIndex === 0 && (
                     <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
                         <DatePicker formData={formData} handleChange={handleFormChange} />
                         <TimePickerComponent formData={formData} handleChange={handleFormChange} />
-                        <Divider sx={{ ml: 23.25, mr: 3, mt: 2, mb: 1 }} />
+                        {!repeat && (<Divider sx={{ ml: 23.25, mr: 3, mt: 2, mb: 1 }} />)}
+
                         <Collapse in={repeat}>
                             <RepeatOptions formData={formData} handleChange={handleFormChange} />
                         </Collapse>
@@ -410,16 +422,8 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                                 onClick={onClose}
                                 variant="outlined"
                                 sx={{
+                                    borderColor: '#20242a',
                                     flex: 1, // Make button take equal space
-                                    borderRadius: '4px',
-                                    border: '1px solid',
-                                    borderColor: '#d8d8d8',
-                                    color: '#9ca6b0',
-                                    backgroundColor: '#f2f5f7',
-                                    textTransform: 'none',
-                                    '&:hover': {
-                                        backgroundColor: '#deebff',
-                                    },
                                 }}
                             >
                                 Cancel
@@ -443,9 +447,9 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                                         borderColor: '#1cb474',
                                     },
                                     '&.Mui-disabled': {
-                                        backgroundColor: '#d8d8d8',
-                                        borderColor: '#d8d8d8',
-                                        color: '#9ca6b0',
+                                        backgroundColor: 'background.default',
+                                        color: '#98a4b3',
+                                        borderColor: '#1d2126',
                                     },
                                 }}
                             >

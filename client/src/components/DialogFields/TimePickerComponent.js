@@ -200,12 +200,12 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                 </Typography>
                 <AccessTimeRoundedIcon
                     sx={{
-                        color: "#9ca6b0",
+                        color: "secondary.main",
                         fontSize: "36px",
                         borderRadius: "50px",
                         padding: 0.5,
                         border: "2px solid #bcbcbc",
-                        borderColor: "#9ca6b0",
+                        borderColor: "secondary.main",
                     }}
                 />
 
@@ -231,18 +231,18 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                         ? '35%'
                                         : error.end
                                             ? '25%'
-                                            : '37.5%',
-                                bgcolor: '#fff',
+                                            : '40%',
+                                backgroundColor: '#15181b',
                                 '& input': {
+                                    borderRadius: '4px',
                                     fontSize: '14px',
-                                    color: '#5f7183',
+                                    color: 'secondary.main',
 
                                 },
                                 '& .MuiInputAdornment-root': {
-                                    fontSize: '14px',  // Adjust for adornment
                                     '& .MuiTypography-root': {
-                                        fontSize: '14px',  // Specifically target text inside the adornment
-                                        color: '#b6c0c9'
+                                        fontSize: '12px',  // Specifically target text inside the adornment
+                                        color: '#5f7183'
                                     }
                                 },
                                 '& .MuiInputAdornment-positionEnd': {
@@ -251,10 +251,10 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 },
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': {
-                                        borderColor: '#fff', // Change the border color
+                                        borderColor: '#20242a',
                                     },
                                     '&:hover fieldset': {
-                                        borderColor: '#b4b4b4', // Border color when hovering
+                                        borderColor: '#303840', // Border color when hovering
                                     },
                                 },
 
@@ -286,25 +286,24 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             disabled={!!(error.start || error.breakLength)}
                             sx={{
                                 borderRadius: '4px',
-                                borderColor: '#fff',
-                                width: error.end
+                                width: error.start
                                     ? '50%'
                                     : error.breakLength
                                         ? '35%'
-                                        : error.start
+                                        : error.end
                                             ? '25%'
-                                            : '37.5%',
-                                bgcolor: '#fff',
+                                            : '40%',
+                                backgroundColor: '#15181b',
                                 '& input': {
+                                    borderRadius: '4px',
                                     fontSize: '14px',
-                                    color: '#5f7183',
+                                    color: 'secondary.main',
 
                                 },
                                 '& .MuiInputAdornment-root': {
-                                    fontSize: '14px',  // Adjust for adornment
                                     '& .MuiTypography-root': {
-                                        fontSize: '14px',  // Specifically target text inside the adornment
-                                        color: '#b6c0c9'
+                                        fontSize: '12px',  // Specifically target text inside the adornment
+                                        color: '#5f7183'
                                     }
                                 },
                                 '& .MuiInputAdornment-positionEnd': {
@@ -313,12 +312,13 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 },
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': {
-                                        borderColor: '#fff', // Change the border color
+                                        borderColor: '#20242a',
                                     },
                                     '&:hover fieldset': {
-                                        borderColor: '#b4b4b4', // Border color when hovering
+                                        borderColor: '#303840', // Border color when hovering
                                     },
                                 },
+
                             }}
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">End</InputAdornment>,
@@ -346,36 +346,39 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                             disabled={!!(error.start || error.end)}
                             sx={{
                                 borderRadius: '4px',
-                                width: error.breakLength
+                                width: error.start
                                     ? '50%'
-                                    : error.start
-                                        ? '20%'
+                                    : error.breakLength
+                                        ? '35%'
                                         : error.end
-                                            ? '20%'
-                                            : '33.33%',
-                                bgcolor: '#fff',
+                                            ? '25%'
+                                            : '32.5%',
+                                backgroundColor: '#15181b',
                                 '& input': {
+                                    borderRadius: '4px',
                                     fontSize: '14px',
-                                    color: '#5f7183',
+                                    color: 'secondary.main',
+
                                 },
                                 '& .MuiInputAdornment-root': {
-                                    fontSize: '14px',  // Adjust for adornment
                                     '& .MuiTypography-root': {
-                                        fontSize: '14px',  // Specifically target text inside the adornment
-                                        color: '#b6c0c9'
+                                        fontSize: '12px',  // Specifically target text inside the adornment
+                                        color: '#5f7183'
                                     }
                                 },
                                 '& .MuiInputAdornment-positionEnd': {
                                     mr: -2,
+
                                 },
                                 '& .MuiOutlinedInput-root': {
                                     '& fieldset': {
-                                        borderColor: '#fff', // Change the border color
+                                        borderColor: '#20242a',
                                     },
                                     '&:hover fieldset': {
-                                        borderColor: '#b4b4b4', // Border color when hovering
+                                        borderColor: '#303840', // Border color when hovering
                                     },
                                 },
+
                             }}
                             InputProps={{
                                 startAdornment: <InputAdornment position="start">Break</InputAdornment>,
@@ -422,8 +425,9 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                         gap: 0,
                         padding: 0,
                         border: "1px solid #e0e0e0",
+                        borderColor: "#101010",
                         borderRadius: "4px",
-                        backgroundColor: "#fff",
+                        backgroundColor: '#15181b',
                         width: 'auto'
 
                     }}
@@ -442,8 +446,8 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 maxHeight: 300,
                                 overflowY: "auto",
                                 padding: "0",
-                                backgroundColor: "#fff",
                                 flex: 1,
+                                backgroundColor: '#15181b',
 
                             }}>
                             {breakLengthOptions.map((option) => (
@@ -453,12 +457,17 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                     selected={breakLengthSelection === option}
                                     sx={{
                                         fontSize: '14px',
+                                        color: 'secondary.main',
                                         "&:hover": {
-                                            backgroundColor: "#deebff",
+                                            backgroundColor: '#303840',
                                         },
+
                                         "&.Mui-selected": {
                                             backgroundColor: "#2684ff",
                                             color: "#fff",
+                                        },
+                                        "&.Mui-selected:hover": {
+                                            bgcolor: '#0077e5', borderColor: '#0077e5',
                                         },
 
                                     }}>
@@ -494,8 +503,9 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                         gap: 0,
                         padding: 0,
                         border: "1px solid #e0e0e0",
+                        borderColor: "#101010",
                         borderRadius: "4px",
-                        backgroundColor: "#fff",
+                        backgroundColor: '#15181b',
                         width: 'auto'
 
                     }}
@@ -515,7 +525,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 maxHeight: 300,
                                 overflowY: "auto",
                                 padding: "0",
-                                backgroundColor: "#fff",
+                                backgroundColor: '#15181b',
                                 width: "33.33%",
                                 flex: 1,
                             }}
@@ -529,12 +539,17 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                     }
                                     sx={{
                                         fontSize: '14px',
+                                        color: 'secondary.main',
                                         "&:hover": {
-                                            backgroundColor: "#deebff",
+                                            backgroundColor: '#303840',
                                         },
+
                                         "&.Mui-selected": {
                                             backgroundColor: "#2684ff",
                                             color: "#fff",
+                                        },
+                                        "&.Mui-selected:hover": {
+                                            bgcolor: '#0077e5', borderColor: '#0077e5',
                                         },
 
                                     }}
@@ -550,7 +565,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 maxHeight: 300,
                                 overflowY: "auto",
                                 padding: "0",
-                                backgroundColor: "#fff",
+                                backgroundColor: '#15181b',
                                 width: "33.33%",
                                 flex: 1,
 
@@ -565,12 +580,17 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                     }
                                     sx={{
                                         fontSize: '14px',
+                                        color: 'secondary.main',
                                         "&:hover": {
-                                            backgroundColor: "#deebff",
+                                            backgroundColor: '#303840',
                                         },
+
                                         "&.Mui-selected": {
                                             backgroundColor: "#2684ff",
                                             color: "#fff",
+                                        },
+                                        "&.Mui-selected:hover": {
+                                            bgcolor: '#0077e5', borderColor: '#0077e5',
                                         },
 
                                     }}
@@ -586,7 +606,7 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                 maxHeight: 300,
                                 overflowY: "auto",
                                 padding: "0",
-                                backgroundColor: "#fff",
+                                backgroundColor: '#15181b',
                                 width: "33.33%",
                                 flex: 1,
                             }}
@@ -600,12 +620,17 @@ const TimePickerComponent = ({ formData, handleChange }) => {
                                     }
                                     sx={{
                                         fontSize: '14px',
+                                        color: 'secondary.main',
                                         "&:hover": {
-                                            backgroundColor: "#deebff",
+                                            backgroundColor: '#303840',
                                         },
+
                                         "&.Mui-selected": {
                                             backgroundColor: "#2684ff",
                                             color: "#fff",
+                                        },
+                                        "&.Mui-selected:hover": {
+                                            bgcolor: '#0077e5', borderColor: '#0077e5',
                                         },
 
                                     }}

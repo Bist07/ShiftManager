@@ -19,19 +19,8 @@ const RoleFilter = ({ anchorEl, setAnchorEl, filters, handleSelectFilter, roles,
                 aria-controls="role-menu"
                 aria-haspopup="true"
                 onClick={(e) => setAnchorEl(e.currentTarget)}
-                variant='outlined'
                 sx={{
-                    color: filters.roleFilters.length > 0 ? '#0085ff' : '#626262',
-                    fontSize: '15px',
-                    textTransform: 'none',
-                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-                    gap: '8px',
-                    borderRadius: '5px',
-                    border: '1px solid #bcbcbc',
-                    borderColor: '#bcbcbc',
-                    '&:hover': {
-                        borderColor: Object.keys(filters.roleFilters).length > 0 ? '#1c74d4' : '#bcbcbc',
-                    },
+                    color: Object.keys(filters.roleFilters).length > 0 ? 'primary.main' : 'secondary.main',
                 }}
             >
                 <AssignmentIcon sx={{ fontSize: '20px' }} />
