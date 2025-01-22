@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText } from '@mui/material';
+import {
+    AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText
+    , Avatar
+} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,11 +22,11 @@ const Header = () => {
         <>
             <AppBar
                 position="sticky"
-                sx={{ backgroundColor: '#333' }}
+                sx={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
                 elevation={3}
             >
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
-                    <Typography variant="h6" component="div" sx={{ flexGrow: 1, ml: 1 }}>
+                    <Typography variant="h6" component="div" sx={{ ml: 1 }}>
                         SHIFT MANAGER
                     </Typography>
 
@@ -39,15 +42,18 @@ const Header = () => {
                     </IconButton>
 
                     {/* Desktop Navigation */}
-                    <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 5 }}>
+                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                         <Button color="inherit" onClick={() => handleRoute('/schedule')}>
                             Schedule
                         </Button>
-                    </Box>
-                    <Box sx={{ display: { xs: 'none', md: 'flex' }, mr: 5 }}>
                         <Button color="inherit" onClick={() => handleRoute('/employee')}>
                             Employee
                         </Button>
+
+                        <Avatar
+                            sx={{ marginLeft: 2 }}
+                            src="/broken-image.jpg"
+                        />
                     </Box>
                 </Toolbar>
             </AppBar>
