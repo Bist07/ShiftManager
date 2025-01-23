@@ -2,7 +2,7 @@
 // logic/preferenceLogic.js
 import { getPreferenceModel } from '../models/preferenceModel.js';
 
-// Logic to get roles
+// Logic to get prefrence
 export const getPreferenceLogic = async () => {
     try {
         const preference = await getPreferenceModel();

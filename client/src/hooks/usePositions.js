@@ -1,18 +1,19 @@
-// /hooks/useRoles.js
+// /hooks/usePositions.js
 import { useState, useEffect } from 'react';
-import { fetchRoles } from '../services/api';
+import { fetchPositions } from '../services/api';
 
-const useRoles = () => {
-    const [roles, setRole] = useState([]);
+const usePositions = () => {
+    const [positions, setPositions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    const fetchAndTransformRoles = async () => {
+    const fetchAndTransformPositions = async () => {
         setLoading(true);
         setError(null);
         try {
-            const data = await fetchRoles();
-            setRole(data);
+            const data = await fetchPositions();
+
+            setPositions(data);
         } catch (err) {
             setError('Failed to load data. Please try again later.');
         } finally {
@@ -21,11 +22,11 @@ const useRoles = () => {
     };
 
     useEffect(() => {
-        fetchAndTransformRoles();
+        fetchAndTransformPositions();
 
     }, []);
 
-    return { roles, loading, error };
+    return { positions, loading, error };
 };
 
-export default useRoles;
+export default usePositions;

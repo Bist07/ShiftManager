@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Menu, Toolbar, Button, MenuItem, Collapse, IconButton, Typography, MenuList, Popover
+    Box, Toolbar, Button, MenuItem, Collapse, IconButton, Typography, MenuList, Popover
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -10,7 +10,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import TuneIcon from '@mui/icons-material/Tune';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { Filter } from '../../Filters';
+import { FilterToolbar } from '../../Filters';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 import AddIcon from '@mui/icons-material/Add';
@@ -29,9 +29,9 @@ const ScheduleToolbar = () => {
     const [refetchTrigger, setRefetchTrigger] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false); // State for collapsible filter section
     const [currentFilters, setCurrentFilters] = useState({
-        employeeFilters: [],
-        locationFilters: [],
-        roleFilters: [],
+        Employee: [],
+        Location: [],
+        Position: [],
     });
     const [viewMode, setViewMode] = useState('week'); // State to toggle between 'week' and 'month' view
     const [currentShift, setCurrentShift] = useState(null);
@@ -340,7 +340,7 @@ const ScheduleToolbar = () => {
                 }
             </Toolbar >
             <Collapse in={filterOpen}>
-                <Filter onFiltersChange={handleFiltersChange} />
+                <FilterToolbar onFiltersChange={handleFiltersChange} filterList={['Location', 'Position', 'Employee']} />
             </Collapse>
 
             <Box>

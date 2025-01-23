@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box, Tabs, Tab, Divider } from '@mui/material';
-import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, RoleSelector } from '../../DialogFields';
+import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, PositionSelector } from '../../DialogFields';
 import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api';
 import { handleShiftChanges } from '../../../services/shiftService';
 import RepeatIcon from '@mui/icons-material/Repeat';
@@ -11,8 +11,10 @@ import { useAvailability } from '../../../hooks';
 import ConflictDialog from './ConflictDialog';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import dayjs from 'dayjs';
+//ADD CLEAR BUTTON PLS
+import ClearAllRoundedIcon from '@mui/icons-material/ClearAllRounded';
 
-const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
+const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_time, end_time, date, onSave, onClose, onDelete, open }) => {
     const [error, setError] = useState('');
     const [repeat, setRepeat] = React.useState(false);
     const { availability } = useAvailability();
@@ -34,7 +36,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
         end_time: end_time || "17:00:00",
         date: date || "",
         repeat: "",
-        role_id: role_id || '',
+        position_id: position_id || '',
         location_id: location_id || "",
         e_id: emp_id || "",
         dates: [date] || "",
@@ -53,7 +55,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                 date: date || '',
                 repeat: '',
                 location_id: location_id || '',
-                role_id: role_id || '',
+                position_id: position_id || '',
                 e_id: emp_id || '',
                 dates: [date] || "",
             };
@@ -87,10 +89,10 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
     };
 
     const handleSave = async () => {
-        const { start_time, end_time, date, location_id, e_id, role_id } = formData;
+        const { start_time, end_time, date, location_id, e_id, position_id } = formData;
 
         // Validate required fields
-        if (!start_time || !end_time || !location_id || !date || !role_id) {
+        if (!start_time || !end_time || !location_id || !date || !position_id) {
             setError('All fields are required.');
             return;
         }
@@ -165,7 +167,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                 await createBulkShift(
                     shiftData.dates,
                     shiftData.e_id,
-                    shiftData.role_id,
+                    shiftData.position_id,
                     shiftData.location_id,
                     shiftData.start_time,
                     shiftData.end_time
@@ -210,7 +212,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
     let isSaveDisabled =
         isInvalid(formData.start_time) ||
         isInvalid(formData.end_time) ||
-        isInvalid(formData.role_id) ||
+        isInvalid(formData.position_id) ||
         isInvalid(formData.location_id) ||
         isInvalid(formData.date);
 
@@ -377,7 +379,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, role_id, start_time,
                             <RepeatOptions formData={formData} handleChange={handleFormChange} />
                         </Collapse>
                         <LocationSelector formData={formData} handleChange={handleFormChange} />
-                        <RoleSelector formData={formData} handleChange={handleFormChange} />
+                        <PositionSelector formData={formData} handleChange={handleFormChange} />
                         <EmployeeSelector formData={formData} handleChange={handleFormChange} />
                         {error && <Typography color="error">{error}</Typography>}
                     </DialogContent>

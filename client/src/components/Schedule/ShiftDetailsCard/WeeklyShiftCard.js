@@ -9,7 +9,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
         const shiftForDay = shift.shiftDays[date]; // This gives you the array for that date
         const startTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].start_time : null;
         const endTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].end_time : null;
-        const role = shiftForDay && shiftForDay[0] ? shiftForDay[0].role_name : null;
+        const position = shiftForDay && shiftForDay[0] ? shiftForDay[0].position_name : null;
         const location = shiftForDay && shiftForDay[0] ? shiftForDay[0].location_name : null;
 
         if (startTime && endTime) {
@@ -38,7 +38,7 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                                 </Typography>
                             </Box>
                             <Typography variant="body1" sx={{ color: '', fontSize: '11px', textAlign: 'left' }}>
-                                {role} • {location}
+                                {position} • {location}
                             </Typography>
                         </CardContent>
                     </CardActionArea>

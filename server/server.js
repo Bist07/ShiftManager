@@ -11,6 +11,7 @@ import { router as availabilityRoutes } from './routes/availabilityRoutes.js';
 import { router as employeeRoutes } from './routes/employeeRoutes.js';
 import { router as shiftBulkOperations } from './routes/shiftBulkOperationsRoute.js'
 import { router as roleRoutes } from './routes/roleRoutes.js'
+import { router as positionRoutes } from './routes/positionRoutes.js'
 import { router as preferenceRoutes } from './routes/preferenceRoutes.js'
 
 const app = express();
@@ -30,6 +31,7 @@ app.use('/api/availability', availabilityRoutes)
 app.use('/api/employees', employeeRoutes)
 app.use('/api/shiftBulkOperations', shiftBulkOperations)
 app.use('/api/roles', roleRoutes)
+app.use('/api/positions', positionRoutes)
 app.use('/api/preference', preferenceRoutes)
 
 // Set up the server to listen on a port

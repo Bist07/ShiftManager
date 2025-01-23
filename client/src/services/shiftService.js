@@ -15,7 +15,7 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
         await createBulkShift(
             shiftData.dates,
             shiftData.e_id,
-            shiftData.role_id,
+            shiftData.position_id,
             shiftData.location_id,
             shiftData.start_time,
             shiftData.end_time
@@ -32,8 +32,8 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
         // Case 2: More e_ids added without removing the old ones
         if (oldValue.every(e_id => newValue.includes(e_id))) {
 
-            if ("start_time" in changes || "end_time" in changes || "location_id" in changes || "role_id" in changes) {
-                await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id);
+            if ("start_time" in changes || "end_time" in changes || "location_id" in changes || "position_id" in changes) {
+                await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.position_id);
 
             }
             const newEIDs = newValue.filter(e_id => !oldValue.includes(e_id));
@@ -42,7 +42,7 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
             await createBulkShift(
                 shiftData.dates,
                 newEIDs,
-                shiftData.role_id,
+                shiftData.position_id,
                 shiftData.location_id,
                 shiftData.start_time,
                 shiftData.end_time
@@ -69,7 +69,7 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
         await createBulkShift(
             shiftData.dates,
             shiftData.e_id,
-            shiftData.role_id,
+            shiftData.position_id,
             shiftData.location_id,
             shiftData.start_time,
             shiftData.end_time
@@ -78,10 +78,10 @@ export async function handleShiftChanges(changes, shift_id, shiftData) {
         return;
     }
 
-    // Case 1: Update shift timing if there are changes to timing, location, or role
-    if ("start_time" in changes || "end_time" in changes || "location_id" in changes || "role_id" in changes) {
+    // Case 1: Update shift timing if there are changes to timing, location, or position
+    if ("start_time" in changes || "end_time" in changes || "location_id" in changes || "position_id" in changes) {
 
-        await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.role_id);
+        await updateShift(shift_id, shiftData.start_time, shiftData.end_time, shiftData.location_id, shiftData.position_id);
 
     }
 }

@@ -13,12 +13,12 @@ export const getShiftsModel = async () => {
          l.name AS location_name,
             s.start_time, 
             s.end_time ,
-            s.role_id,
-            r.role_name
+            s.position_id,
+          p.name AS position_name
         FROM employee e
         LEFT JOIN assignments a ON a.employee_id = e.e_id
         LEFT JOIN shifts s ON a.shift_id = s.shift_id
-        LEFT JOIN roles r ON s.role_id = r.role_id
+        LEFT JOIN positions p ON s.position_id = p.position_id
         LEFT JOIN locations l ON s.location_id = l.location_id
         ORDER BY e.e_id, s.full_date;
     `;
@@ -33,15 +33,15 @@ export const getShiftsModel = async () => {
 };
 
 // Function to update a shift in the database
-export const updateShiftModel = async (start_time, end_time, location_id, role_id, shift_id) => {
+export const updateShiftModel = async (start_time, end_time, location_id, position_id, shift_id) => {
     const sqlQuery = `
         UPDATE shifts
-        SET start_time = ?, end_time = ?, location_id = ?, role_id = ?
+        SET start_time = ?, end_time = ?, location_id = ?, position_id = ?
         WHERE shift_id = ?;
     `;
 
     try {
-        const params = [start_time, end_time, location_id, role_id, shift_id];
+        const params = [start_time, end_time, location_id, position_id, shift_id];
         return await query(sqlQuery, params);
     } catch (error) {
         console.error('Error updating shift:', error);
@@ -65,16 +65,16 @@ export const deleteShiftModel = async (shift_id) => {
     }
 };
 
-export const createShiftsModel = async (locationId, role_id, startTime, endTime, dates) => {
+export const createShiftsModel = async (locationId, position_id, startTime, endTime, dates) => {
     try {
         // Construct the values for the insert
 
         const values = dates.map(date =>
-            `(${locationId},'${role_id}','${startTime}', '${endTime}', '${date}')`
+            `(${locationId},'${position_id}','${startTime}', '${endTime}', '${date}')`
         ).join(", ");  // Join all values with a comma
 
         const sqlCreateShiftBulk = `
-            INSERT INTO shifts (location_id, role_id, start_time, end_time, full_date)
+            INSERT INTO shifts (location_id, position_id, start_time, end_time, full_date)
             VALUES ${values}
         `;
 
@@ -107,11 +107,11 @@ export const getUnassignedShiftsModel = async () => {
 
     const sqlQuery = `
         SELECT 
-        s.shift_id, NULL AS e_id, s.start_time, s.end_time, d.full_date, s.date_id, s.location_id, l.name AS location_name ,s.role_id, r.role_name
+        s.shift_id, NULL AS e_id, s.start_time, s.end_time, d.full_date, s.date_id, s.location_id, l.name AS location_name ,s.position_id, p.name AS position_name
         FROM shifts s
         JOIN dim_Date d ON s.date_id = d.date_id
         LEFT JOIN assignments a ON a.shift_id = s.shift_id
-        LEFT JOIN roles r ON s.role_id = r.role_id
+        LEFT JOIN positions p ON s.position_id = p.position_id
         LEFT JOIN locations l ON s.location_id = l.location_id
         WHERE a.shift_id IS NULL;
     `;

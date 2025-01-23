@@ -7,7 +7,7 @@ shifts
 | start_time  | time    | YES  |     | NULL    |                |
 | end_time    | time    | YES  |     | NULL    |                |
 | date_id     | int(11) | NO   | MUL | NULL    |                |
-| role_id     | int(11) | NO   | MUL | NULL    |                |
+| position_id     | int(11) | NO   | MUL | NULL    |                |
 +-------------+---------+------+-----+---------+----------------+
 
  assignments
@@ -47,7 +47,7 @@ employee;
 | first_name | varchar(255) | NO   |     | NULL                |                |
 | last_name  | varchar(255) | NO   |     | NULL                |                |
 | email      | varchar(255) | NO   | UNI | NULL                |                |
-| role_id    | int(11)      | NO   | MUL | NULL                |                |
+| position_id    | int(11)      | NO   | MUL | NULL                |                |
 | created_at | timestamp    | YES  |     | current_timestamp() |                |
 +------------+--------------+------+-----+---------------------+----------------+
 
@@ -62,12 +62,12 @@ employee;
 | is_read         | tinyint(1) | YES  |     | 0                   |                |
 +-----------------+------------+------+-----+---------------------+----------------+
 
- roles;
+ positions;
 +-----------+-------------+------+-----+---------+----------------+
 | Field     | Type        | Null | Key | Default | Extra          |
 +-----------+-------------+------+-----+---------+----------------+
-| role_id   | int(11)     | NO   | PRI | NULL    | auto_increment |
-| role_name | varchar(50) | NO   | UNI | NULL    |                |
+| position_id   | int(11)     | NO   | PRI | NULL    | auto_increment |
+| position_name | varchar(50) | NO   | UNI | NULL    |                |
 +-----------+-------------+------+-----+---------+----------------+
 
 +-----------------+---------+------+-----+---------+----------------+

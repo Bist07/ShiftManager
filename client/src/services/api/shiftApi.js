@@ -10,7 +10,7 @@ export const fetchShifts = async () => {
     }
 };
 
-export const updateShift = async (shift_id, start_time, end_time, location_id, role_id) => {
+export const updateShift = async (shift_id, start_time, end_time, location_id, position_id) => {
     try {
         // Use a PUT request for updating the shift
         const response = await axiosInstance.put('/api/shifts/update', {
@@ -18,7 +18,7 @@ export const updateShift = async (shift_id, start_time, end_time, location_id, r
             start_time,
             end_time,
             location_id,
-            role_id
+            position_id
         });
         return response.data;
     } catch (error) {
@@ -26,14 +26,14 @@ export const updateShift = async (shift_id, start_time, end_time, location_id, r
     }
 };
 
-export const createShift = async (date, repeat, e_id, role_id, location_id, start_time, end_time) => {
+export const createShift = async (date, repeat, e_id, position_id, location_id, start_time, end_time) => {
     try {
         // Use a POST request for updating the shift
         const response = await axiosInstance.post('/api/shifts/create', {
             date,
             repeat,
             e_id,
-            role_id,
+            position_id,
             location_id,
             start_time,
             end_time

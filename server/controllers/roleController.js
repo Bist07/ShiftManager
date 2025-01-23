@@ -1,4 +1,4 @@
-// controllers/roletController.js
+// controllers/roleController.js
 import { getRolesLogic } from '../logic/roleLogic.js';
 import { validateFields } from '../utils/validateFields.js';
 

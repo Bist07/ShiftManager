@@ -8,3 +8,4 @@ export * from './employeeApi';
 export * from './locationApi';
 export * from './preferenceApi';
 export * from './roleApi';
+export * from './positionApi';

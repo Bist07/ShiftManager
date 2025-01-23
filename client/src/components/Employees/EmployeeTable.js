@@ -11,18 +11,18 @@ import {
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EmployeeCard from '../EmployeeCard';
-import { useEmployee, useLocations, useRoles } from '../../hooks';
+import { useEmployee, useLocations, usePositions } from '../../hooks';
 import EmployeeDialog from './EmployeeDialog';
 
 const EmployeeTable = ({ filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
     const { locations } = useLocations();
-    const { roles } = useRoles();
+    const { positions } = usePositions();
     const [currentEmployee, setCurrentEmployee] = useState(null);
 
     const [openDialog, setOpenDialog] = useState(false); // State to open/close the dialog
 
-    const getRoleName = (role_id) => roles?.find((role) => role.id === role_id)?.name || 'Unknown';
+    const getPositionName = (position_id) => positions?.find((position) => position.id === position_id)?.name || 'Unknown';
     const getLocationName = (location_id) =>
         locations?.find((loc) => loc.id === location_id)?.name || 'Unknown';
 
@@ -75,7 +75,7 @@ const EmployeeTable = ({ filter, refetchTrigger }) => {
                                     />
                                 </TableCell>
                                 <TableCell sx={{ width: '12%', padding: 0 }}>{emp.e_id}</TableCell>
-                                <TableCell sx={{ width: '12%', padding: 1 }}>{getRoleName(emp.role_id)}</TableCell>
+                                <TableCell sx={{ width: '12%', padding: 1 }}>{getPositionName(emp.position_id)}</TableCell>
                                 <TableCell sx={{ width: '12%', padding: 1 }}>{getLocationName(emp.location_id)}</TableCell>
                                 <TableCell sx={{ width: '12%', padding: 1 }}>{emp.email || 'N/A'}</TableCell>
                                 <TableCell sx={{ width: '12%', padding: 1 }}>{emp.phone || 'N/A'}</TableCell>
@@ -100,7 +100,7 @@ const EmployeeTable = ({ filter, refetchTrigger }) => {
                     firstName={currentEmployee.name}
                     lastName={currentEmployee.lastName}
                     location_id={currentEmployee.location_id}
-                    role_id={currentEmployee.role_id}
+                    position_id={currentEmployee.position_id}
                     email={currentEmployee.email}
                     phone={currentEmployee.phone}
                     status={currentEmployee.status}

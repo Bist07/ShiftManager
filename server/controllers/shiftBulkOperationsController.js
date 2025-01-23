@@ -7,14 +7,14 @@ import { query } from '../config/db.js';
 
 // Function to create shifts in bulk and assign them to employees with a transaction
 export const createAndAssignShiftsInBulk = async (req, res) => {
-    const { dates, e_id, role_id, location_id, start_time, end_time } = req.body;
+    const { dates, e_id, position_id, location_id, start_time, end_time } = req.body;
     const conn = await query('BEGIN'); // Start the transaction
     try {
         // Step 1: Create dates if they dont exist
         await createDateLogic(dates)
 
         if (!e_id) {
-            const shiftIds = await createShiftsLogic(location_id, role_id, start_time, end_time, dates);
+            const shiftIds = await createShiftsLogic(location_id, position_id, start_time, end_time, dates);
             if (shiftIds.length === 0) {
                 return res.status(404).json({ message: 'No unassigned shifts created.' });
             }
@@ -22,7 +22,7 @@ export const createAndAssignShiftsInBulk = async (req, res) => {
 
         // Step 2: Iterate over each employee and create a new shift for each
         for (const e of e_id) {
-            const shiftIds = await createShiftsLogic(location_id, role_id, start_time, end_time, dates); // Use the core logic function
+            const shiftIds = await createShiftsLogic(location_id, position_id, start_time, end_time, dates); // Use the core logic function
 
             if (shiftIds.length === 0) {
                 return res.status(404).json({ message: 'No shifts created.' });

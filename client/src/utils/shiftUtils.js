@@ -20,19 +20,19 @@ export const transformShifts = (shifts, filters) => {
     const groupedShifts = {};
 
     // If filters are provided, apply them; otherwise, no filtering.
-    const filteredShifts = filters ? shifts.filter(({ e_id, location_id, role_id }) => {
-        const { employeeFilters, locationFilters, roleFilters } = filters;
+    const filteredShifts = filters ? shifts.filter(({ e_id, location_id, position_id }) => {
+        const { Employee, Location, Position } = filters;
 
         // If any filter is empty, it means no filtering is done for that category
-        const employeeMatch = employeeFilters.length === 0 || employeeFilters.includes(e_id);
-        const locationMatch = locationFilters.length === 0 || locationFilters.includes(location_id);
-        const roleMatch = roleFilters.length === 0 || roleFilters.includes(role_id);
+        const employeeMatch = Employee.length === 0 || Employee.includes(e_id);
+        const locationMatch = Location.length === 0 || Location.includes(location_id);
+        const positionMatch = Position.length === 0 || Position.includes(position_id);
 
-        return employeeMatch && locationMatch && roleMatch;
+        return employeeMatch && locationMatch && positionMatch;
     }) : shifts; // No filtering if filters are undefined
 
     // Iterate through each shift and group them by employee
-    filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, full_date, role_id, role_name, location_name }) => {
+    filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, full_date, position_id, position_name, location_name }) => {
         if (!groupedShifts[e_id]) {
             groupedShifts[e_id] = { e_id, name, shiftDays: {} };
         }
@@ -43,8 +43,8 @@ export const transformShifts = (shifts, filters) => {
         // Add the shift details to the respective date
         groupedShifts[e_id].shiftDays[full_date].push({
             shift_id,
-            role_id,
-            role_name,
+            position_id,
+            position_name,
             location_id,
             location_name,
             start_time: start_time || 'N/A',

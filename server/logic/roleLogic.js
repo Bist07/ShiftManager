@@ -5,7 +5,7 @@ import { getRolesModel } from '../models/roleModel.js';
 export const getRolesLogic = async () => {
     try {
         const roles = await getRolesModel();
-
+        console.log(roles)
         // Return the roles fetched from the database
         return roles;
     } catch (error) {

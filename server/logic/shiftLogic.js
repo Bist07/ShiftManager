@@ -12,9 +12,9 @@ export const getShiftsLogic = async () => {
 };
 
 // Logic to update a shift
-export const updateShiftLogic = async (start_time, end_time, location_id, role_id, shift_id) => {
+export const updateShiftLogic = async (start_time, end_time, location_id, position_id, shift_id) => {
     try {
-        const result = await updateShiftModel(start_time, end_time, location_id, role_id, shift_id);
+        const result = await updateShiftModel(start_time, end_time, location_id, position_id, shift_id);
         return result;
     } catch (error) {
         throw new Error('Failed to update shift');
@@ -33,9 +33,9 @@ export const deleteShiftLogic = async (shift_id) => {
 
 
 // Logic to create shifts for dates in bulk
-export const createShiftsLogic = async (locationId, role_id, startTime, endTime, dates) => {
+export const createShiftsLogic = async (locationId, position_id, startTime, endTime, dates) => {
     try {
-        const shiftIds = await createShiftsModel(locationId, role_id, startTime, endTime, dates);
+        const shiftIds = await createShiftsModel(locationId, position_id, startTime, endTime, dates);
         return shiftIds;
     } catch (error) {
         throw new Error('Failed to create shifts in bulk');

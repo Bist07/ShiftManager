@@ -32,7 +32,7 @@ const UnassignedShiftCard = ({ shift, onClick }) => {
                         </Typography>
                     </Box>
                     <Typography variant="body1" sx={{ color: '#fff', fontSize: '11px', textAlign: 'left' }}>
-                        {shift.role_name} • {shift.location_name}
+                        {shift.position_name} • {shift.location_name}
                     </Typography>
                 </CardContent>
             </CardActionArea>

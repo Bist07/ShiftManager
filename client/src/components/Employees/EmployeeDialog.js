@@ -19,14 +19,14 @@ import {
 import EmployeeCard from '../EmployeeCard';
 import { deleteShiftsAndAssignments } from '../../services/api';
 import { isInvalid } from '../../utils';
-import { LocationSelector, RoleSelector } from '../DialogFields';
+import { LocationSelector, PositionSelector } from '../DialogFields';
 
 const EmployeeDialog = ({
     e_id,
     firstName,
     lastName,
     location_id,
-    role_id,
+    position_id,
     email,
     phone,
     status,
@@ -36,8 +36,8 @@ const EmployeeDialog = ({
     onClose,
     onDelete,
     open,
-    roles = [], // Assuming you will pass available roles for the employee
-    locations = [] // Assuming you will pass available locations for the employee
+    positions = [],
+    locations = []
 }) => {
     const [error, setError] = useState('');
     const [tabIndex, setTabIndex] = useState(0);
@@ -47,7 +47,7 @@ const EmployeeDialog = ({
         email: email || '',
         phone: phone || '',
         status: status || '',
-        role_id: role_id || '',
+        position_id: position_id || '',
         location_id: location_id || '',
         preferences: { ...preferences },
         availability: [...availability],
@@ -61,7 +61,7 @@ const EmployeeDialog = ({
                 email: email || '',
                 phone: phone || '',
                 status: status || '',
-                role_id: role_id || '',
+                position_id: position_id || '',
                 location_id: location_id || '',
                 preferences: { ...preferences },
                 availability: [...availability],
@@ -191,7 +191,7 @@ const EmployeeDialog = ({
                     <Box mt={2}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <RoleSelector formData={formData.preferences.role_id || ''} handleChange={(e) => handleFormChange('preferences.role_id', e.target.value)}></RoleSelector>
+                                <PositionSelector formData={formData.preferences.position_id || ''} handleChange={(e) => handleFormChange('preferences.position_id', e.target.value)}></PositionSelector>
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <LocationSelector formData={formData.preferences.location_id || ''} handleChange={(e) => handleFormChange('preferences.location_id', e.target.value)}></LocationSelector>

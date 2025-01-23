@@ -25,7 +25,7 @@ import AddShiftCard from './ShiftDetailsCard/AddShiftCard';
 const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
     const mappedWeek = mapWeekToDays(week); // Map week to specific dates
-    const { shifts, refetchShifts } = useShifts(year, filter);
+    const { shifts, refetchShifts } = useShifts();
     const transformedShifts = transformShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
     const { unassignedShifts, refetchUnassignedShifts } = useUnassignedShifts();
@@ -43,7 +43,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
             e_id: shift?.e_id,
             shift_id: shiftDetails[0]?.shift_id || shift.shift_id,
             location_id: shiftDetails[0]?.location_id || shift.location_id,
-            role_id: shiftDetails[0]?.role_id || shift.role_id,
+            position_id: shiftDetails[0]?.position_id || shift.position_id,
             date,
             start_time: shiftDetails[0]?.start_time || shift.start_time,
             end_time: shiftDetails[0]?.end_time || shift.end_time,
@@ -232,7 +232,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                     start_time={currentShift.start_time}
                     end_time={currentShift.end_time}
                     location_id={currentShift.location_id}
-                    role_id={currentShift.role_id}
+                    position_id={currentShift.position_id}
                     name={currentShift.name}
                     e_id={currentShift.e_id}
                     date={currentShift.date}

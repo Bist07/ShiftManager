@@ -27,12 +27,12 @@ export const getShifts = async (req, res) => {
 
 // Controller to update a shift
 export const updateShift = async (req, res) => {
-    const { shift_id, start_time, end_time, location_id, role_id } = req.body;
+    const { shift_id, start_time, end_time, location_id, position_id } = req.body;
 
-    if (validateRequest({ shift_id, start_time, end_time, location_id, role_id }, res)) return;
+    if (validateRequest({ shift_id, start_time, end_time, location_id, position_id }, res)) return;
 
     try {
-        const result = await updateShiftLogic(start_time, end_time, location_id, role_id, shift_id);
+        const result = await updateShiftLogic(start_time, end_time, location_id, position_id, shift_id);
 
         if (result.affectedRows > 0) {
             return res.status(200).json({ message: 'Shift updated successfully' });
@@ -69,7 +69,7 @@ export const deleteShift = async (shift_id) => {
 
 
 export const createShifts = async (req, res) => {
-    const { locationId, role_id, startTime, endTime, dateIds } = req.body;
+    const { locationId, position_id, startTime, endTime, dateIds } = req.body;
     try {
 
         // Validate inputs
@@ -78,7 +78,7 @@ export const createShifts = async (req, res) => {
         }
 
         // Call the createShiftsForDatesBulk function from the model
-        const shiftIds = await createShiftsLogic(locationId, role_id, startTime, endTime, dateIds);
+        const shiftIds = await createShiftsLogic(locationId, position_id, startTime, endTime, dateIds);
         if (shiftIds.length === 0) {
             return res.status(404).send('No shifts found for the selected month and year');
         }
