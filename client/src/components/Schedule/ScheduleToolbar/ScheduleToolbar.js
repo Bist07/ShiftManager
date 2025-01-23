@@ -194,7 +194,9 @@ const ScheduleToolbar = () => {
                                         bgcolor: '#15181b', '& input': {
                                             fontSize: '14px',
                                             color: 'secondary.main',
-
+                                            '&:hover': {
+                                                color: '#ebf5ff',
+                                            },
                                         },
                                         svg: {
                                             color: '#3399ff',

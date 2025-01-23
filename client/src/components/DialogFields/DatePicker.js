@@ -46,6 +46,9 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                                         bgcolor: '#15181b', '& input': {
                                             fontSize: '14px',
                                             color: 'secondary.main',
+                                            '&:hover': {
+                                                color: '#ebf5ff',
+                                            }
                                         },
                                         svg: {
                                             color: '#3399ff',
@@ -61,13 +64,6 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                                                 borderColor: '#303840', // Border color when hovering
                                             },
 
-                                        },
-                                        '& .MuiInputAdornment-positionEnd .MuiIconButton-root': {
-                                            // Target the icon button inside the adornment
-                                            '&:hover': {
-                                                borderColor: 'transparent',
-                                                backgroundColor: 'transparent',
-                                            },
                                         },
                                     }
                                 }

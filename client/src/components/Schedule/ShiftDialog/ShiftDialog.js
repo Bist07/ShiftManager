@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, IconButton, Collapse, Box, Tabs, Tab, Divider } from '@mui/material';
-import { DatePicker, TimePickerComponent, RepeatOptions, LocationSelector, EmployeeSelector, PositionSelector } from '../../DialogFields';
+import { Dialog, DialogTitle, DialogActions, Button, IconButton, Box, Tabs, Tab, } from '@mui/material';
 import { createBulkShift, deleteShiftsAndAssignments } from '../../../services/api';
 import { handleShiftChanges } from '../../../services/shiftService';
 import RepeatIcon from '@mui/icons-material/Repeat';
@@ -11,6 +10,7 @@ import { useAvailability } from '../../../hooks';
 import ConflictDialog from './ConflictDialog';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import dayjs from 'dayjs';
+import DialogContentRenderer from './DialogContentRenderer';
 //ADD CLEAR BUTTON PLS
 import ClearAllRoundedIcon from '@mui/icons-material/ClearAllRounded';
 
@@ -24,6 +24,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
     const [ScheduleConflicts, setScheduleConflicts] = useState([]); // Store conflict details
     const [initialData, setInitialData] = useState(null); // Store initial data
     const [tabIndex, setTabIndex] = useState(0);
+
     let emp_id;
 
     if (typeof e_id === "undefined" || e_id === null) {
@@ -183,7 +184,6 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
     const handleTabChange = (event, newValue) => {
         setTabIndex(newValue);
     };
-
     const handleIgnoreConflict = async () => {
         setIgnoreConflict(true);
         setOpenConflictDialog(false);
@@ -191,7 +191,6 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
         // Proceed with save after ignoring conflicts
         await handleSave();
     };
-
 
     const handleEditConflict = () => {
         // Allow editing the shift time again
@@ -370,19 +369,13 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
                 }}
             >
                 {tabIndex === 0 && (
-                    <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
-                        <DatePicker formData={formData} handleChange={handleFormChange} />
-                        <TimePickerComponent formData={formData} handleChange={handleFormChange} />
-                        {!repeat && (<Divider sx={{ ml: 23.25, mr: 3, mt: 2, mb: 1 }} />)}
-
-                        <Collapse in={repeat}>
-                            <RepeatOptions formData={formData} handleChange={handleFormChange} />
-                        </Collapse>
-                        <LocationSelector formData={formData} handleChange={handleFormChange} />
-                        <PositionSelector formData={formData} handleChange={handleFormChange} />
-                        <EmployeeSelector formData={formData} handleChange={handleFormChange} />
-                        {error && <Typography color="error">{error}</Typography>}
-                    </DialogContent>
+                    <DialogContentRenderer
+                        formData={formData}
+                        handleFormChange={handleFormChange}
+                        repeat={repeat}
+                        error={error}
+                        fieldList={["Date", "Time", "RepeatOptions", "Location", "Position", "Employee"]}
+                    />
                 )}
 
                 <Box
@@ -450,7 +443,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
                                     },
                                     '&.Mui-disabled': {
                                         backgroundColor: 'background.default',
-                                        color: '#98a4b3',
+                                        color: '#b6bec9',
                                         borderColor: '#1d2126',
                                     },
                                 }}
@@ -460,8 +453,6 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
                         </DialogActions>
                     </Box>
                 </Box>
-
-
 
                 {/* Conflict Dialog */}
                 <ConflictDialog

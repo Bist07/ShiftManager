@@ -191,10 +191,10 @@ const EmployeeDialog = ({
                     <Box mt={2}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <PositionSelector formData={formData.preferences.position_id || ''} handleChange={(e) => handleFormChange('preferences.position_id', e.target.value)}></PositionSelector>
+                                {/* <PositionSelector formData={formData.preferences.position_id || ''} handleChange={(e) => handleFormChange('preferences.position_id', e.target.value)}></PositionSelector> */}
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <LocationSelector formData={formData.preferences.location_id || ''} handleChange={(e) => handleFormChange('preferences.location_id', e.target.value)}></LocationSelector>
+                                {/* <LocationSelector formData={formData.preferences.location_id || ''} handleChange={(e) => handleFormChange('preferences.location_id', e.target.value)}></LocationSelector> */}
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField

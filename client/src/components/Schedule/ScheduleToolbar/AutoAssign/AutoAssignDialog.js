@@ -185,7 +185,7 @@ const AutoAssignDialog = ({ open, onClose, onSave }) => {
                         renderInput={(params) => <TextField {...params} />}
                     />
                 </LocalizationProvider>
-                <EmployeeSelector formData={formData} handleChange={handleFormChange} />
+                {/* <EmployeeSelector formData={formData} handleChange={handleFormChange} /> */}
                 {error && <Typography color="error">{error}</Typography>}
             </DialogContent>
             <DialogActions>

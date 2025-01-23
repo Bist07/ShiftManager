@@ -111,7 +111,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                     ...provided,
                                     fontSize: '14px',
                                     backgroundColor: '#15181b',
-                                    color: '#98a4b3',
+                                    color: '#b6bec9',
                                     borderColor: '#20242a',
                                     '&:hover': {
                                         borderColor: '#303840',
@@ -119,7 +119,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                 }),
                                 singleValue: (provided) => ({
                                     ...provided,
-                                    color: '#98a4b3',
+                                    color: '#b6bec9',
                                     '&:hover': {
                                         backgroundColor: '#303840',
                                     },
@@ -127,7 +127,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                 menu: (provided) => ({
                                     ...provided,
                                     backgroundColor: '#15181b',
-                                    color: '#98a4b3',
+                                    color: '#b6bec9',
                                     fontSize: '14px',
 
                                 }),
@@ -138,7 +138,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                         : state.isFocused
                                             ? '#303840'
                                             : '#15181b',
-                                    color: state.isSelected ? 'white' : '#98a4b3',
+                                    color: state.isSelected ? 'white' : '#b6bec9',
                                     '&:hover': {
                                         backgroundColor: '#303840',
                                     },
@@ -190,6 +190,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                                                 value={dayMapping[day]}
                                                 aria-label={day}
                                                 sx={{
+                                                    borderColor: '#20242a',
                                                     "&.Mui-selected": {
                                                         backgroundColor: "#2684ff",
                                                         color: "#fff",

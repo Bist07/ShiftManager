@@ -8,7 +8,7 @@ const darkTheme = createTheme({
             main: '#3399ff', // Light blue for primary color
         },
         secondary: {
-            main: '#98a4b3', // Light grey for secondary color
+            main: '#b6bec9', // Light grey for secondary color
         },
     },
     typography: {
@@ -26,11 +26,12 @@ const darkTheme = createTheme({
                     borderRadius: '5px', // Custom border radius for all buttons
                     gap: '8px',
                     fontSize: '15px',
-                    color: '#98a4b3',
+                    color: '#b6bec9',
                     border: '1px solid transparent', // Add border to mimic outlined style
                     '&:hover': {
                         backgroundColor: '#1a1e22',
                         borderColor: '#1d2126',
+                        color: '#ebf5ff',
                     },
                 }
             },
@@ -41,14 +42,14 @@ const darkTheme = createTheme({
                     fontWeight: 600,
                     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
                     borderRadius: '5px', // Custom border radius for all buttons
-                    color: '#98a4b3',
+                    color: '#b6bec9',
                     gap: '8px',
                     fontSize: '15px',
                     border: '1px solid transparent', // Add border to mimic outlined style
                     '&:hover': {
                         backgroundColor: '#1a1e22',
                         borderColor: '#1d2126',
-
+                        color: '#ebf5ff',
                     },
                 },
             },
@@ -77,9 +78,10 @@ const darkTheme = createTheme({
                 root: {
                     backgroundColor: '#15181b',
                     fontSize: '14px',
-                    color: '#98a4b3',
+                    color: '#b6bec9',
                     "&:hover": {
                         backgroundColor: '#303840',
+                        color: '#ebf5ff',
                     },
 
                     "&.Mui-selected": {
