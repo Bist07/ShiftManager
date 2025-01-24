@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DialogContent, Divider, Collapse, Typography } from '@mui/material';
-import { DatePicker, TimePickerComponent, RepeatOptions, Selector } from '../../DialogFields';
+import { DatePicker, TimePickerComponent, RepeatOptions, Selector, ShiftTimeSelector } from '../../DialogFields';
 import { useLocations, useEmployee, usePositions } from '../../../hooks';
 const DialogContentRenderer = ({ formData, handleFormChange, repeat, error, fieldList }) => {
     const { locations = [] } = useLocations();
@@ -12,7 +12,6 @@ const DialogContentRenderer = ({ formData, handleFormChange, repeat, error, fiel
         { name: 'Location', data: locations, optionIdKey: 'location_id', placeHolder: "Add location", isMulti: false },
         { name: 'Position', data: positions, optionIdKey: 'position_id', placeHolder: "Add position", isMulti: false },
         { name: 'Employee', data: employees, optionIdKey: 'e_id', placeHolder: "Add employee(s)", isMulti: true },
-
     ];
 
     function filterNamesFromData(filterData, fieldList) {
@@ -29,7 +28,8 @@ const DialogContentRenderer = ({ formData, handleFormChange, repeat, error, fiel
                 <DatePicker formData={formData} handleChange={handleFormChange} />
             )}
             {fieldList.includes("Time") && (
-                <TimePickerComponent formData={formData} handleChange={handleFormChange} />
+                <ShiftTimeSelector formData={formData} handleChange={handleFormChange} />
+                // <TimePickerComponent formData={formData} handleChange={handleFormChange} />
             )}
             {fieldList.includes("RepeatOptions") && (
                 <>
