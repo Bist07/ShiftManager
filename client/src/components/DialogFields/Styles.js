@@ -67,6 +67,10 @@ export const CreatableSelectStyle = {
             color: '#ffffff', // Hover text color
         },
     }),
+    input: (provided) => ({
+        ...provided,
+        color: '#b6bec9', // Change the color of the typed text
+    }),
 
 };
 

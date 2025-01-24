@@ -22,7 +22,6 @@ const DialogContentRenderer = ({ formData, handleFormChange, repeat, error, fiel
 
     const filteredData = filterNamesFromData(filterData, fieldList);
 
-    console.log(formData)
     return (
         <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
             {fieldList.includes("Date") && (
