@@ -16,13 +16,26 @@ const Selector = ({ name, formData, handleChange, loading, optionIdKey, options,
     const [selectedOption, setSelectedOption] = useState('');
     const IconComponent = iconMap[name];
     useEffect(() => {
-        if (formData?.optionKey && options?.length > 0) {
-            const option = options.find((pos) => pos[optionIdKey] === formData[optionIdKey]);
-            const initialOption = {
-                value: formData[optionIdKey],
-                label: option ? `${option.name}` : formData[optionIdKey],
-            };
-            setSelectedOption(initialOption);
+        if (formData[optionIdKey] && options?.length > 0) {
+
+            if (isMulti) {
+                const initialOptions = formData[optionIdKey].map((id) => {
+                    const option = options.find((opt) => opt[optionIdKey] === id);
+                    return {
+                        value: id,
+                        label: option ? `${option.name}` : id,
+                    };
+                });
+                setSelectedOption(initialOptions);
+            }
+            else {
+                const option = options.find((opt) => opt[optionIdKey] === formData[optionIdKey]);
+                const initialOption = {
+                    value: formData[optionIdKey],
+                    label: option ? `${option.name}` : formData[optionIdKey],
+                };
+                setSelectedOption(initialOption);
+            }
         }
     }, [formData[optionIdKey], options]);
 
@@ -37,7 +50,6 @@ const Selector = ({ name, formData, handleChange, loading, optionIdKey, options,
             handleChange(optionIdKey, selectedId);
         }
     };
-
 
     const formatedOptions = options?.map((option) => ({
         value: option[optionIdKey],

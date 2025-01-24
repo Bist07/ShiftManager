@@ -180,7 +180,6 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
         }
     };
 
-
     const handleTabChange = (event, newValue) => {
         setTabIndex(newValue);
     };

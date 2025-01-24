@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DialogContent, Divider, Collapse, Typography } from '@mui/material';
-import { DatePicker, TimePickerComponent, RepeatOptions, Selector, ShiftTimeSelector } from '../../DialogFields';
+import { DatePicker, RepeatOptions, Selector, ShiftTimeSelector } from '../../DialogFields';
 import { useLocations, useEmployee, usePositions } from '../../../hooks';
 const DialogContentRenderer = ({ formData, handleFormChange, repeat, error, fieldList }) => {
     const { locations = [] } = useLocations();
@@ -22,6 +22,7 @@ const DialogContentRenderer = ({ formData, handleFormChange, repeat, error, fiel
 
     const filteredData = filterNamesFromData(filterData, fieldList);
 
+    console.log(formData)
     return (
         <DialogContent sx={{ paddingLeft: 0, paddingRight: 0 }}>
             {fieldList.includes("Date") && (
@@ -29,7 +30,6 @@ const DialogContentRenderer = ({ formData, handleFormChange, repeat, error, fiel
             )}
             {fieldList.includes("Time") && (
                 <ShiftTimeSelector formData={formData} handleChange={handleFormChange} />
-                // <TimePickerComponent formData={formData} handleChange={handleFormChange} />
             )}
             {fieldList.includes("RepeatOptions") && (
                 <>

@@ -65,7 +65,6 @@ const ShiftTimeSelector = ({ formData, handleChange }) => {
 
     };
 
-    console.log(shiftTime)
     return (
         <Box
             sx={{
