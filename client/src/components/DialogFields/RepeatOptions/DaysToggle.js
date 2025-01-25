@@ -84,13 +84,20 @@ const DaysToggle = ({ formData, handleChange }) => {
                                     aria-label={day}
                                     sx={{
                                         borderColor: '#20242a',
+                                        color: '#b6bec9',
+                                        '&:hover': {
+                                            borderColor: '#303840',
+                                            color: '#ebf5ff',
+                                        },
                                         '&.Mui-selected': {
                                             backgroundColor: '#2684ff',
-                                            color: '#fff',
+                                            borderColor: '#20242a',
+                                            color: '#ebf5ff',
                                         },
                                         '&.Mui-selected:hover': {
                                             bgcolor: '#0077e5',
-                                            borderColor: '#0077e5',
+                                            borderColor: '#303840',
+                                            color: '#ebf5ff',
                                         },
                                     }}
                                 >

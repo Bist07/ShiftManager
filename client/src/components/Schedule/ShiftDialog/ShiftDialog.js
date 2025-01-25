@@ -94,8 +94,6 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
         )
     }, [formData.date]);
 
-    console.log(formData.repeat.startDate)
-
     useEffect(() => {
         if (ignoreConflict) {
             // Proceed with saving after ignoring conflicts

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Box,
     FormControl,
@@ -15,10 +15,11 @@ const filterData = [
 ];
 
 const RepeatOptions = ({ formData, handleChange }) => {
-    const { startDate, endDate } = formData;
+    const [dateData, setDateData] = useState({ startDate: formData.startDate, endDate: formData.endDate });
+    useEffect(() => {
+        setDateData({ startDate: formData.startDate, endDate: formData.endDate });
+    }, [formData.startDate]);
 
-    // Create a new object with only the required properties
-    const dateData = { startDate, endDate };
 
     const [repeatOptions, setRepeatOptions] = React.useState(formData || {});
     const frequencyMapping = {
@@ -39,14 +40,6 @@ const RepeatOptions = ({ formData, handleChange }) => {
         label: key,
     }));
 
-    // useEffect(() => {
-    //     // Update the startDate when formData.date changes
-    //     setRepeatOptions((prev) => ({
-    //         ...prev,
-    //         startDate: formData.date, 
-    //     }));
-    // }, [formData.date]);
-
     const handleRepeatOptionsChange = (event, newDays) => {
         const { name, value } = event?.target;
         setRepeatOptions((prev) => {
@@ -54,7 +47,6 @@ const RepeatOptions = ({ formData, handleChange }) => {
 
             // Handle days selection correctly
             if (name === 'days') {
-
                 updatedOptions.days = newDays || []; // Update the days
             } else if (name === 'frequency') {
                 if (value !== 0) {
@@ -70,6 +62,9 @@ const RepeatOptions = ({ formData, handleChange }) => {
             return updatedOptions;
         });
     };
+
+    console.log(repeatOptions)
+
 
     return (
         <Box sx={{

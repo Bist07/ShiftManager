@@ -323,7 +323,7 @@ const ScheduleToolbar = () => {
                         sx={{
                             bgcolor: 'primary.main',
                             color: 'white',
-                            '&:hover': { bgcolor: '#0077e5', borderColor: '#0077e5', },
+                            '&:hover': { bgcolor: '#0077e5', borderColor: '#0077e5' },
                         }}
                     >
                         <AddIcon />

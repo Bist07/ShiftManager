@@ -9,14 +9,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 
-const DatePicker = ({ value, onChange, label, isDisabled, minDate }) => {
+const DatePicker = ({ value, onChange, label, isDisabled, minDate, name }) => {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <MobileDatePicker
                 value={value ? dayjs(value) : null}
-                onChange={(date) =>
-                    onChange(date ? date.format('YYYY-MM-DD') : '')
+                onChange={(date) => {
+                    onChange(name, date ? date.format('YYYY-MM-DD') : '')
                 }
+
+                }
+                name={name}
                 disabled={isDisabled}
                 minDate={minDate ? dayjs(minDate) : null}
                 format="DD MMM YYYY"
@@ -80,15 +83,13 @@ const DateRangePicker = ({ formData, handleChange }) => {
             startDate: formData.startDate || '',
             endDate: formData.endDate || '',
         });
-    }, []);
+    }, [formData]);
 
     const handleDateChange = (key, value) => {
-        const updatedRange = { ...dateRange, [key]: value };
-        setDateRange(updatedRange);
-        handleChange(updatedRange); // Send updated range back to the parent
+        const updatedRange = { [key]: value };
+        setDateRange({ ...dateRange, [key]: value });
+        handleChange({ target: { name: key, value: value } });
     };
-
-
 
     return (
         <Box sx={{ display: 'flex', gap: 2 }}>
@@ -96,13 +97,15 @@ const DateRangePicker = ({ formData, handleChange }) => {
             <DatePicker
                 value={dateRange.startDate}
                 onChange={(value) => handleDateChange('startDate', value)}
+                name="startDate"
                 label="Start"
                 isDisabled={true}
             />
             {/* End Date Picker */}
             <DatePicker
                 value={dateRange.endDate}
-                onChange={(value) => handleDateChange('endDate', value)}
+                onChange={handleDateChange}
+                name="endDate"
                 label="End"
                 isDisabled={false}
                 minDate={dateRange.startDate}
