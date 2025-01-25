@@ -22,7 +22,7 @@ const formatBreakDuration = (value) => {
 };
 
 
-const BreakDurationSelector = ({ formData, handleChange = () => { }, errors, type, setErrors }) => {
+const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type, setErrors }) => {
     const [breakDuration, setBreakDuration] = useState(formData.breakDuration || "");
     const [anchorEl, setAnchorEl] = useState(null);
     const [tempValue, setTempValue] = useState(formData[type] || ""); // New state for raw input
@@ -228,4 +228,4 @@ const BreakDurationSelector = ({ formData, handleChange = () => { }, errors, typ
     );
 };
 
-export default BreakDurationSelector;
+export default BreakDurationPicker;

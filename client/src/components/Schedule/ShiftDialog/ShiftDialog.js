@@ -32,18 +32,26 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
     } else {
         emp_id = [e_id];
     }
+
+    let dayOfWeekIndex = dayjs(date).day();
+
+
     const [formData, setFormData] = useState({
         start_time: start_time || "09:00:00",
         end_time: end_time || "17:00:00",
         date: date || "",
-        repeat: "",
+        repeat: {
+            frequency: '',
+            days: [dayOfWeekIndex],
+            startDate: date,
+            endDate: ''
+        },
         position_id: position_id || '',
         location_id: location_id || "",
         e_id: emp_id || "",
         dates: [date] || "",
     });
 
-    let dayOfWeekIndex = dayjs(formData.date).day();
 
     // Reset formData when the dialog is opened or date/e_id changes
     useEffect(() => {
@@ -54,7 +62,12 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
                 start_time: start_time || "09:00:00",
                 end_time: end_time || "17:00:00",
                 date: date || '',
-                repeat: '',
+                repeat: {
+                    frequency: '',
+                    days: [dayOfWeekIndex],
+                    startDate: date,
+                    endDate: ''
+                },
                 location_id: location_id || '',
                 position_id: position_id || '',
                 e_id: emp_id || '',
@@ -69,7 +82,19 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
 
     useEffect(() => {
         dayOfWeekIndex = dayjs(formData.date).day();
+        setFormData((prev) => ({
+            ...prev,
+            repeat: {
+                ...prev.repeat,
+                startDate: formData.date,
+                days: [dayOfWeekIndex],
+            }
+        })
+
+        )
     }, [formData.date]);
+
+    console.log(formData.repeat.startDate)
 
     useEffect(() => {
         if (ignoreConflict) {

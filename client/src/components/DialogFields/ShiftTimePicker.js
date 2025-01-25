@@ -5,14 +5,14 @@ import {
     Typography,
 } from "@mui/material";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import BreakDurationSelector from './BreakDurationSelector';
+import BreakDurationSelector from './BreakDurationPicker';
 import TimePicker from "./TimePicker";
 import duration from "dayjs/plugin/duration";
 import dayjs from "dayjs";
 
 dayjs.extend(duration);
 
-const ShiftTimeSelector = ({ formData, handleChange }) => {
+const ShiftTimePicker = ({ formData, handleChange }) => {
 
     const [shiftTime, setShiftTime] = useState({
         start_time: formData?.start_time || '',
@@ -133,4 +133,4 @@ const ShiftTimeSelector = ({ formData, handleChange }) => {
     );
 };
 
-export default ShiftTimeSelector;
+export default ShiftTimePicker;

@@ -3,37 +3,24 @@ import {
     Box,
     FormControl,
     Typography,
-    TextField,
-    ToggleButton,
-    ToggleButtonGroup,
-    InputAdornment,
 } from '@mui/material';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 import EventRepeatIcon from '@mui/icons-material/EventRepeat';
-import AddIcon from '@mui/icons-material/Add';
-import dayjs from 'dayjs';
 import CreatableSelect from 'react-select/creatable';
+import DaysToggle from './DaysToggle';
+import DateRangePicker from './DateRangePicker';
+
+const filterData = [
+    { name: 'RepeatFrequency', data: '', optionIdKey: '', placeHolder: "Select repeat frequency", isMulti: false },
+];
 
 const RepeatOptions = ({ formData, handleChange }) => {
-    const [repeatOptions, setRepeatOptions] = React.useState({
-        frequency: '',
-        days: [],
-        startDate: formData.date,
-        endDate: '',
-    });
+    const { startDate, endDate } = formData;
 
-    const dayMapping = {
-        Sun: 0,
-        Mon: 1,
-        Tue: 2,
-        Wed: 3,
-        Thu: 4,
-        Fri: 5,
-        Sat: 6,
-    };
+    // Create a new object with only the required properties
+    const dateData = { startDate, endDate };
 
+    const [repeatOptions, setRepeatOptions] = React.useState(formData || {});
     const frequencyMapping = {
         'Never': 0,
         'This week': 1,
@@ -52,30 +39,34 @@ const RepeatOptions = ({ formData, handleChange }) => {
         label: key,
     }));
 
-    useEffect(() => {
-        setRepeatOptions((prev) => ({
-            ...prev,
-            startDate: formData.date,
-        }));
-    }, [formData.date]);
+    // useEffect(() => {
+    //     // Update the startDate when formData.date changes
+    //     setRepeatOptions((prev) => ({
+    //         ...prev,
+    //         startDate: formData.date, 
+    //     }));
+    // }, [formData.date]);
 
     const handleRepeatOptionsChange = (event, newDays) => {
         const { name, value } = event?.target;
-
         setRepeatOptions((prev) => {
             const updatedOptions = { ...prev };
 
             // Handle days selection correctly
             if (name === 'days') {
-                updatedOptions.days = newDays || [];
+
+                updatedOptions.days = newDays || []; // Update the days
             } else if (name === 'frequency') {
                 if (value !== 0) {
-                    updatedOptions.frequency = value || '';
+                    updatedOptions.frequency = value || ''; // Update frequency
                 }
             } else {
-                updatedOptions[name] = value;
+                updatedOptions[name] = value; // Update other properties
             }
+
+            // Pass the updated options back to the parent component
             handleChange('repeat', updatedOptions);
+
             return updatedOptions;
         });
     };
@@ -160,54 +151,8 @@ const RepeatOptions = ({ formData, handleChange }) => {
             {/* Days of the Week Selection */}
             {
                 repeatOptions.frequency > 0 && (
-                    <Box>
-                        <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
-                            <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                                <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Days</Typography>
-                                <AddIcon sx={{
-                                    color: 'secondary.main',
-                                    fontSize: '36px',
-                                    borderRadius: '50px',
-                                    border: '2px solid #bcbcbc',
-                                    borderColor: 'secondary.main',
-                                    padding: 0.5
-                                }} />
-                            </Box>
-                            <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
-                                <FormControl fullWidth>
-                                    <ToggleButtonGroup
-                                        size='small'
-                                        value={repeatOptions.days}
-                                        onChange={(e, newDays) => handleRepeatOptionsChange(e, newDays)}
-                                        name="days"
-                                        fullWidth
-                                        aria-label="days of the week"
-                                    >
-                                        {Object.keys(dayMapping).map((day) => (
-                                            <ToggleButton
-                                                name="days"
-                                                key={day}
-                                                value={dayMapping[day]}
-                                                aria-label={day}
-                                                sx={{
-                                                    borderColor: '#20242a',
-                                                    "&.Mui-selected": {
-                                                        backgroundColor: "#2684ff",
-                                                        color: "#fff",
-                                                    },
-                                                    "&.Mui-selected:hover": {
-                                                        bgcolor: '#0077e5', borderColor: '#0077e5',
-                                                    },
-                                                }}
-                                            >
-                                                {day}
-                                            </ToggleButton>
-                                        ))}
-                                    </ToggleButtonGroup>
-                                </FormControl>
-                            </Box>
-                        </Box>
-                    </Box>)
+                    <DaysToggle formData={formData.days} handleChange={handleRepeatOptionsChange} />
+                )
             }
 
             {/* Start and End Dates */}
@@ -218,86 +163,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
                             <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                             </Box>
                             <Box sx={{ display: 'flex', alignItems: "center", width: "75%", gap: 2 }}>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <MobileDatePicker
-                                        value={repeatOptions.startDate ? dayjs(repeatOptions.startDate) : null}
-                                        disabled // Lock the start date
-                                        format="DD MMM YYYY"
-                                        slotProps={{
-                                            textField: {
-                                                size: 'small',
-                                                sx: {
-                                                    '& .MuiOutlinedInput-root': {
-                                                        // Disabled state customization
-                                                        '&.Mui-disabled': {
-                                                            backgroundColor: '#15181b',
-                                                            '& input': {
-                                                                fontSize: '14px',
-                                                            },
-                                                            '& fieldset': {
-                                                                borderColor: '#20242a', // Change the border color
-                                                                borderRadius: '4px',
-                                                            },
-                                                        },
-                                                        '& .MuiInputAdornment-root': {
-                                                            '& .MuiTypography-root': {
-                                                                fontSize: '12px', // Specifically target text inside the adornment
-                                                                color: '#5f7183',
-                                                            },
-                                                        },    // Add direct targeting for native input in disabled state
-
-                                                    },
-
-                                                },
-                                                InputProps: {
-                                                    startAdornment: <InputAdornment position="start">Start</InputAdornment>,
-                                                },
-                                            },
-
-                                        }}
-                                        renderInput={(params) => <TextField {...params} />}
-                                    />
-
-
-                                    <MobileDatePicker
-                                        minDate={dayjs(repeatOptions.startDate)}
-                                        value={repeatOptions.endDate ? dayjs(repeatOptions.endDate) : null}
-                                        onChange={(date) => handleRepeatOptionsChange({ target: { name: 'endDate', value: date ? date.format('YYYY-MM-DD') : '' } })}
-                                        format="DD MMM YYYY"
-                                        slotProps={{
-                                            textField: {
-                                                size: 'small', sx: {
-                                                    borderRadius: '4px',
-                                                    bgcolor: '#15181b', '& input': {
-                                                        fontSize: '14px',
-                                                        color: 'secondary.main',
-                                                    },
-                                                    '& .MuiOutlinedInput-root': {
-                                                        '& fieldset': {
-                                                            borderColor: '#20242a', // Change the border color
-                                                            borderRadius: '4px',
-                                                            width: '100%',
-                                                        },
-                                                        '&:hover fieldset': {
-                                                            borderColor: '#303840', // Border color when hovering
-                                                        },
-                                                        '& .MuiInputAdornment-root': {
-                                                            '& .MuiTypography-root': {
-                                                                fontSize: '12px',  // Specifically target text inside the adornment
-                                                                color: '#5f7183'
-                                                            }
-                                                        },
-                                                    },
-                                                },
-                                                InputProps: {
-                                                    startAdornment: <InputAdornment position="start" >End</InputAdornment>,
-                                                }
-                                            }
-                                        }}
-                                        renderInput={(params) => <TextField {...params} />}
-
-                                    />
-                                </LocalizationProvider>
+                                <DateRangePicker formData={dateData} handleChange={handleRepeatOptionsChange} />
                             </Box>
                         </Box>
                     </Box>)
