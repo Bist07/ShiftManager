@@ -9,7 +9,6 @@ import {
     Alert,
 } from "@mui/material";
 
-
 const validateBreakDuration = (value) => {
     const breakPattern = /^(?:None|\d+\s?(?:min)?)$/;
     return breakPattern.test(value);
@@ -20,7 +19,6 @@ const formatBreakDuration = (value) => {
     const match = value.match(/\d+/);
     return match ? parseInt(match[0], 10) : 0;
 };
-
 
 const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type, setErrors }) => {
     const [breakDuration, setBreakDuration] = useState(formData.breakDuration || "");
@@ -74,7 +72,6 @@ const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type,
             setErrors((prevErrors) => ({ ...prevErrors, [type]: true }));
         }
     };
-
 
     return (
         <>

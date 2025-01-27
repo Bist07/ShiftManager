@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import {
-    Box,
-    FormControl,
-    Typography,
-} from '@mui/material';
-
-import EventRepeatIcon from '@mui/icons-material/EventRepeat';
-import CreatableSelect from 'react-select/creatable';
+import { Box } from '@mui/material';
 import DaysToggle from './DaysToggle';
 import DateRangePicker from './DateRangePicker';
-
-const filterData = [
-    { name: 'RepeatFrequency', data: '', optionIdKey: '', placeHolder: "Select repeat frequency", isMulti: false },
-];
+import { DialogRow, Selector } from '../';
+import PropTypes from 'prop-types';
 
 const RepeatOptions = ({ formData, handleChange }) => {
     const [dateData, setDateData] = useState({ startDate: formData.startDate, endDate: formData.endDate });
+    const [repeatOptions, setRepeatOptions] = useState(formData || {});
+
     useEffect(() => {
         setDateData({ startDate: formData.startDate, endDate: formData.endDate });
-    }, [formData.startDate]);
+    }, [formData.startDate, formData.endDate]);
 
-
-    const [repeatOptions, setRepeatOptions] = React.useState(formData || {});
     const frequencyMapping = {
         'Never': 0,
         'This week': 1,
@@ -36,136 +27,56 @@ const RepeatOptions = ({ formData, handleChange }) => {
     };
 
     const frequencyOptions = Object.entries(frequencyMapping).map(([key, value]) => ({
-        value,
-        label: key,
+        frequency: value,
+        name: key,
     }));
 
-    const handleRepeatOptionsChange = (event, newDays) => {
-        const { name, value } = event?.target;
-        setRepeatOptions((prev) => {
-            const updatedOptions = { ...prev };
-
-            // Handle days selection correctly
-            if (name === 'days') {
-                updatedOptions.days = newDays || []; // Update the days
-            } else if (name === 'frequency') {
-                if (value !== 0) {
-                    updatedOptions.frequency = value || ''; // Update frequency
-                }
-            } else {
-                updatedOptions[name] = value; // Update other properties
-            }
-
-            // Pass the updated options back to the parent component
-            handleChange('repeat', updatedOptions);
-
-            return updatedOptions;
-        });
+    const handleRepeatOptionsChange = (key, value) => {
+        const updatedOptions = {
+            ...repeatOptions,
+            [key]: value,
+        };
+        setRepeatOptions(updatedOptions);
+        handleChange('repeat', updatedOptions);
     };
 
-    console.log(repeatOptions)
-
-
     return (
-        <Box sx={{
-            display: 'flex', flexDirection: 'column', bgcolor: '#181818'
-            , width: '100%', ml: 0, mr: 0
-        }}>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, paddingLeft: 4, paddingRight: 2 }}>
-                {/* Frequency Selection */}
-                <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                    <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>Repeat</Typography>
-                    <EventRepeatIcon sx={{
-                        color: 'secondary.main',
-                        fontSize: '36px',
-                        borderRadius: '50px',
-                        border: '2px solid #bcbcbc',
-                        borderColor: 'secondary.main',
-                        padding: 0.5
-                    }} />
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: "center", width: "75%" }}>
-                    <FormControl fullWidth>
-                        <CreatableSelect
-                            options={frequencyOptions}
-                            value={frequencyOptions.find(option => option.value === repeatOptions.frequency)}
-                            onChange={(e) => handleRepeatOptionsChange({ target: { name: 'frequency', value: e.value || '' } })}
-                            placeholder="Select repeat frequency"
-                            menuPortalTarget={document.body} // Render dropdown outside parent container
-                            styles={{
-                                control: (provided) => ({
-                                    ...provided,
-                                    fontSize: '14px',
-                                    backgroundColor: '#15181b',
-                                    color: '#b6bec9',
-                                    borderColor: '#20242a',
-                                    '&:hover': {
-                                        borderColor: '#303840',
-                                    },
-                                }),
-                                singleValue: (provided) => ({
-                                    ...provided,
-                                    color: '#b6bec9',
-                                    '&:hover': {
-                                        backgroundColor: '#303840',
-                                    },
-                                }),
-                                menu: (provided) => ({
-                                    ...provided,
-                                    backgroundColor: '#15181b',
-                                    color: '#b6bec9',
-                                    fontSize: '14px',
+        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: '#181818', width: '100%' }}>
+            <DialogRow iconName={'Repeat'}
+                field={<Selector
+                    name="Repeat"
+                    formData={repeatOptions.frequency}
+                    handleChange={(key, value) => handleRepeatOptionsChange('frequency', value)}
+                    options={frequencyOptions}
+                    optionIdKey="frequency"
+                    placeHolderText="Select repeat frequency"
+                    isMulti={false}
+                />} />
 
-                                }),
-                                option: (provided, state) => ({
-                                    ...provided,
-                                    backgroundColor: state.isSelected
-                                        ? '#3399ff'
-                                        : state.isFocused
-                                            ? '#303840'
-                                            : '#15181b',
-                                    color: state.isSelected ? 'white' : '#b6bec9',
-                                    '&:hover': {
-                                        backgroundColor: '#303840',
-                                    },
-                                }),
-                                menuPortal: (base) => ({
-                                    ...base,
-                                    zIndex: 1300,
-                                }),
-                                placeholder: (provided) => ({
-                                    ...provided,
-                                    color: '#5f7183',
-                                }),
-                            }}
+            {repeatOptions.frequency > 0 && (
+                <Box>
+                    <DaysToggle formData={formData.days} handleChange={(key, value) => handleRepeatOptionsChange('days', value)} />
+                    {repeatOptions.frequency > 1 && (
+
+                        <DialogRow field={<DateRangePicker formData={dateData} handleChange={(key, value) => handleRepeatOptionsChange('dateRange', value)} />}
                         />
-                    </FormControl>
+
+
+                    )}
                 </Box>
-            </Box>
-
-            {/* Days of the Week Selection */}
-            {
-                repeatOptions.frequency > 0 && (
-                    <DaysToggle formData={formData.days} handleChange={handleRepeatOptionsChange} />
-                )
-            }
-
-            {/* Start and End Dates */}
-            {
-                repeatOptions.frequency > 1 && (
-                    <Box>
-                        <Box sx={{ flex: 1, display: 'flex', alignItems: "center", gap: 2, margin: 1, mt: 0, paddingLeft: 4, paddingRight: 2 }}>
-                            <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
-                            </Box>
-                            <Box sx={{ display: 'flex', alignItems: "center", width: "75%", gap: 2 }}>
-                                <DateRangePicker formData={dateData} handleChange={handleRepeatOptionsChange} />
-                            </Box>
-                        </Box>
-                    </Box>)
-            }
-        </Box >
-
+            )}
+        </Box>
     );
+};
+
+RepeatOptions.propTypes = {
+    formData: PropTypes.shape({
+        startDate: PropTypes.string.isRequired,
+        endDate: PropTypes.string.isRequired,
+        frequency: PropTypes.number,
+        days: PropTypes.arrayOf(PropTypes.string),
+    }).isRequired,
+    handleChange: PropTypes.func.isRequired,
 };
 
 export default RepeatOptions;

@@ -115,6 +115,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
     const handleSave = async () => {
         const { start_time, end_time, date, location_id, e_id, position_id } = formData;
 
+
         // Validate required fields
         if (!start_time || !end_time || !location_id || !date || !position_id) {
             setError('All fields are required.');
@@ -202,6 +203,8 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
             setError('Failed to save the shift. Please try again.');
         }
     };
+
+
 
     const handleTabChange = (event, newValue) => {
         setTabIndex(newValue);
@@ -396,7 +399,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
                         handleFormChange={handleFormChange}
                         repeat={repeat}
                         error={error}
-                        fieldList={["Date", "Time", "RepeatOptions", "Location", "Position", "Employee"]}
+                        fieldList={["Date", "Time", "Repeat", "Location", "Position", "Employee"]}
                     />
                 )}
 

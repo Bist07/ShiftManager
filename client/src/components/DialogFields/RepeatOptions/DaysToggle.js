@@ -23,7 +23,7 @@ const DaysToggle = ({ formData, handleChange }) => {
 
     const handleDaysChange = (event, newDays) => {
         setDays(newDays || []);
-        handleChange(event, newDays || []);
+        handleChange(newDays || []);
     };
 
     return (

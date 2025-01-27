@@ -86,9 +86,8 @@ const DateRangePicker = ({ formData, handleChange }) => {
     }, [formData]);
 
     const handleDateChange = (key, value) => {
-        const updatedRange = { [key]: value };
         setDateRange({ ...dateRange, [key]: value });
-        handleChange({ target: { name: key, value: value } });
+        handleChange(key, value);
     };
 
     return (
