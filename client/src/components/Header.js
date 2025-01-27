@@ -5,6 +5,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 const Header = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
@@ -43,6 +44,7 @@ const Header = () => {
 
                     {/* Desktop Navigation */}
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <ThemeToggle />
                         <Button color="inherit" onClick={() => handleRoute('/schedule')}>
                             Schedule
                         </Button>
