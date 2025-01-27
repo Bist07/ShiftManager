@@ -457,8 +457,7 @@ const ShiftDialog = ({ shift_id, shifts, e_id, location_id, position_id, start_t
                                 sx={{
                                     flex: 1, // Make button take equal space
                                     borderRadius: '4px',
-                                    border: '1px solid',
-                                    borderColor: '#1cc982',
+                                    border: '1px solid #1cc982',
                                     color: '#fff',
                                     backgroundColor: '#1cc982',
                                     textTransform: 'none',

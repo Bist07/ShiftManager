@@ -31,8 +31,7 @@ const DialogRow = ({ iconName, field }) => {
                                 color: '#9ca6b0',
                                 fontSize: '36px',
                                 borderRadius: '50px',
-                                border: '2px solid #bcbcbc',
-                                borderColor: '#9ca6b0',
+                                border: '2px solid #9ca6b0',
                                 padding: 0.5,
 
                             }} />

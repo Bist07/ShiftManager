@@ -271,8 +271,7 @@ const ScheduleToolbar = () => {
                             display: "flex",
                             gap: 0,
                             padding: 0,
-                            border: "1px solid #e0e0e0",
-                            borderColor: "#101010",
+                            border: "1px solid #101010",
                             borderRadius: "4px",
                             backgroundColor: '#15181b',
                         }}

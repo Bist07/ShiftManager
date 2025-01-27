@@ -175,7 +175,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                     const date = mappedWeek[day];
                                     const shiftForDay = transformedShifts.find(shift => shift.e_id === emp.e_id) || {};
                                     return (
-                                        <TableCell key={date} sx={{ border: '1px solid #ccc', padding: 0, minWidth: 150, verticalAlign: "top" }}>
+                                        <TableCell key={date} sx={{ border: '1px solid #1d2126', padding: 0, minWidth: 150, verticalAlign: "top" }}>
                                             <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "wrap", alignContent: "flex-start" }}>
                                                 {Object.keys(shiftForDay).length > 0 ? (
                                                     <Button

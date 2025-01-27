@@ -27,7 +27,7 @@ export const CreatableSelectStyle = {
         ...provided,
         backgroundColor: '#15181b',
         fontSize: '14px',
-
+        border: '1px solid #1d2126'
     }),
     option: (provided, state) => ({
         ...provided,
