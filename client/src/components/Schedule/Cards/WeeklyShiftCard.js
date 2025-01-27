@@ -24,20 +24,22 @@ const ShiftDetails = ({ shift, date, onClick }) => {
                         margin: 0,
                         padding: 0,
                         boxSizing: 'border-box', // Ensures padding is included in dimensions
+
+                        color: '#00af28'
                     }}
                 >
 
                     <CardActionArea disableRipple disableFocusRipple sx={{ display: 'flex' }}>
                         <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: 0.5, paddingLeft: 1, width: '100%' }}>
                             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5 }}>
-                                <Typography variant="body1" sx={{ fontWeight: 600, color: '#0085ff', fontSize: '11px', textAlign: 'left' }} >
+                                <Typography variant="body1" sx={{ fontWeight: 600, color: '#00af28', fontSize: '11px', textAlign: 'left' }} >
                                     {formatTime(startTime)} - {formatTime(endTime)}
                                 </Typography>
                                 <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>
                                     • {formatted}
                                 </Typography>
                             </Box>
-                            <Typography variant="body1" sx={{ color: '', fontSize: '11px', textAlign: 'left' }}>
+                            <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>
                                 {position} • {location}
                             </Typography>
                         </CardContent>
@@ -46,46 +48,6 @@ const ShiftDetails = ({ shift, date, onClick }) => {
             );
         }
     }
-
-    // If no valid shift times, show "Add" card with hover effect
-    return (
-        <Card
-            sx={{
-                width: '100%', // Ensure content takes full width
-                height: '100%', // Ensure content takes full height
-                borderRadius: 2,
-                boxShadow: 'none',
-                position: 'relative',
-                opacity: 0.1, // Start with reduced opacity
-                transition: 'opacity 0.3s ease', // Smooth transition
-                '&:hover': {
-                    opacity: 1, // Full opacity on hover
-                },
-                boxSizing: 'border-box', // Ensures padding is included in dimensions
-            }}
-        >
-            <CardActionArea
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: '100%',
-                    height: '100%',
-                }}
-                onClick={onClick}
-            >
-                <CardContent sx={{ paddingLeft: 2, paddingRight: 2, paddingTop: 0, paddingBottom: 0 }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        <AddIcon sx={{ fontSize: 40, color: '#0085ff' }} />
-                        <Typography variant="body1" sx={{ fontSize: '14px', color: 'text.secondary', mb: 1 }}>
-                            No shift scheduled
-                        </Typography>
-                    </Box>
-                </CardContent>
-            </CardActionArea>
-        </Card>
-    );
 };
 
 export default ShiftDetails;

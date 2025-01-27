@@ -131,7 +131,7 @@ const ScheduleToolbar = () => {
 
     return (
         <Box>
-            <Toolbar>
+            <Toolbar sx={{ border: 0 }}>
                 <Box sx={{ display: 'flex', gap: '16px', height: '40px' }}>
                     <IconButton
                         onClick={() => setViewMode(viewMode === 'week' ? 'month' : 'week')}

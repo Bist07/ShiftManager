@@ -67,7 +67,7 @@ export const mapWeekToDays = (week) => {
     week.forEach((date) => {
 
         const localDate = getLocalDate(date);
-        const dayName = new Date(localDate).toLocaleString('en-us', { weekday: 'long' }); // Get day name (e.g., "Sunday")
+        const dayName = new Date(localDate).toLocaleString('en-us', { weekday: 'short' }); // Get day name (e.g., "Sunday")
 
         // Directly store the date, no need for an array
         mappedWeek[dayName] = date;

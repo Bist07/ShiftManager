@@ -9,7 +9,6 @@ const UnassignedShiftCard = ({ shift, onClick }) => {
         <Card sx={{
             width: '100%',
             borderRadius: '2px',
-            backgroundColor: '#f19b72',
             margin: 0,
             minWidth: '150px',
             maxHeight: '60px',
@@ -17,21 +16,18 @@ const UnassignedShiftCard = ({ shift, onClick }) => {
             display: 'flex',
             alignItems: 'flex-start',
             padding: 0,
-            '&:hover': {
-                backgroundColor: '#e9b298',
-            }
         }}>
             <CardActionArea disableRipple disableFocusRipple sx={{ display: 'flex' }}>
                 <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: 0.5, paddingLeft: 1, width: '100%' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5 }}>
-                        <Typography variant="body1" sx={{ fontWeight: 600, color: '#fff', fontSize: '11px', textAlign: 'left' }} >
+                        <Typography variant="body1" sx={{ fontWeight: 600, color: 'primary.main', fontSize: '11px', textAlign: 'left' }} >
                             {formatTime(shift.start_time)} - {formatTime(shift.end_time)}
                         </Typography>
-                        <Typography variant="body1" sx={{ color: '#fff', fontSize: '11px', textAlign: 'left' }}>
+                        <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>
                             • {formatted}
                         </Typography>
                     </Box>
-                    <Typography variant="body1" sx={{ color: '#fff', fontSize: '11px', textAlign: 'left' }}>
+                    <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>
                         {shift.position_name} • {shift.location_name}
                     </Typography>
                 </CardContent>
