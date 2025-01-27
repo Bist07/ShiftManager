@@ -1,5 +1,5 @@
 import React from 'react';
-import ScheduleToolbar from '../components/Schedule/ScheduleToolbar/ScheduleToolbar';
+import ScheduleToolbar from '../components/Schedule/Toolbars/ScheduleToolbar';
 
 const Schedule = () => {
 
