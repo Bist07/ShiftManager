@@ -6,6 +6,7 @@ export const darkTheme = createTheme({
         mode: 'dark', // Enables dark mode
         primary: {
             main: '#3399ff', // Light blue for primary color
+            green: '#00af28',
         },
         secondary: {
             main: '#b6bec9', // Light grey for secondary color
@@ -18,6 +19,13 @@ export const darkTheme = createTheme({
         },
     },
     components: {
+        MuiAppBar: {
+            styleOverrides: {
+                colorPrimary: {
+                    backgroundColor: "#121212",
+                },
+            }
+        },
         MuiIconButton: {
             styleOverrides: {
                 root: {
@@ -59,7 +67,6 @@ export const darkTheme = createTheme({
                 root: {
                     justifyContent: 'space-between',
                     padding: '12px',
-                    borderBottom: '1px solid #1d2126',
                     position: 'sticky', // Stick to the top
                     top: 0,
                     zIndex: 1000,
@@ -94,6 +101,72 @@ export const darkTheme = createTheme({
                 },
             },
         },
+        MuiTableContainer: {
+            styleOverrides: {
+                root: {
+                    maxHeight: '800px', // Set a maxHeight for scrolling
+                    overflow: 'auto', // Enable scrolling
+                    borderRadius: '40px'
+                }
+            }
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#14171a',
+                    border: '0',
+                    padding: '0',
+                    minWidth: '185px',
+                }
+            },
+            variants: [
+                {
+                    props: { variant: 'header' },
+                    style: {
+                        borderBottom: '1px solid #ccc',
+
+                    }
+                },
+                {
+                    props: { variant: 'body' },
+                    style: {
+                        border: '1px solid #1d2126',
+                        borderBottom: '0',
+                        verticalAlign: "top"
+                    },
+                }
+            ]
+        },
+        MuiTypography: {
+            variants: [
+                {
+                    props: { variant: 'header' },
+                    style: {
+                        fontWeight: 600,
+                        padding: '20px'
+                    }
+                },
+                {
+                    props: { variant: 'Table.header.secondary' },
+                    style: {
+                        fontSize: '11px',
+                        textTransform: 'uppercase',
+                        fontWeight: 500,
+                        lineHeight: '32px',
+                        letterSpacing: '.8px'
+                    }
+                },
+                {
+                    props: { variant: 'Table.header.primary' },
+                    style: {
+                        fontSize: '26px',
+                        lineHeight: '46px',
+                        fontWeight: 400
+                    }
+                }
+            ]
+        }
+
 
     },
 });

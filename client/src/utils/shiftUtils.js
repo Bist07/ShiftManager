@@ -1,11 +1,5 @@
 import { mapWeekToDays } from "./dateUtils";
 
-export const getShiftDetails = (shift, date, formatTime) => {
-    const shiftDetails = shift.shiftDays[date];
-    if (!shiftDetails) return 'No Shift Assigned';
-    return `${formatTime(shiftDetails[0].start_time)} - ${formatTime(shiftDetails[0].end_time)}`;
-};
-
 export const GroupUnassignedShiftsByDate = (unassignedShifts) => {
     return unassignedShifts.reduce((acc, shift) => {
         const date = shift.full_date;
@@ -16,8 +10,7 @@ export const GroupUnassignedShiftsByDate = (unassignedShifts) => {
 };
 
 
-export const transformShifts = (shifts, filters) => {
-    const groupedShifts = {};
+export const filterShifts = (shifts, filters) => {
 
     // If filters are provided, apply them; otherwise, no filtering.
     const filteredShifts = filters ? shifts.filter(({ e_id, location_id, position_id }) => {
@@ -31,28 +24,9 @@ export const transformShifts = (shifts, filters) => {
         return employeeMatch && locationMatch && positionMatch;
     }) : shifts; // No filtering if filters are undefined
 
-    // Iterate through each shift and group them by employee
-    filteredShifts.forEach(({ e_id, shift_id, name, location_id, start_time, end_time, full_date, position_id, position_name, location_name }) => {
-        if (!groupedShifts[e_id]) {
-            groupedShifts[e_id] = { e_id, name, shiftDays: {} };
-        }
 
-        // Group shifts by the date
-        groupedShifts[e_id].shiftDays[full_date] = groupedShifts[e_id].shiftDays[full_date] || [];
 
-        // Add the shift details to the respective date
-        groupedShifts[e_id].shiftDays[full_date].push({
-            shift_id,
-            position_id,
-            position_name,
-            location_id,
-            location_name,
-            start_time: start_time || 'N/A',
-            end_time: end_time || 'N/A',
-        });
-    });
-
-    return Object.values(groupedShifts); // Convert the object to an array of grouped shifts
+    return Object.values(filteredShifts); // Convert the object to an array of grouped shifts
 };
 
 
@@ -132,3 +106,26 @@ export const ValidateShift = (shifts, e_id, dates, start_time, end_time) => {
         return true;
     }
 };
+
+export const getShiftDetails = (shift, date) => {
+
+    if (shift.shiftDays) {
+        const shiftForDay = shift.shiftDays[date]; // This gives you the array for that date
+        const startTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].start_time : null;
+        const endTime = shiftForDay && shiftForDay[0] ? shiftForDay[0].end_time : null;
+        const position = shiftForDay && shiftForDay[0] ? shiftForDay[0].position_name : null;
+        const location = shiftForDay && shiftForDay[0] ? shiftForDay[0].location_name : null;
+        const name = shift.name;
+        const shift_id = shiftForDay && shiftForDay[0] ? shiftForDay[0].shift_id : null;
+
+        return { startTime, endTime, position, location, name, shift_id }
+    }
+    const startTime = shift?.start_time;
+    const endTime = shift?.end_time;
+    const position = shift?.position_name;
+    const location = shift?.location_name;
+    const name = shift?.name;
+    const shift_id = shift?.shift_id;
+
+    return { startTime, endTime, position, location, name, shift_id }
+}

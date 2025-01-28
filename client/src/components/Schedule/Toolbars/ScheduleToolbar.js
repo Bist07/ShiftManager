@@ -16,23 +16,21 @@ import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 import AddIcon from '@mui/icons-material/Add';
 import { ShiftDialog } from '../Dialogs';
 import dayjs from 'dayjs';
-import { ShiftTable, MonthlyShiftTable } from '../Views'
 import { AutoAssignButton } from './Buttons/AutoAssign';
+import { useSchedule } from '../../../context/ScheduleContext';
 
 const ScheduleToolbar = () => {
+    const {
+        viewMode, setViewMode,
+        selectedWeek, setSelectedWeek,
+        selectedMonth, setSelectedMonth,
+        selectedYear, setSelectedYear,
+        setCurrentFilters,
+        setRefetchTrigger
+    } = useSchedule();
     const [weeks, setWeeks] = useState([]);
     const [weekAnchorEl, setWeekAnchorEl] = useState(null);
-    const [selectedWeek, setSelectedWeek] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth()); // Default to current month
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear()); // Default to current year
-    const [refetchTrigger, setRefetchTrigger] = useState(false);
     const [filterOpen, setFilterOpen] = useState(false); // State for collapsible filter section
-    const [currentFilters, setCurrentFilters] = useState({
-        Employee: [],
-        Location: [],
-        Position: [],
-    });
-    const [viewMode, setViewMode] = useState('week'); // State to toggle between 'week' and 'month' view
     const [currentShift, setCurrentShift] = useState(null);
 
     const handleFiltersChange = (updatedFilters) => {
@@ -130,8 +128,8 @@ const ScheduleToolbar = () => {
     };
 
     return (
-        <Box>
-            <Toolbar sx={{ border: 0 }}>
+        <Box >
+            <Toolbar sx={{ border: 0, margin: 0 }}>
                 <Box sx={{ display: 'flex', gap: '16px', height: '40px' }}>
                     <IconButton
                         onClick={() => setViewMode(viewMode === 'week' ? 'month' : 'week')}
@@ -342,18 +340,6 @@ const ScheduleToolbar = () => {
             <Collapse in={filterOpen}>
                 <FilterToolbar onFiltersChange={handleFiltersChange} filterList={['Location', 'Position', 'Employee']} />
             </Collapse>
-
-            <Box>
-                {(
-                    viewMode === 'week' ? (
-                        <ShiftTable week={selectedWeek} month={selectedMonth} year={selectedYear} filter={currentFilters} refetchTrigger={refetchTrigger} />
-                    ) : viewMode === 'month' ? (
-                        <MonthlyShiftTable month={selectedMonth} year={selectedYear} filter={currentFilters} refetchTrigger={refetchTrigger} />
-                    ) : (
-                        <Typography sx={{ p: 2 }}>Invalid view mode.</Typography>
-                    )
-                )}
-            </Box>
         </Box >
 
     );

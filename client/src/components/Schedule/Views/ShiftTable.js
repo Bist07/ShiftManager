@@ -13,17 +13,17 @@ import {
 
 } from '@mui/material';
 import { EmployeeCard } from '../../Common';
-import { getLocalDate, mapWeekToDays, transformShifts, GroupUnassignedShiftsByDate } from '../../../utils';
+import { getLocalDate, mapWeekToDays, filterShifts, GroupUnassignedShiftsByDate } from '../../../utils';
 import { useShifts, useEmployee, useUnassignedShifts } from '../../../hooks';
 import { ShiftDialog } from '../Dialogs';
-import { AddShiftCard, WeeklyShiftCard, UnassignedShiftCard } from '../Cards';
+import { AddShiftCard, ShiftCard } from '../Cards';
 
 
 const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger }) => {
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
     const mappedWeek = mapWeekToDays(week); // Map week to specific dates
     const { shifts, refetchShifts } = useShifts();
-    const transformedShifts = transformShifts(shifts, filter) || [];
+    const filteredShifts = filterShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
     const { unassignedShifts, refetchUnassignedShifts } = useUnassignedShifts();
 
@@ -33,17 +33,15 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
     }, [refetchTrigger]);
 
     const handleOpenDialog = (shift, date) => {
-        const shiftDetails = shift?.shiftDays?.[date] || [];
-
         setCurrentShift({
             name: shift?.name,
             e_id: shift?.e_id,
-            shift_id: shiftDetails[0]?.shift_id || shift.shift_id,
-            location_id: shiftDetails[0]?.location_id || shift.location_id,
-            position_id: shiftDetails[0]?.position_id || shift.position_id,
-            date,
-            start_time: shiftDetails[0]?.start_time || shift.start_time,
-            end_time: shiftDetails[0]?.end_time || shift.end_time,
+            shift_id: shift?.shift_id,
+            location_id: shift?.location_id,
+            position_id: shift?.position_id,
+            date: date,
+            start_time: shift?.start_time,
+            end_time: shift?.end_time,
         });
     };
 
@@ -66,18 +64,14 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
     // Group unassigned shifts by formatted date
     const unassignedShiftsByDate = GroupUnassignedShiftsByDate(unassignedShifts);
 
+
     return (
         <>
-            <TableContainer component={Paper}
-                sx={{
-                    maxHeight: '800px', // Set a maxHeight for scrolling
-                    overflow: 'auto', // Enable scrolling
-                    borderRadius: '40px'
-                }}>
+            <TableContainer component={Paper}>
                 <Table stickyHeader sx={{ minWidth: 650, tableLayout: 'auto' }} aria-label="employee shift table">
                     <TableHead>
                         <TableRow>
-                            <TableCell sx={{ width: '15%', padding: 0, minWidth: 150, bgcolor: '#14171a', border: 0 }} align="center"></TableCell>
+                            <TableCell sx={{ width: '15%' }} align="center"></TableCell>
                             {Object.keys(mappedWeek).map((day) => {
                                 const date = mappedWeek[day];
                                 const localDate = getLocalDate(date);
@@ -85,16 +79,13 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                     day: 'numeric',
                                 });
                                 return (
-                                    <TableCell key={localDate} align="center" sx={{ width: '12%', padding: 1, minWidth: 150, bgcolor: '#14171a', border: 0 }}>
-                                        <Typography sx={{
-                                            fontSize: '11px',
-                                            textTransform: 'uppercase',
-                                            fontWeight: 500,
-                                            lineHeight: '32px',
-                                            letterSpacing: '.8px'
-                                        }}>
-                                            {day} <br /></Typography>
-                                        <Typography sx={{ fontSize: '26px', lineHeight: '46px', fontWeight: 400 }}> {formattedDate}</Typography>
+                                    <TableCell key={localDate} align="center" sx={{ width: '12%', paddingTop: 1 }}>
+                                        <Typography variant='Table.header.secondary'>
+                                            {day} <br />
+                                        </Typography>
+                                        <Typography variant='Table.header.primary'>
+                                            {formattedDate}
+                                        </Typography>
                                     </TableCell>
                                 );
                             })}
@@ -102,11 +93,14 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                         <TableRow>
                             <TableCell
                                 colSpan={Object.keys(mappedWeek).length + 1}
-                                sx={{ borderBottom: 1, borderBottomColor: 'primary.main', bgcolor: '#14171a' }}
+                                variant='header'
+                                sx={{ borderBottomColor: 'primary.main' }}
                             >
-                                <Typography sx={{ fontWeight: 600, color: 'primary.main' }}><strong>UNASSIGNED SHIFTS</strong></Typography>
-
-
+                                <Typography
+                                    variant='header'
+                                    sx={{ color: 'primary.main' }}>
+                                    <strong>UNASSIGNED SHIFTS</strong>
+                                </Typography>
                             </TableCell>
                         </TableRow>
                     </TableHead>
@@ -114,12 +108,12 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                     <TableBody>
                         {/* Unassigned Shifts Row */}
                         <TableRow>
-                            <TableCell component="th" scope="row" sx={{ border: 0, padding: 0, minWidth: 150, bgcolor: '#14171a' }}></TableCell>
+                            <TableCell component="th" scope="row" ></TableCell>
                             {Object.keys(mappedWeek).map((day) => {
                                 const date = mappedWeek[day];
                                 const shiftsForDate = unassignedShiftsByDate[date] || [];
                                 return (
-                                    <TableCell key={date} sx={{ border: '1px solid #1d2126', borderBottom: 0, padding: 0, minWidth: 150, verticalAlign: "top", bgcolor: '#14171a' }}>
+                                    <TableCell key={date} >
                                         <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "wrap", alignContent: "flex-start" }}>
                                             {shiftsForDate.length > 0 ? (
                                                 shiftsForDate.map((shift) => (
@@ -134,7 +128,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                         }}
                                                         onClick={() => handleOpenDialog(shift, date)}
                                                     >
-                                                        <UnassignedShiftCard shift={shift} date={date} />
+                                                        <ShiftCard shift={shift} date={date} />
                                                     </Button>
                                                 ))
                                             ) : (
@@ -149,7 +143,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                             backgroundColor: 'transparent',
                                                         },
                                                     }}
-                                                    onClick={() => handleOpenDialog(date)}
+                                                    onClick={() => handleOpenDialog(null, date)}
                                                 >
                                                     <AddShiftCard />
                                                 </Button>
@@ -162,27 +156,32 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                         </TableRow>
                         <TableRow>
                             <TableCell
+                                variant='header'
                                 colSpan={Object.keys(mappedWeek).length + 1}
-                                sx={{ borderBottom: 1, borderBottomColor: "#00af28", bgcolor: '#14171a' }}
+                                sx={{ borderBottomColor: "primary.green" }}
                             >
-                                <Typography sx={{ fontWeight: 600, color: '#00af28' }}><strong>SCHEDULED SHIFTS</strong></Typography>
+                                <Typography
+                                    variant='header'
+                                    sx={{ color: "primary.green" }}>
+                                    <strong>SCHEDULED SHIFTS</strong></Typography>
 
                             </TableCell>
                         </TableRow>
                         {/* Assigned Shifts Rows (Always displayed) */}
                         {employees.map((emp) => (
                             <TableRow key={emp.e_id}>
-                                <TableCell component="th" scope="row" sx={{ padding: 2, border: 0, bgcolor: '#14171a' }}>
+                                <TableCell component="th" scope="row" sx={{ padding: 2 }}>
                                     <EmployeeCard title={emp.name} description="Employee" />
                                 </TableCell>
                                 {Object.keys(mappedWeek).map((day) => {
                                     const date = mappedWeek[day];
-                                    const shiftForDay = transformedShifts.find(shift => shift.e_id === emp.e_id) || {};
+                                    const shiftForDay = filteredShifts.find((shift) => shift.e_id === emp.e_id && shift.full_date === date) || {};
                                     return (
-                                        <TableCell key={date} sx={{ border: '1px solid #1d2126', borderBottom: 0, padding: 0, minWidth: 150, verticalAlign: "top", bgcolor: '#14171a' }}>
+                                        <TableCell key={date}>
                                             <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "wrap", alignContent: "flex-start" }}>
                                                 {Object.keys(shiftForDay).length > 0 ? (
-                                                    <Button
+
+                                                    < Button
                                                         disableRipple
                                                         disableFocusRipple
                                                         key={shiftForDay.shift_id}
@@ -193,8 +192,9 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                         }}
                                                         onClick={() => handleOpenDialog(shiftForDay, date)}
                                                     >
-                                                        <WeeklyShiftCard shift={shiftForDay} date={date} />
+                                                        <ShiftCard shift={shiftForDay} date={date} />
                                                     </Button>
+
                                                 )
                                                     : (
                                                         <Button
@@ -208,7 +208,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                                     backgroundColor: 'transparent',
                                                                 },
                                                             }}
-                                                            onClick={() => handleOpenDialog(date)}
+                                                            onClick={() => handleOpenDialog(null, date)}
                                                         >
                                                             <AddShiftCard />
                                                         </Button>

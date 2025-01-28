@@ -9,16 +9,18 @@ import {
     Paper,
     Button,
     Box,
+    Typography,
+    IconButton
 } from '@mui/material';
-import { MonthlyShiftCard } from '../Cards';
-import { getDaysInMonth, getLocalDate, transformShifts } from '../../../utils';
+import { ShiftCard } from '../Cards';
+import { getDaysInMonth, getLocalDate, filterShifts } from '../../../utils';
 import { useShifts } from '../../../hooks';
 import AddIcon from '@mui/icons-material/Add';
 import { ShiftDialog } from '../Dialogs';
 
 const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
     const { shifts, refetchShifts } = useShifts(year);
-    const transformedShifts = transformShifts(shifts, filter);
+    const filteredShifts = filterShifts(shifts, filter);
     const [currentShift, setCurrentShift] = useState(null);
     let daysInMonth = getDaysInMonth(month, year);
 
@@ -59,33 +61,34 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
     const renderDays = () => {
         const rows = [];
         let currentWeek = [];
-
         daysInMonth.forEach((date, index) => {
-            const shiftsForDay = transformedShifts
-                .flatMap((shift) => {
-                    return (shift.shiftDays?.[date] || []).map((shiftDetail) => ({
-                        ...shiftDetail,
-                        e_id: shift.e_id,
-                        name: shift.name,
-                    }));
-                });
+            const shiftsForDay = filteredShifts
+                .filter((shift) => shift.full_date === date)
+                .map((shift) => ({
+                    ...shift,
+                    e_id: shift.e_id,
+                    name: shift.name,
+                }));
 
             const hasShift = shiftsForDay.length > 0;
             const localDate = getLocalDate(date);
-            const formattedDate = `${localDate.getDate()} ${localDate.toLocaleString('default', { month: 'short' })}`;
+            const formattedDate = localDate.getDate() === 1
+                ? `${localDate.getDate()} ${localDate.toLocaleString('default', { month: 'short' })}`
+                : `${localDate.getDate()}`;
 
             currentWeek.push(
                 <TableCell
                     key={date}
                     align="left"
                     sx={{
-                        borderRight: '1px solid #ccc',
+                        borderTop: 0,
+                        borderBottom: '1px solid #1d2126',
                         padding: '8px',
                         verticalAlign: 'top',
                         position: 'relative',
-                        display: 'table-cell', // Keep table-cell display to ensure proper layout
+                        display: 'table-cell',
                         '&:hover .add-icon': {
-                            opacity: 1, // Show the icon when the cell is hovered
+                            opacity: 1,
                         },
                     }}
                 >
@@ -95,44 +98,54 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'flex-start',
-                            position: 'relative', // Make sure the child elements are positioned correctly
+                            position: 'relative',
                         }}
                     >
                         <Box
                             sx={{
-                                color: '#626262',
-                                fontSize: '12px',
-                                position: 'absolute',
-                                top: '0px',
-                                left: '8px',
+                                display: 'flex',
+                                paddingBottom: 0,
+                                marginBottom: -3,
+                                marginTop: -1,
+                                alignItems: 'center'
                             }}
                         >
-                            {formattedDate}
-                        </Box>
+                            <Typography variant='Table.header.secondary'
+                                sx={{
+                                    padding: 0,
+                                    paddingLeft: 1,
+                                    marginBottom: 0,
+                                    left: '8px',
+                                }}
+                            >
+                                {formattedDate}
+                            </Typography>
 
-                        <Box
-                            className="add-icon"
-                            sx={{
-                                position: 'absolute',
-                                color: '#626262',
-                                top: '0px',
-                                right: '-4px',
-                                opacity: 0, // Hidden by default
-                                transition: 'opacity 0.3s ease', // Smooth transition to appear
-                                '&:hover': {
-                                    color: "#0085ff",
-                                },
-                            }}
-                            onClick={() => handleOpenDialog(null, date)}
-                        >
-                            <AddIcon onClick={() => handleOpenDialog('', date)} fontSize="medium" />
-                        </Box>
 
+                            <IconButton
+                                className="add-icon"
+                                sx={{
+                                    marginBottom: 0,
+                                    padding: 0,
+                                    position: 'absolute',
+                                    color: 'primary.main',
+                                    right: '-4px',
+                                    opacity: 0,
+                                    transition: 'opacity 0.3s ease',
+                                    '&:hover': {
+                                        color: 'primary.main',
+                                    },
+                                }}
+                                onClick={() => handleOpenDialog(null, date)}
+                            >
+                                <AddIcon onClick={() => handleOpenDialog('', date)} fontSize="medium" />
+                            </IconButton>
+                        </Box>
                         <Box sx={{ marginTop: '20px', mr: 0, ml: 0, padding: 0, width: "90%" }}>
                             {hasShift && shiftsForDay.map((shiftDetail, idx) => (
                                 <Button onClick={() => handleOpenDialog(shiftDetail, date)} sx={{ margin: 0.5, padding: 0, width: "100%" }} >
                                     <Box key={idx} sx={{ margin: 0, padding: 0, width: "100%" }}>
-                                        <MonthlyShiftCard shift={shiftDetail} />
+                                        <ShiftCard shift={shiftDetail} displayName={true} />
                                     </Box>
                                 </Button>
                             ))}
@@ -153,28 +166,24 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
     return (
         <>
             <TableContainer
-
                 component={Paper}
-                sx={{
-                    maxHeight: '700px', // Set a maxHeight for scrolling
-                    overflow: 'auto', // Enable scrolling
-                }}
             >
                 <Table stickyHeader sx={{ minWidth: 650 }} aria-label="monthly shift table">
                     <TableHead>
                         <TableRow>
-                            {['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'].map((day) => (
+                            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
                                 <TableCell
                                     key={day}
                                     align="center"
                                     sx={{
-                                        paddingBottom: '36px',
                                         paddingTop: '20px',
-                                        position: 'sticky', // Make it sticky
-                                        zIndex: 1, // Ensure it's on top of other content
+                                        position: 'sticky',
+                                        zIndex: 1,
                                     }}
                                 >
-                                    <strong>{day}</strong>
+                                    <Typography variant='Table.header.secondary'>
+                                        {day}
+                                    </Typography>
                                 </TableCell>
                             ))}
                         </TableRow>

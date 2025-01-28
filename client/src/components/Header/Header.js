@@ -1,91 +1,70 @@
 import React, { useState } from 'react';
-import {
-    AppBar, Toolbar, Typography, Button, Box, IconButton, Drawer, List, ListItem, ListItemButton, ListItemText
-    , Avatar
-} from '@mui/material';
+import { AppBar, Toolbar, Box, IconButton, Avatar } from '@mui/material';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { styled } from '@mui/system';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useNavigate } from 'react-router-dom';
-import { ThemeToggle } from './Buttons';
+import { ThemeToggle, NavigationButton } from './Buttons';
+import logo from '../../assets/logo.png'
+import ScheduleToolbar from '../Schedule/Toolbars/ScheduleToolbar';
+import EmployeeToolbar from '../Employees/Toolbars/EmployeeToolbar';
+import { useSchedule } from '../../context/ScheduleContext';
+
+const LogoContainer = styled('div')`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Header = () => {
     const [drawerOpen, setDrawerOpen] = useState(false);
-    const navigate = useNavigate(); // React Router hook for navigation
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { viewMode, setViewMode, setSelectedWeek, setSelectedMonth, setSelectedYear, setCurrentFilters, setRefetchTrigger } = useSchedule();
 
     const handleRoute = (path) => {
-        navigate(path); // Navigate to the specified route
+        navigate(path);
+        setDrawerOpen(false);
     };
 
     const toggleDrawer = (open) => () => {
         setDrawerOpen(open);
     };
 
+    const renderToolbar = () => {
+        switch (location.pathname) {
+            case '/schedule':
+                return <ScheduleToolbar />;
+            case '/employee':
+                return <EmployeeToolbar />;
+            default:
+                return null;
+        }
+    };
+
     return (
         <>
             <AppBar
                 position="sticky"
-                sx={{ backgroundColor: 'rgba(0, 0, 0, 0.7)' }}
-                elevation={3}
+                boxShadow='0'
+                elevation={0}
             >
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
-                    <Typography variant="h6" component="div" sx={{ ml: 1 }}>
-                        SHIFT MANAGER
-                    </Typography>
-
-                    {/* Mobile Menu Button */}
-                    <IconButton
-                        color="inherit"
-                        edge="end"
-                        sx={{ display: { xs: 'block', md: 'none' } }}
-                        onClick={toggleDrawer(true)}
-                        aria-label="menu"
-                    >
-                        <MenuIcon />
-                    </IconButton>
-
-                    {/* Desktop Navigation */}
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '16px' }}>
+                        <LogoContainer>
+                            <img src={logo} alt="Logo" style={{ width: '40px', height: '40px' }} />
+                        </LogoContainer>
+                        <NavigationButton />
+                    </Box>
+                    <Box sx={{ width: '100%' }}>  {renderToolbar()}</Box>
+                    <Box sx={{ display: { xs: 'none', md: 'flex', gap: '16px' } }}>
                         <ThemeToggle />
-                        <Button color="inherit" onClick={() => handleRoute('/schedule')}>
-                            Schedule
-                        </Button>
-                        <Button color="inherit" onClick={() => handleRoute('/employee')}>
-                            Employee
-                        </Button>
-
                         <Avatar
                             sx={{ marginLeft: 2 }}
                             src="/broken-image.jpg"
                         />
                     </Box>
                 </Toolbar>
-            </AppBar>
-
-            {/* Drawer for Mobile */}
-            <Drawer
-                anchor="right"
-                open={drawerOpen}
-                onClose={toggleDrawer(false)}
-            >
-                <Box
-                    sx={{
-                        width: 200,
-                        backgroundColor: '#333',
-                        height: '100%',
-                        color: 'white',
-                    }}
-                    role="presentation"
-                    onClick={toggleDrawer(false)}
-                    onKeyDown={toggleDrawer(false)}
-                >
-                    <List>
-                        <ListItem disablePadding>
-                            <ListItemButton onClick={() => handleRoute('/schedule')}>
-                                <ListItemText primary="Schedule" />
-                            </ListItemButton>
-                        </ListItem>
-                    </List>
-                </Box>
-            </Drawer>
+            </AppBar >
         </>
     );
 };
