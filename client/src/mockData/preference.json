@@ -1,0 +1,37 @@
+[
+    {
+        "preference_id": 1,
+        "position_id": 1,
+        "e_id": 6,
+        "location_id": 1,
+        "MaxWeeklyHours": 40
+    },
+    {
+        "preference_id": 2,
+        "position_id": 2,
+        "e_id": 7,
+        "location_id": 2,
+        "MaxWeeklyHours": 20
+    },
+    {
+        "preference_id": 3,
+        "position_id": 1,
+        "e_id": 8,
+        "location_id": 3,
+        "MaxWeeklyHours": 40
+    },
+    {
+        "preference_id": 4,
+        "position_id": 3,
+        "e_id": 9,
+        "location_id": 1,
+        "MaxWeeklyHours": 40
+    },
+    {
+        "preference_id": 5,
+        "position_id": 2,
+        "e_id": 10,
+        "location_id": 2,
+        "MaxWeeklyHours": 20
+    }
+]

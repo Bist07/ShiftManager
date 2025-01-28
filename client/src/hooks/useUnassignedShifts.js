@@ -1,5 +1,6 @@
 import { fetchUnassignedShifts } from '../services/api';
 import { useState, useEffect } from 'react';
+import mockData from '../mockData/unassigned.json';
 
 const useUnassignedShifts = () => {
     const [unassignedShifts, setUnassignedShifts] = useState([]);
@@ -10,8 +11,9 @@ const useUnassignedShifts = () => {
         setLoading(true);
         setError(null);
         try {
-            const shifts = await fetchUnassignedShifts();
-            const formattedShifts = shifts.map(shift => ({
+            const data = await fetchUnassignedShifts();
+            const finalData = data || mockData;
+            const formattedShifts = finalData.map(shift => ({
                 ...shift,
                 full_date: new Date(shift.full_date).toLocaleDateString(),
             }));
@@ -19,6 +21,7 @@ const useUnassignedShifts = () => {
             setUnassignedShifts(formattedShifts);
         } catch (err) {
             setError('Failed to load data. Please try again later.');
+            setUnassignedShifts(mockData);
         } finally {
             setLoading(false);
         }

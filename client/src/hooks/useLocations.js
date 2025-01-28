@@ -1,7 +1,7 @@
 // /hooks/useLocations.js
 import { useState, useEffect } from 'react';
 import { fetchLocations } from '../services/api';
-
+import mockData from '../mockData/locations.json';
 const useLocations = () => {
     const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,9 +12,11 @@ const useLocations = () => {
             setLoading(true);
             setError(null);
             const data = await fetchLocations();
-            setLocations(data);
+            const finalData = data || mockData;
+            setLocations(finalData);
         } catch (err) {
             setError('Failed to load data. Please try again later.');
+            setLocations(mockData);
         } finally {
             setLoading(false);
         }

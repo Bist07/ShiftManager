@@ -1,0 +1,252 @@
+[
+  {
+    "assignment_id": 1,
+    "employee_id": 7,
+    "shift_id": 16
+  },
+  {
+    "assignment_id": 3,
+    "employee_id": 10,
+    "shift_id": 18
+  },
+  {
+    "assignment_id": 5,
+    "employee_id": 7,
+    "shift_id": 14
+  },
+  {
+    "assignment_id": 10,
+    "employee_id": 7,
+    "shift_id": 18
+  },
+  {
+    "assignment_id": 11,
+    "employee_id": 10,
+    "shift_id": 14
+  },
+  {
+    "assignment_id": 18,
+    "employee_id": 6,
+    "shift_id": 19
+  },
+  {
+    "assignment_id": 19,
+    "employee_id": 6,
+    "shift_id": 13
+  },
+  {
+    "assignment_id": 21,
+    "employee_id": 9,
+    "shift_id": 11
+  },
+  {
+    "assignment_id": 22,
+    "employee_id": 10,
+    "shift_id": 16
+  },
+  {
+    "assignment_id": 24,
+    "employee_id": 8,
+    "shift_id": 13
+  },
+  {
+    "assignment_id": 28,
+    "employee_id": 8,
+    "shift_id": 19
+  },
+  {
+    "assignment_id": 69,
+    "employee_id": 7,
+    "shift_id": 30
+  },
+  {
+    "assignment_id": 71,
+    "employee_id": 8,
+    "shift_id": 32
+  },
+  {
+    "assignment_id": 72,
+    "employee_id": 6,
+    "shift_id": 33
+  },
+  {
+    "assignment_id": 107,
+    "employee_id": 10,
+    "shift_id": 68
+  },
+  {
+    "assignment_id": 110,
+    "employee_id": 8,
+    "shift_id": 71
+  },
+  {
+    "assignment_id": 111,
+    "employee_id": 7,
+    "shift_id": 72
+  },
+  {
+    "assignment_id": 123,
+    "employee_id": 10,
+    "shift_id": 84
+  },
+  {
+    "assignment_id": 126,
+    "employee_id": 6,
+    "shift_id": 87
+  },
+  {
+    "assignment_id": 127,
+    "employee_id": 8,
+    "shift_id": 88
+  },
+  {
+    "assignment_id": 128,
+    "employee_id": 6,
+    "shift_id": 89
+  },
+  {
+    "assignment_id": 129,
+    "employee_id": 6,
+    "shift_id": 90
+  },
+  {
+    "assignment_id": 130,
+    "employee_id": 6,
+    "shift_id": 91
+  },
+  {
+    "assignment_id": 131,
+    "employee_id": 6,
+    "shift_id": 92
+  },
+  {
+    "assignment_id": 132,
+    "employee_id": 7,
+    "shift_id": 93
+  },
+  {
+    "assignment_id": 133,
+    "employee_id": 7,
+    "shift_id": 94
+  },
+  {
+    "assignment_id": 134,
+    "employee_id": 6,
+    "shift_id": 95
+  },
+  {
+    "assignment_id": 135,
+    "employee_id": 6,
+    "shift_id": 96
+  },
+  {
+    "assignment_id": 136,
+    "employee_id": 7,
+    "shift_id": 97
+  },
+  {
+    "assignment_id": 137,
+    "employee_id": 7,
+    "shift_id": 98
+  },
+  {
+    "assignment_id": 138,
+    "employee_id": 7,
+    "shift_id": 99
+  },
+  {
+    "assignment_id": 139,
+    "employee_id": 6,
+    "shift_id": 100
+  },
+  {
+    "assignment_id": 140,
+    "employee_id": 8,
+    "shift_id": 101
+  },
+  {
+    "assignment_id": 141,
+    "employee_id": 6,
+    "shift_id": 102
+  },
+  {
+    "assignment_id": 142,
+    "employee_id": 6,
+    "shift_id": 103
+  },
+  {
+    "assignment_id": 143,
+    "employee_id": 8,
+    "shift_id": 104
+  },
+  {
+    "assignment_id": 144,
+    "employee_id": 9,
+    "shift_id": 105
+  },
+  {
+    "assignment_id": 145,
+    "employee_id": 6,
+    "shift_id": 106
+  },
+  {
+    "assignment_id": 146,
+    "employee_id": 7,
+    "shift_id": 107
+  },
+  {
+    "assignment_id": 157,
+    "employee_id": 6,
+    "shift_id": 119
+  },
+  {
+    "assignment_id": 158,
+    "employee_id": 6,
+    "shift_id": 120
+  },
+  {
+    "assignment_id": 159,
+    "employee_id": 6,
+    "shift_id": 121
+  },
+  {
+    "assignment_id": 160,
+    "employee_id": 6,
+    "shift_id": 122
+  },
+  {
+    "assignment_id": 161,
+    "employee_id": 6,
+    "shift_id": 123
+  },
+  {
+    "assignment_id": 162,
+    "employee_id": 6,
+    "shift_id": 124
+  },
+  {
+    "assignment_id": 163,
+    "employee_id": 6,
+    "shift_id": 125
+  },
+  {
+    "assignment_id": 164,
+    "employee_id": 6,
+    "shift_id": 126
+  },
+  {
+    "assignment_id": 165,
+    "employee_id": 8,
+    "shift_id": 127
+  },
+  {
+    "assignment_id": 166,
+    "employee_id": 8,
+    "shift_id": 128
+  },
+  {
+    "assignment_id": 167,
+    "employee_id": 8,
+    "shift_id": 129
+  }
+]

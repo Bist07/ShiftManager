@@ -1,0 +1,226 @@
+[
+  {
+    "date_id": 1,
+    "full_date": "2024-12-01",
+    "day_of_week": 0,
+    "is_Holiday": 0,
+    "is_Weekend": 1
+  },
+  {
+    "date_id": 2,
+    "full_date": "2024-12-02",
+    "day_of_week": 1,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 3,
+    "full_date": "2024-12-03",
+    "day_of_week": 2,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 4,
+    "full_date": "2024-12-04",
+    "day_of_week": 3,
+    "is_Holiday": 1,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 5,
+    "full_date": "2024-12-05",
+    "day_of_week": 4,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 6,
+    "full_date": "2024-12-06",
+    "day_of_week": 5,
+    "is_Holiday": 0,
+    "is_Weekend": 1
+  },
+  {
+    "date_id": 7,
+    "full_date": "2024-12-07",
+    "day_of_week": 6,
+    "is_Holiday": 0,
+    "is_Weekend": 1
+  },
+  {
+    "date_id": 8,
+    "full_date": "2024-12-08",
+    "day_of_week": 0,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 9,
+    "full_date": "2024-12-09",
+    "day_of_week": 1,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 10,
+    "full_date": "2024-12-10",
+    "day_of_week": 2,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 11,
+    "full_date": "2024-12-11",
+    "day_of_week": 3,
+    "is_Holiday": 1,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 12,
+    "full_date": "2024-12-12",
+    "day_of_week": 4,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 13,
+    "full_date": "2024-12-13",
+    "day_of_week": 5,
+    "is_Holiday": 0,
+    "is_Weekend": 1
+  },
+  {
+    "date_id": 14,
+    "full_date": "2024-12-14",
+    "day_of_week": 6,
+    "is_Holiday": 0,
+    "is_Weekend": 1
+  },
+  {
+    "date_id": 15,
+    "full_date": "2024-12-15",
+    "day_of_week": 0,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 16,
+    "full_date": "2024-12-16",
+    "day_of_week": 1,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 17,
+    "full_date": "2024-12-17",
+    "day_of_week": 2,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 18,
+    "full_date": "2024-12-18",
+    "day_of_week": 3,
+    "is_Holiday": 1,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 19,
+    "full_date": "2024-12-19",
+    "day_of_week": 4,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 20,
+    "full_date": "2024-12-29",
+    "day_of_week": 6,
+    "is_Holiday": 0,
+    "is_Weekend": 1
+  },
+  {
+    "date_id": 21,
+    "full_date": "2024-12-30",
+    "day_of_week": 0,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 22,
+    "full_date": "2024-12-31",
+    "day_of_week": 1,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 23,
+    "full_date": "2025-01-01",
+    "day_of_week": 2,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 24,
+    "full_date": "2025-01-02",
+    "day_of_week": 3,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 25,
+    "full_date": "2025-01-03",
+    "day_of_week": 4,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 26,
+    "full_date": "2025-01-04",
+    "day_of_week": 5,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 27,
+    "full_date": "2025-01-06",
+    "day_of_week": 0,
+    "is_Holiday": 0,
+    "is_Weekend": 1
+  },
+  {
+    "date_id": 28,
+    "full_date": "2025-01-21",
+    "day_of_week": 1,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 29,
+    "full_date": "2025-01-22",
+    "day_of_week": 2,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 30,
+    "full_date": "2025-01-23",
+    "day_of_week": 3,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 31,
+    "full_date": "2025-01-24",
+    "day_of_week": 4,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  },
+  {
+    "date_id": 32,
+    "full_date": "2025-01-25",
+    "day_of_week": 5,
+    "is_Holiday": 0,
+    "is_Weekend": 0
+  }
+]

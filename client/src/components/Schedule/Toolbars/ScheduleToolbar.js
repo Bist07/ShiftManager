@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Toolbar, Button, MenuItem, Collapse, IconButton, Typography, MenuList, Popover
+    Box, Toolbar, Button, MenuItem, IconButton, MenuList, Popover
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
@@ -28,8 +28,6 @@ const ScheduleToolbar = () => {
     const [weeks, setWeeks] = useState([]);
     const [weekAnchorEl, setWeekAnchorEl] = useState(null);
     const [currentShift, setCurrentShift] = useState(null);
-
-
 
     const openWeekMenu = Boolean(weekAnchorEl);
 
@@ -304,7 +302,6 @@ const ScheduleToolbar = () => {
                         }}
                     >
                         <AddIcon />
-                        <Typography sx={{ marginRight: '4px', }}>Create shift</Typography>
                     </IconButton>
                 </Box>
                 {

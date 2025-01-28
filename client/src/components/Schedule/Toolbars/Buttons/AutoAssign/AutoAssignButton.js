@@ -37,7 +37,7 @@ const AutoAssignButton = ({ shift, onClick }) => (
         onClick={() => onClick(shift)}
     >
         <AutoFixHighIcon />
-        Auto Assign
+        Auto
     </IconButton>
 );
 
