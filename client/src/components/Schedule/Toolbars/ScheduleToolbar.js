@@ -7,10 +7,8 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { formatWeek, generateWeeks } from '../../../utils';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import TuneIcon from '@mui/icons-material/Tune';
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { FilterToolbar } from '../../Common';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 import AddIcon from '@mui/icons-material/Add';
@@ -25,17 +23,13 @@ const ScheduleToolbar = () => {
         selectedWeek, setSelectedWeek,
         selectedMonth, setSelectedMonth,
         selectedYear, setSelectedYear,
-        setCurrentFilters,
         setRefetchTrigger
     } = useSchedule();
     const [weeks, setWeeks] = useState([]);
     const [weekAnchorEl, setWeekAnchorEl] = useState(null);
-    const [filterOpen, setFilterOpen] = useState(false); // State for collapsible filter section
     const [currentShift, setCurrentShift] = useState(null);
 
-    const handleFiltersChange = (updatedFilters) => {
-        setCurrentFilters(updatedFilters);
-    };
+
 
     const openWeekMenu = Boolean(weekAnchorEl);
 
@@ -51,9 +45,6 @@ const ScheduleToolbar = () => {
         setWeekAnchorEl(null);
     };
 
-    const handleToggleFilter = () => {
-        setFilterOpen(!filterOpen); // Toggle filter section
-    };
 
     const handlePrev = () => {
         if (viewMode !== 'month') {
@@ -304,16 +295,6 @@ const ScheduleToolbar = () => {
                 <Box sx={{ display: 'flex', flexGrow: 1 }} />
                 <Box sx={{ display: 'flex', gap: '16px' }}>
                     <AutoAssignButton onClick={handleAutoAssign} />
-                    {/* Tune Button, flipped when filter is open */}
-                    <IconButton
-                        onClick={handleToggleFilter}
-                        sx={{
-                            color: filterOpen ? 'primary.main' : 'secondary.main',
-                        }}
-                    >
-                        Filters
-                        <TuneIcon sx={{ transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', }} />
-                    </IconButton>
                     <IconButton
                         onClick={handleOpenDialog}
                         sx={{
@@ -337,9 +318,6 @@ const ScheduleToolbar = () => {
                     )
                 }
             </Toolbar >
-            <Collapse in={filterOpen}>
-                <FilterToolbar onFiltersChange={handleFiltersChange} filterList={['Location', 'Position', 'Employee']} />
-            </Collapse>
         </Box >
 
     );

@@ -175,12 +175,180 @@ export default darkTheme;
 
 export const lightTheme = createTheme({
     palette: {
-        mode: 'light',
+        mode: 'light', // Enables light mode
         primary: {
-            main: '#1976d2',
+            main: '#0066cc', // A deeper blue for primary color
+            green: '#008000', // Bright green for accents
+        },
+        secondary: {
+            main: '#5a5a5a', // Neutral grey for secondary color
         },
         background: {
-            default: '#ffffff',
+            default: '#f5f5f5', // Light grey background for light mode
+            paper: '#ffffff', // White background for paper components
+        },
+        text: {
+            primary: '#212121', // Dark grey text for readability
+            secondary: '#757575', // Lighter grey for secondary text
+        },
+    },
+    typography: {
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        button: {
+            textTransform: 'none',
+        },
+    },
+    components: {
+        MuiAppBar: {
+            styleOverrides: {
+                colorPrimary: {
+                    backgroundColor: "#ffffff", // White AppBar for light theme
+                    color: '#212121', // Dark text color
+                },
+            },
+        },
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    fontWeight: 600,
+                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                    borderRadius: '5px',
+                    gap: '8px',
+                    fontSize: '15px',
+                    color: '#5a5a5a', // Neutral grey for icons
+                    border: '1px solid transparent',
+                    '&:hover': {
+                        backgroundColor: '#e0e0e0', // Light grey hover color
+                        borderColor: '#d6d6d6',
+                        color: '#0066cc', // Primary blue hover text color
+                    },
+                },
+            },
+        },
+        MuiButton: {
+            styleOverrides: {
+                root: {
+                    fontWeight: 600,
+                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                    borderRadius: '5px',
+                    color: '#5a5a5a',
+                    gap: '8px',
+                    fontSize: '15px',
+                    border: '1px solid transparent',
+                    '&:hover': {
+                        backgroundColor: '#e0e0e0',
+                        borderColor: '#d6d6d6',
+                        color: '#0066cc',
+                    },
+                },
+            },
+        },
+        MuiToolbar: {
+            styleOverrides: {
+                root: {
+                    justifyContent: 'space-between',
+                    padding: '12px',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1000,
+                    backgroundColor: '#ffffff', // White background for Toolbar
+                },
+            },
+        },
+        MuiMenuList: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#ffffff', // White MenuList background
+                },
+            },
+        },
+        MuiMenuItem: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#ffffff', // White MenuItem background
+                    fontSize: '14px',
+                    color: '#212121', // Dark text
+                    "&:hover": {
+                        backgroundColor: '#e8eaf6', // Light blue-grey hover color
+                        color: '#0066cc',
+                    },
+                    "&.Mui-selected": {
+                        backgroundColor: "#0066cc",
+                        color: "#ffffff",
+                    },
+                    "&.Mui-selected:hover": {
+                        backgroundColor: "#004ba0",
+                    },
+                },
+            },
+        },
+        MuiTableContainer: {
+            styleOverrides: {
+                root: {
+                    maxHeight: '800px',
+                    overflow: 'auto',
+                    borderRadius: '40px',
+                    backgroundColor: '#ffffff', // White table container
+                },
+            },
+        },
+        MuiTableCell: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#ffffff',
+                    border: '0',
+                    padding: '0',
+                    minWidth: '185px',
+                },
+            },
+            variants: [
+                {
+                    props: { variant: 'header' },
+                    style: {
+                        borderBottom: '1px solid #ccc', // Light grey header border
+                    },
+                },
+                {
+                    props: { variant: 'body' },
+                    style: {
+                        border: '1px solid #e0e0e0', // Light grey body border
+                        borderBottom: '0',
+                        verticalAlign: "top",
+                    },
+                },
+            ],
+        },
+        MuiTypography: {
+            variants: [
+                {
+                    props: { variant: 'header' },
+                    style: {
+                        fontWeight: 600,
+                        padding: '20px',
+                        color: '#212121', // Dark text for headers
+                    },
+                },
+                {
+                    props: { variant: 'Table.header.secondary' },
+                    style: {
+                        fontSize: '11px',
+                        textTransform: 'uppercase',
+                        fontWeight: 500,
+                        lineHeight: '32px',
+                        letterSpacing: '.8px',
+                        color: '#757575', // Secondary grey for sub-headers
+                    },
+                },
+                {
+                    props: { variant: 'Table.header.primary' },
+                    style: {
+                        fontSize: '26px',
+                        lineHeight: '46px',
+                        fontWeight: 400,
+                        color: '#212121',
+                    },
+                },
+            ],
         },
     },
 });

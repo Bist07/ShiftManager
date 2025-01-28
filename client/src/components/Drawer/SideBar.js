@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import { Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
-import { MoveToInbox as InboxIcon, Mail as MailIcon } from '@mui/icons-material';
+import { ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
 import MuiDrawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
+import FilterIcon from '@mui/icons-material/Tune';
+import { useSchedule } from '../../context/ScheduleContext';
 
 const drawerWidth = 240;
 
@@ -71,6 +72,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [filterOpen, setFilterOpen] = useState(false);
+    const { setCurrentFilters } = useSchedule();
+
+    const handleFiltersChange = (updatedFilters) => {
+        setCurrentFilters(updatedFilters);
+    };
+
+    const handleToggleFilter = () => {
+        setFilterOpen(!filterOpen); // Toggle filter section
+    };
+
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -92,58 +104,62 @@ export default function MiniDrawer() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={handleDrawerOpen}
+                    <ListItem key={'Filters'} disablePadding sx={{ display: 'block' }}>
+                        <ListItemButton
+                            onClick={() => {
+                                handleDrawerOpen();
+                                handleToggleFilter();
+                            }}
+                            sx={[
+                                {
+                                    minHeight: 48,
+                                    px: 2.5,
+                                },
+                                open
+                                    ? {
+                                        justifyContent: 'initial',
+                                    }
+                                    : {
+                                        justifyContent: 'center',
+                                    },
+                            ]}
+                        >
+                            <ListItemIcon
                                 sx={[
+
                                     {
-                                        minHeight: 48,
-                                        px: 2.5,
+                                        minWidth: 0,
+                                        justifyContent: 'center',
                                     },
                                     open
                                         ? {
-                                            justifyContent: 'initial',
+                                            mr: 3,
                                         }
                                         : {
-                                            justifyContent: 'center',
+                                            mr: 'auto',
                                         },
+
                                 ]}
                             >
-                                <ListItemIcon
-                                    sx={[
-                                        {
-                                            minWidth: 0,
-                                            justifyContent: 'center',
+                                <FilterIcon sx={{ transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', }} />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={"Filters"}
+                                sx={[
+                                    open
+                                        ? {
+                                            opacity: 1,
+                                        }
+                                        : {
+                                            opacity: 0,
                                         },
-                                        open
-                                            ? {
-                                                mr: 3,
-                                            }
-                                            : {
-                                                mr: 'auto',
-                                            },
-                                    ]}
-                                >
-                                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                                </ListItemIcon>
-                                <ListItemText
-                                    primary={text}
-                                    sx={[
-                                        open
-                                            ? {
-                                                opacity: 1,
-                                            }
-                                            : {
-                                                opacity: 0,
-                                            },
-                                    ]}
-                                />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
+                                ]}
+                            />
+                        </ListItemButton>
+                    </ListItem>
+
                 </List>
             </Drawer>
-        </Box>
+        </Box >
     );
 }

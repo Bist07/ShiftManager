@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Box, Toolbar } from '@mui/material';
+import { Box, ListItem, List } from '@mui/material';
 import { Filter } from '.';
 import { useEmployee, useLocations, useRoles, usePositions } from '../../../hooks';
 
-const FilterToolbar = ({ onFiltersChange, filterList }) => {
+const FilterList = ({ onFiltersChange, filterList }) => {
     const { employees = [] } = useEmployee();
     const { locations = [] } = useLocations();
     const { roles = [] } = useRoles();
@@ -67,8 +67,8 @@ const FilterToolbar = ({ onFiltersChange, filterList }) => {
     };
 
     return (
-        <Toolbar>
-            <Box sx={{ display: 'flex', gap: '16px', height: '40px' }}>
+        <List>
+            <ListItem sx={{ display: 'flex', gap: '16px', height: '40px' }}>
                 {filteredData.map(({ name, data, optionIdKey }) => (
                     <Filter
                         key={name}
@@ -81,10 +81,10 @@ const FilterToolbar = ({ onFiltersChange, filterList }) => {
                         optionIdKey={optionIdKey}
                     />
                 ))}
-            </Box>
-        </Toolbar>
+            </ListItem>
+        </List>
     );
 };
 
 
-export default FilterToolbar;
+export default FilterList;
