@@ -3,7 +3,7 @@ import {
     Box, Toolbar, Button, MenuItem, IconButton, MenuList, Popover
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { formatWeek, generateWeeks } from '../../../utils';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -163,14 +163,14 @@ const ScheduleToolbar = () => {
                         </IconButton>
                     </Box>
 
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             views={['year', 'month']}
-                            value={new Date(selectedYear, selectedMonth)}
+                            value={dayjs(new Date(selectedYear, selectedMonth))}
                             onChange={(newDate) => {
                                 if (newDate) {
-                                    setSelectedMonth(newDate.getMonth());
-                                    setSelectedYear(newDate.getFullYear());
+                                    setSelectedMonth(newDate.month());
+                                    setSelectedYear(newDate.year());
                                 }
                             }}
                             slotProps={{
