@@ -1,7 +1,6 @@
 // /hooks/useRoles.js
 import { useState, useEffect } from 'react';
 import { fetchRoles } from '../services/api';
-import mockData from '../mockData/roles.json';
 
 const useRoles = () => {
     const [roles, setRole] = useState([]);
@@ -13,11 +12,9 @@ const useRoles = () => {
         setError(null);
         try {
             const data = await fetchRoles();
-            const finalData = data || mockData;
-            setRole(finalData);
+            setRole(data);
         } catch (err) {
             setError('Failed to load data. Please try again later.');
-            setRole(mockData);
         } finally {
             setLoading(false);
         }

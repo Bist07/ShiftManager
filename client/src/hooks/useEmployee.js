@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchEmployee } from '../services/api';
 import { transformEmployeeData } from '../utils';
-import mockData from '../mockData/employees.json';
 
 const useEmployee = () => {
     const [employees, setEmployee] = useState([]);
@@ -14,15 +13,11 @@ const useEmployee = () => {
         try {
             const data = await fetchEmployee();
             // If fetchEmployee returns null or undefined, fallback to mockData
-            const finalData = data || mockData;
-            const transformedEmployeeData = transformEmployeeData(finalData);
+            const transformedEmployeeData = transformEmployeeData(data);
             setEmployee(transformedEmployeeData);
         } catch (err) {
             console.error('Error fetching employee data:', err);
-            setError('Failed to load data. Showing mock data instead.');
-            // Use mockData as fallback when fetchEmployee fails
-            const transformedMockData = transformEmployeeData(mockData);
-            setEmployee(transformedMockData);
+            setError('Failed to load data.');
         } finally {
             setLoading(false);
         }

@@ -1,7 +1,6 @@
 // /hooks/useLocations.js
 import { useState, useEffect } from 'react';
 import { fetchPreference } from '../services/api';
-import mockData from '../mockData/preference.json';
 
 const usePreference = () => {
     const [preference, setPreference] = useState([]);
@@ -13,11 +12,9 @@ const usePreference = () => {
             setLoading(true);
             setError(null);
             const data = await fetchPreference();
-            const finalData = data || mockData;
-            setPreference(finalData);
+            setPreference(data);
         } catch (err) {
             setError('Failed to load data. Please try again later.');
-            setPreference(mockData);
         } finally {
             setLoading(false);
         }

@@ -1,7 +1,6 @@
 // /hooks/useShifts.js
 import { useState, useEffect } from 'react';
 import { fetchShifts } from '../services/api';
-import mockData from '../mockData/shifts.json';
 
 const useShifts = () => {
     const [shifts, setShifts] = useState([]);
@@ -14,8 +13,7 @@ const useShifts = () => {
         try {
 
             const data = await fetchShifts();
-            const finalData = data || mockData;
-            const formattedShifts = finalData.map(shift => ({
+            const formattedShifts = data.map(shift => ({
                 ...shift,  // Keep all the other properties the same
                 full_date: new Date(shift.full_date).toLocaleDateString(),
             }));
@@ -23,11 +21,7 @@ const useShifts = () => {
 
         } catch (err) {
             setError('Failed to load data. Please try again later.');
-            const formattedShifts = mockData.map(shift => ({
-                ...shift,  // Keep all the other properties the same
-                full_date: new Date(shift.full_date).toLocaleDateString(),
-            }));
-            setShifts(formattedShifts);
+
         } finally {
             setLoading(false);
         }
