@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Menu, Toolbar, Button, TextField, Collapse, IconButton, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import TuneIcon from '@mui/icons-material/Tune';
-import { Filter } from '../../Common';
+import { FilterSelector } from '../../Common';
 import AddIcon from '@mui/icons-material/Add';
 import EmployeeTable from '../Views/EmployeeTable';
 // import EmployeeDialog from './EmployeeDialog';
@@ -163,7 +163,7 @@ const EmployeeToolbar = () => {
                 )} */}
             </Toolbar>
             <Collapse in={filterOpen}>
-                <Filter onFiltersChange={handleFiltersChange} />
+                <FilterSelector onFiltersChange={handleFiltersChange} />
             </Collapse>
 
             <Box>

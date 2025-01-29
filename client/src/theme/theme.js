@@ -165,11 +165,29 @@ export const darkTheme = createTheme({
                     }
                 }
             ]
+        },
+        MuiListItemButton: {
+            styleOverrides: {
+                root: {
+                    fontWeight: 600,
+                    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+                    borderRadius: '5px', // Custom border radius for all buttons
+                    color: '#b6bec9',
+                    gap: '8px',
+                    fontSize: '15px',
+                    border: '1px solid transparent', // Add border to mimic outlined style
+                    '&:hover': {
+                        backgroundColor: '#1a1e22',
+                        borderColor: '#1d2126',
+                        color: '#ebf5ff',
+                    },
+                },
+            },
         }
+    }
 
-
-    },
-});
+},
+);
 
 export default darkTheme;
 

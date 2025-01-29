@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, CssBaseline, Divider, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
-import { ChevronLeft as ChevronLeftIcon } from '@mui/icons-material';
+import { Box, CssBaseline, Divider, IconButton, List } from '@mui/material';
+import { ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon } from '@mui/icons-material';
 import MuiDrawer from '@mui/material/Drawer';
-import MenuIcon from '@mui/icons-material/Menu';
-import FilterIcon from '@mui/icons-material/Tune';
-import { useSchedule } from '../../context/ScheduleContext';
+import { FilterList } from '../Common/Filters';
 
 const drawerWidth = 240;
 
@@ -72,17 +70,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [filterOpen, setFilterOpen] = useState(false);
-    const { setCurrentFilters } = useSchedule();
-
-    const handleFiltersChange = (updatedFilters) => {
-        setCurrentFilters(updatedFilters);
-    };
-
-    const handleToggleFilter = () => {
-        setFilterOpen(!filterOpen); // Toggle filter section
-    };
-
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -99,65 +86,12 @@ export default function MiniDrawer() {
                 <DrawerHeader sx={{ justifyContent: open ? 'flex-end' : 'center' }}>
                     <IconButton
                         onClick={open ? handleDrawerClose : handleDrawerOpen}>
-                        {open ? <ChevronLeftIcon /> : <MenuIcon />}
+                        {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    <ListItem key={'Filters'} disablePadding sx={{ display: 'block' }}>
-                        <ListItemButton
-                            onClick={() => {
-                                handleDrawerOpen();
-                                handleToggleFilter();
-                            }}
-                            sx={[
-                                {
-                                    minHeight: 48,
-                                    px: 2.5,
-                                },
-                                open
-                                    ? {
-                                        justifyContent: 'initial',
-                                    }
-                                    : {
-                                        justifyContent: 'center',
-                                    },
-                            ]}
-                        >
-                            <ListItemIcon
-                                sx={[
-
-                                    {
-                                        minWidth: 0,
-                                        justifyContent: 'center',
-                                    },
-                                    open
-                                        ? {
-                                            mr: 3,
-                                        }
-                                        : {
-                                            mr: 'auto',
-                                        },
-
-                                ]}
-                            >
-                                <FilterIcon sx={{ transform: filterOpen ? 'rotate(180deg)' : 'rotate(0deg)', }} />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={"Filters"}
-                                sx={[
-                                    open
-                                        ? {
-                                            opacity: 1,
-                                        }
-                                        : {
-                                            opacity: 0,
-                                        },
-                                ]}
-                            />
-                        </ListItemButton>
-                    </ListItem>
-
+                    <FilterList filterList={['Employee', 'Location', 'Position']} handleDrawerOpen={handleDrawerOpen} drawerState={open} />
                 </List>
             </Drawer>
         </Box >

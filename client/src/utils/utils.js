@@ -11,14 +11,12 @@ export const renderButtonText = (filters, category) => {
         return (
             <>
                 {`${category.toLowerCase()} ${selectedCount}`}
-                <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#bcbcbc' }} />
             </>
         );
     } else if (selectedCount > 1) {
         return (
             <>
                 {`${category.toLowerCase()}s ${selectedCount}`}
-                <ArrowDropDownIcon sx={{ fontSize: '20px', color: '#bcbcbc' }} />
             </>
         );
     } else {

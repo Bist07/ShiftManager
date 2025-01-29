@@ -1,13 +1,36 @@
-import React, { useState } from 'react';
-import { Box, ListItem, List } from '@mui/material';
-import { Filter } from '.';
+import React, { useEffect, useState } from 'react';
+import { ListItem, List, Collapse, ListItemText, ListItemButton, ListItemIcon, Box } from '@mui/material';
+import { FilterSelector } from '.';
 import { useEmployee, useLocations, useRoles, usePositions } from '../../../hooks';
+import { ExpandLess, ExpandMore } from '@mui/icons-material';
+import FilterIcon from '@mui/icons-material/Tune';
+import { useSchedule } from '../../../context/ScheduleContext';
 
-const FilterList = ({ onFiltersChange, filterList }) => {
+const FilterList = ({ onFiltersChange, filterList, handleDrawerOpen, drawerState }) => {
     const { employees = [] } = useEmployee();
     const { locations = [] } = useLocations();
     const { roles = [] } = useRoles();
     const { positions = [] } = usePositions();
+    const { setCurrentFilters } = useSchedule();
+
+    const handleFiltersChange = (updatedFilters) => {
+        setCurrentFilters(updatedFilters);
+    };
+
+    const [open, setOpen] = useState(false);
+
+    const handleToggle = () => {
+        handleDrawerOpen(!open);
+        setOpen(!open);
+
+    };
+
+    useEffect(() => {
+        if (drawerState === false) {
+            setOpen(false);
+        }
+    }, [drawerState]);
+
     //const { statuses = [] } = useStatus();
     // { name: 'Status', data: statuses, optionIdKey: 'Status' },
     const filterData = [
@@ -47,7 +70,7 @@ const FilterList = ({ onFiltersChange, filterList }) => {
     }, {});
 
     const [filters, setFilters] = useState(initialFilters);
-
+    const hasActiveFilters = Object.values(filters).some((filter) => filter.length > 0);
 
     const handleSelectFilter = (category, id) => {
         setFilters((prevFilters) => {
@@ -68,23 +91,91 @@ const FilterList = ({ onFiltersChange, filterList }) => {
 
     return (
         <List>
-            <ListItem sx={{ display: 'flex', gap: '16px', height: '40px' }}>
-                {filteredData.map(({ name, data, optionIdKey }) => (
-                    <Filter
-                        key={name}
-                        anchorEl={anchorEls[name]}
-                        setAnchorEl={(el) => setAnchorEls((prev) => ({ ...prev, [name]: el }))}
-                        filters={filters}
-                        handleSelectFilter={handleSelectFilter}
-                        filterOptions={data}
-                        filterName={name}
-                        optionIdKey={optionIdKey}
+            {/* Parent List Item */}
+            <ListItem key={'Filters'} disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                    onClick={() => {
+                        handleToggle()
+                    }}
+                    sx={[
+                        {
+                            minHeight: 48,
+                            px: 2.5,
+                        },
+                        drawerState
+                            ? {
+                                justifyContent: 'initial',
+                            }
+                            : {
+                                justifyContent: 'center',
+                            },
+                    ]}
+                >
+                    <ListItemIcon
+                        sx={[
+
+                            {
+                                minWidth: 0,
+                                justifyContent: 'center',
+                            },
+                            drawerState
+                                ? {
+                                    mr: 3,
+                                }
+                                : {
+                                    mr: 'auto',
+                                },
+                            hasActiveFilters ?
+                                {
+                                    color: 'primary.main'
+                                }
+                                : {
+                                    color: 'inherit'
+                                }
+
+                        ]}
+                    >
+                        <FilterIcon sx={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)', }} />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={"Filters"}
+                        sx={[
+                            drawerState
+                                ? {
+                                    opacity: 1,
+                                }
+                                : {
+                                    opacity: 0,
+                                },
+                        ]}
                     />
-                ))}
+                </ListItemButton>
             </ListItem>
+
+            {/* Nested Child Items */}
+            <Collapse in={open} timeout="auto" unmountOnExit>
+                <Box sx={{ bgcolor: '#181818' }}>
+                    <List component="div" disablePadding>
+                        {filteredData.map(({ name, data, optionIdKey }) => (
+                            <ListItem>
+                                <FilterSelector
+                                    filters={filters}
+                                    handleSelectFilter={handleSelectFilter}
+                                    filterName={name}
+                                    filterOptions={data}
+                                    optionIdKey={optionIdKey}
+                                />
+                            </ListItem>
+                        ))}
+                    </List>
+                </Box>
+            </Collapse>
+
         </List>
     );
 };
 
 
 export default FilterList;
+
+
