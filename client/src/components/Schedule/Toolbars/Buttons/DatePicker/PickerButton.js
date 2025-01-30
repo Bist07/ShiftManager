@@ -2,8 +2,9 @@ import { generateWeekDates } from '../../../../../utils';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Button from '@mui/material/Button';
 import DateRangeRoundedIcon from '@mui/icons-material/DateRangeRounded';
+import { useSchedule } from '../../../../../context/ScheduleContext';
 
-function WeekPickerButton(props) {
+function PickerButton(props) {
     const {
         setOpen,
         label,
@@ -13,8 +14,10 @@ function WeekPickerButton(props) {
         inputProps: { 'aria-label': ariaLabel } = {},
     } = props;
 
+    const { viewMode } = useSchedule();
+
     const startOfWeek = generateWeekDates(label)[0].format('MMM D, YYYY');
-    const endOfWeek = generateWeekDates(label)[generateWeekDates(label).length - 1].format('MMM D, YYYY');
+    const endOfWeek = generateWeekDates(label)[6].format('MMM D, YYYY'); // Last day of the week
 
     return (
         <Button
@@ -29,29 +32,27 @@ function WeekPickerButton(props) {
                 bgcolor: '#15181b',
                 borderRadius: '4px',
                 borderColor: '#20242a',
-                '&:hover ': {
+                '&:hover': {
                     borderColor: '#303840',
                     color: '#0077e5',
                 },
             }}
         >
             {label ? (
-                <>
-                    <DateRangeRoundedIcon
-                        sx={{
-                            color: 'secondary.main',
-                        }} /> {startOfWeek}
-                    <ArrowForwardIcon
-                        sx={{
-                            color: 'secondary.main',
-                        }} /> {endOfWeek}
-                </>
+                viewMode === 'week' ? (
+                    <>
+                        <DateRangeRoundedIcon sx={{ color: 'secondary.main' }} /> {startOfWeek}
+                        <ArrowForwardIcon sx={{ color: 'secondary.main' }} /> {endOfWeek}
+                    </>
+                ) : (
+
+                    `${label}`
+                )
             ) : (
                 'Pick a date'
             )}
-
         </Button>
     );
 }
 
-export default WeekPickerButton;
+export default PickerButton;

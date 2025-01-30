@@ -1,8 +1,8 @@
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { useSchedule } from '../../../../context/ScheduleContext';
+import { useSchedule } from '../../../../../context/ScheduleContext';
 import React, { useState, useEffect } from 'react';
-import { generateWeekDates } from '../../../../utils';
+import { generateWeekDates } from '../../../../../utils';
 import {
     IconButton
 } from '@mui/material';

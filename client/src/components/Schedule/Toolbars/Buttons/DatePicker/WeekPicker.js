@@ -7,7 +7,7 @@ import isBetweenPlugin from 'dayjs/plugin/isBetween';
 import dayjs from 'dayjs';
 import { generateWeekDates, isInSameWeek } from '../../../../../utils';
 import CustomPickersDay from './Styles';
-import WeekPickerButton from './WeekPickerButton';
+import PickerButton from './PickerButton';
 
 dayjs.extend(isBetweenPlugin);
 
@@ -47,7 +47,7 @@ export default function WeekPicker(props) {
                 onChange={(newValue) => handleChange(newValue)}
                 showDaysOutsideCurrentMonth
                 {...props}
-                slots={{ ...props.slots, day: Day, textField: WeekPickerButton }}
+                slots={{ ...props.slots, day: Day, textField: PickerButton }}
                 slotProps={{
                     ...props.slotProps,
                     field: { setOpen },

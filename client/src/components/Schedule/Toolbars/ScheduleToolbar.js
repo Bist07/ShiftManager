@@ -9,8 +9,9 @@ import { ShiftDialog } from '../Dialogs';
 import dayjs from 'dayjs';
 import { AutoAssignButton } from './Buttons/AutoAssign';
 import { useSchedule } from '../../../context/ScheduleContext';
-import WeekPicker from './Buttons/WeekPicker/WeekPicker';
-import NavButtons from './Buttons/NavButtons';
+import WeekPicker from './Buttons/DatePicker/WeekPicker';
+import NavButtons from './Buttons/DatePicker/NavButtons';
+import MonthPicker from './Buttons/DatePicker/MonthPicker';
 
 const ScheduleToolbar = () => {
     const {
@@ -66,7 +67,7 @@ const ScheduleToolbar = () => {
                     </IconButton>
                     <ButtonGroup>
                         <NavButtons type={'Prev'} />
-                        <WeekPicker />
+                        {viewMode === 'week' ? <WeekPicker /> : <MonthPicker />}
                         <NavButtons type={'Next'} />
                     </ButtonGroup>
                 </Box>

@@ -9,9 +9,9 @@ export const useSchedule = () => useContext(ScheduleContext);
 
 export const ScheduleProvider = ({ children }) => {
     const [viewMode, setViewMode] = useState('week');
-    const [date, setDate] = useState(dayjs(new Date()));
+    const [date, setDate] = useState(dayjs());
     const [selectedWeek, setSelectedWeek] = useState(generateWeekDates(dayjs(new Date())));
-    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+    const [selectedMonth, setSelectedMonth] = useState(dayjs(new Date()).month());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [currentFilters, setCurrentFilters] = useState({
 
