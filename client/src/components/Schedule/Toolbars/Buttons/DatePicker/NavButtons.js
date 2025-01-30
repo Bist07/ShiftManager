@@ -49,8 +49,13 @@ const NavButtons = ({ type }) => {
     return (
 
         <IconButton
-            varient="contained"
             onClick={type === 'Next' ? handleNext : handlePrev}
+            sx={{
+                '&:hover': {
+                    borderRadius: '16px',
+                    borderColor: 'transparent',
+                },
+            }}
         >
             {type === 'Next' ? <ArrowRightIcon /> : <ArrowLeftIcon />}
         </IconButton>

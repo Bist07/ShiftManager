@@ -43,23 +43,21 @@ function PickerButton(props) {
                 fontSize: '14px',
                 color: 'primary.main',
                 bgcolor: '#15181b',
-                borderRadius: '4px',
-                borderColor: '#20242a',
                 '&:hover': {
-                    borderColor: '#303840',
+                    borderColor: 'transparent',
                     color: '#0077e5',
                 },
             }}
         >
             {label ? (
                 viewMode === 'week' ? (
-                    <>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
-                            <DateRangeRoundedIcon sx={{ color: 'secondary.main' }} />
-                            {startOfWeek}
-                            <ArrowForwardIcon sx={{ color: 'secondary.main' }} /> {endOfWeek}
-                        </Box>
-                    </>
+
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '8px' }}>
+                        <DateRangeRoundedIcon sx={{ color: 'secondary.main' }} />
+                        {startOfWeek}
+                        <ArrowForwardIcon sx={{ color: 'secondary.main' }} /> {endOfWeek}
+                    </Box>
+
                 ) : (
                     <>
                         <DateRangeRoundedIcon sx={{ color: 'secondary.main' }} /> {month}   {year}

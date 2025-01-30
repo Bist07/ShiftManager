@@ -65,7 +65,16 @@ const ScheduleToolbar = () => {
                         )}
 
                     </IconButton>
-                    <ButtonGroup>
+                    <ButtonGroup sx={{
+                        bgcolor: '#15181b',
+                        borderRadius: '16px',
+                        borderColor: '#20242a',
+                        '&:hover': {
+                            borderRadius: '16px',
+                            borderColor: '#303840',
+                            color: '#0077e5',
+                        },
+                    }}>
                         <NavButtons type={'Prev'} />
                         {viewMode === 'week' ? <WeekPicker /> : <MonthPicker />}
                         <NavButtons type={'Next'} />
