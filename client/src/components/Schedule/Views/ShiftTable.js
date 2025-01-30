@@ -66,7 +66,6 @@ const ShiftTable = ({ shifts: initialShifts, selectedWeek, filter, refetchTrigge
     // Group unassigned shifts by formatted date
     const unassignedShiftsByDate = GroupUnassignedShiftsByDate(unassignedShifts);
 
-
     return (
         <>
             <TableContainer component={Paper}>

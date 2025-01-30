@@ -14,14 +14,14 @@ const useShifts = () => {
 
             const data = await fetchShifts();
             const formattedShifts = data.map(shift => ({
-                ...shift,  // Keep all the other properties the same
+                ...shift,
                 full_date: new Date(shift.full_date).toLocaleDateString(),
             }));
             setShifts(formattedShifts);
 
+
         } catch (err) {
             setError('Failed to load data. Please try again later.');
-
         } finally {
             setLoading(false);
         }

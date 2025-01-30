@@ -256,7 +256,7 @@ const mockRoles = [
     }
 ]
 
-const mockPreference = [
+const mockPreferences = [
     {
         "preference_id": 1,
         "position_id": 1,
@@ -333,6 +333,12 @@ app.delete('/api/employees/delete', (req, res) => {
 
 // 📌 Shifts API
 app.get('/api/shifts', (req, res) => res.json(mockShifts));
+
+app.get('/api/shifts/unassigned', (req, res) => {
+    const unassignedShifts = mockShifts.filter(shift => shift.e_id === null);
+    res.json(unassignedShifts);
+});
+
 
 app.post('/api/shifts/create', (req, res) => {
     const { date, repeat, e_id, position_id, location_id, start_time, end_time } = req.body;
