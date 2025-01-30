@@ -4,13 +4,16 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useSchedule } from '../../../../../context/ScheduleContext';
 import PickerButton from './PickerButton';
+import dayjs from 'dayjs';
 
 export default function MonthPicker(props) {
     const [open, setOpen] = React.useState(false);
-    const { selectedMonth, setSelectedMonth, setSelectedYear, date } = useSchedule();
+    const { selectedMonth, setSelectedMonth, setSelectedYear, date, setDate } = useSchedule();
 
     const handleChange = (value) => {
-        setSelectedMonth(value);
+        setDate(value)
+        setSelectedMonth(value.format('M') - 1);
+        setSelectedYear(value.format('YYYY'))
     }
 
     return (
@@ -18,7 +21,8 @@ export default function MonthPicker(props) {
             <DatePicker
                 label={date}
                 open={open}
-                views={['month']}
+                views={["year", "month"]}
+                openTo="month"
                 onClose={() => setOpen(false)}
                 onOpen={() => setOpen(true)}
                 value={date}

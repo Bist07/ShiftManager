@@ -10,7 +10,7 @@ import {
 const NavButtons = ({ type }) => {
     const {
         viewMode,
-        setDate,
+        setDate, date,
         selectedWeek, setSelectedWeek,
         selectedMonth, setSelectedMonth,
         selectedYear, setSelectedYear,
@@ -24,12 +24,10 @@ const NavButtons = ({ type }) => {
             setDate(prevWeekStart)
             setSelectedWeek(generateWeekDates(prevWeekStart)); // Generate the new week and update state
         } else {
-            if (selectedMonth === 0) {
-                setSelectedMonth(11);
-                setSelectedYear((prevYear) => prevYear - 1);
-            } else {
-                setSelectedMonth((prevMonth) => prevMonth - 1);
-            }
+            const newDate = date.subtract(1, 'month');
+            setDate(newDate)
+            setSelectedMonth(newDate.format('M') - 1)
+            setSelectedYear(newDate.format('YYYY'))
         }
     };
 
@@ -40,12 +38,10 @@ const NavButtons = ({ type }) => {
             setDate(nextWeekStart)
             setSelectedWeek(generateWeekDates(nextWeekStart)); // Generate the new week and update state
         } else {
-            if (selectedMonth === 11) {
-                setSelectedMonth(0);
-                setSelectedYear((prevYear) => prevYear + 1);
-            } else {
-                setSelectedMonth((prevMonth) => prevMonth + 1);
-            }
+            const newDate = date.add(1, 'month');
+            setDate(newDate)
+            setSelectedMonth(newDate.format('M') - 1)
+            setSelectedYear(newDate.format('YYYY'))
         }
     };
 
