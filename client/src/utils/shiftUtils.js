@@ -1,4 +1,4 @@
-import { mapWeekToDays } from "./dateUtils";
+
 
 export const GroupUnassignedShiftsByDate = (unassignedShifts) => {
     return unassignedShifts.reduce((acc, shift) => {
@@ -30,26 +30,26 @@ export const filterShifts = (shifts, filters) => {
 };
 
 
-export const getScheduledHours = (e_id, shifts, period) => {
-    let scheduledHours = 0;
+// export const getScheduledHours = (e_id, shifts, period) => {
+//     let scheduledHours = 0;
 
-    // Ensure the week is mapped correctly
-    period = mapWeekToDays(period);
+//     // Ensure the week is mapped correctly
+//     period = mapWeekToDays(period);
 
-    shifts.forEach(({ shiftDays }) => {
-        Object.keys(shiftDays).forEach((day) => {
-            const shift = shiftDays[day];
-            if (shift.start_time && shift.end_time) {
-                const startTime = new Date(shift.start_time);
-                const endTime = new Date(shift.end_time);
-                const hours = (endTime - startTime) / 1000 / 60 / 60;
-                scheduledHours += hours;
-            }
-        });
-    });
+//     shifts.forEach(({ shiftDays }) => {
+//         Object.keys(shiftDays).forEach((day) => {
+//             const shift = shiftDays[day];
+//             if (shift.start_time && shift.end_time) {
+//                 const startTime = new Date(shift.start_time);
+//                 const endTime = new Date(shift.end_time);
+//                 const hours = (endTime - startTime) / 1000 / 60 / 60;
+//                 scheduledHours += hours;
+//             }
+//         });
+//     });
 
-    return scheduledHours;
-}
+//     return scheduledHours;
+// }
 
 export const ValidateShift = (shifts, e_id, dates, start_time, end_time) => {
     if (!e_id || !dates || !start_time || !end_time) {

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { darkTheme, lightTheme } from '../theme/theme'; // Assuming these are valid themes
 
@@ -8,7 +8,7 @@ const ThemeModeContext = createContext();
 export const useThemeMode = () => useContext(ThemeModeContext);
 
 export default function ThemeModeProvider({ children }) {
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(true);
 
     const toggleTheme = () => {
         setIsDarkMode((prevMode) => !prevMode);

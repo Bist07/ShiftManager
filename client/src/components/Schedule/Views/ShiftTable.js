@@ -13,15 +13,17 @@ import {
 
 } from '@mui/material';
 import { EmployeeCard } from '../../Common';
-import { getLocalDate, mapWeekToDays, filterShifts, GroupUnassignedShiftsByDate } from '../../../utils';
+import { filterShifts, GroupUnassignedShiftsByDate } from '../../../utils';
 import { useShifts, useEmployee, useUnassignedShifts } from '../../../hooks';
 import { ShiftDialog } from '../Dialogs';
 import { AddShiftCard, ShiftCard } from '../Cards';
+import dayjs from 'dayjs';
+import { generateWeekDates } from '../../../utils';
 
+const ShiftTable = ({ shifts: initialShifts, selectedWeek, filter, refetchTrigger }) => {
 
-const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger }) => {
+    const week = selectedWeek ? selectedWeek : generateWeekDates(dayjs(new Date()));
     const { employees = [], loading } = useEmployee(); // Ensure employees is always an array
-    const mappedWeek = mapWeekToDays(week); // Map week to specific dates
     const { shifts, refetchShifts } = useShifts();
     const filteredShifts = filterShifts(shifts, filter) || [];
     const [currentShift, setCurrentShift] = useState(null);
@@ -72,19 +74,16 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{ width: '15%' }} align="center"></TableCell>
-                            {Object.keys(mappedWeek).map((day) => {
-                                const date = mappedWeek[day];
-                                const localDate = getLocalDate(date);
-                                const formattedDate = localDate.toLocaleDateString('en-US', {
-                                    day: 'numeric',
-                                });
+                            {week.map((date) => {
+                                const formattedDate = date.format('YYYY-MM-DD');
+                                const dayOfWeek = date.format('ddd');
                                 return (
-                                    <TableCell key={localDate} align="center" sx={{ width: '12%', paddingTop: 1 }}>
+                                    <TableCell key={formattedDate} align="center" sx={{ width: '12%', paddingTop: 1 }}>
                                         <Typography variant='Table.header.secondary'>
-                                            {day} <br />
+                                            {dayOfWeek} <br />
                                         </Typography>
                                         <Typography variant='Table.header.primary'>
-                                            {formattedDate}
+                                            {date.format('D')}
                                         </Typography>
                                     </TableCell>
                                 );
@@ -92,7 +91,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                         </TableRow>
                         <TableRow>
                             <TableCell
-                                colSpan={Object.keys(mappedWeek).length + 1}
+                                colSpan={8}
                                 variant='header'
                                 sx={{ borderBottomColor: 'primary.main' }}
                             >
@@ -109,11 +108,11 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                         {/* Unassigned Shifts Row */}
                         <TableRow>
                             <TableCell component="th" scope="row" ></TableCell>
-                            {Object.keys(mappedWeek).map((day) => {
-                                const date = mappedWeek[day];
-                                const shiftsForDate = unassignedShiftsByDate[date] || [];
+                            {week.map((date) => {
+                                const formattedDate = date.format('YYYY-MM-DD');
+                                const shiftsForDate = unassignedShiftsByDate[formattedDate] || [];
                                 return (
-                                    <TableCell key={date} >
+                                    <TableCell key={formattedDate} >
                                         <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "wrap", alignContent: "flex-start" }}>
                                             {shiftsForDate.length > 0 ? (
                                                 shiftsForDate.map((shift) => (
@@ -126,9 +125,9 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                             margin: 0.5,
                                                             width: '100%',
                                                         }}
-                                                        onClick={() => handleOpenDialog(shift, date)}
+                                                        onClick={() => handleOpenDialog(shift, formattedDate)}
                                                     >
-                                                        <ShiftCard shift={shift} date={date} />
+                                                        <ShiftCard shift={shift} date={formattedDate} />
                                                     </Button>
                                                 ))
                                             ) : (
@@ -143,7 +142,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                             backgroundColor: 'transparent',
                                                         },
                                                     }}
-                                                    onClick={() => handleOpenDialog(null, date)}
+                                                    onClick={() => handleOpenDialog(null, formattedDate)}
                                                 >
                                                     <AddShiftCard />
                                                 </Button>
@@ -157,7 +156,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                         <TableRow>
                             <TableCell
                                 variant='header'
-                                colSpan={Object.keys(mappedWeek).length + 1}
+                                colSpan={8}
                                 sx={{ borderBottomColor: "primary.green" }}
                             >
                                 <Typography
@@ -173,9 +172,9 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                 <TableCell component="th" scope="row" sx={{ padding: 2 }}>
                                     <EmployeeCard title={emp.name} description="Employee" />
                                 </TableCell>
-                                {Object.keys(mappedWeek).map((day) => {
-                                    const date = mappedWeek[day];
-                                    const shiftForDay = filteredShifts.find((shift) => shift.e_id === emp.e_id && shift.full_date === date) || {};
+                                {week.map((date) => {
+                                    const formattedDate = date.format('YYYY-MM-DD');
+                                    const shiftForDay = filteredShifts.find((shift) => shift.e_id === emp.e_id && shift.full_date === formattedDate) || {};
                                     return (
                                         <TableCell key={date}>
                                             <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", flexWrap: "wrap", alignContent: "flex-start" }}>
@@ -190,9 +189,9 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                             margin: 0.5,
                                                             width: '100%',
                                                         }}
-                                                        onClick={() => handleOpenDialog(shiftForDay, date)}
+                                                        onClick={() => handleOpenDialog(shiftForDay, formattedDate)}
                                                     >
-                                                        <ShiftCard shift={shiftForDay} date={date} />
+                                                        <ShiftCard shift={shiftForDay} date={formattedDate} />
                                                     </Button>
 
                                                 )
@@ -208,7 +207,7 @@ const ShiftTable = ({ shifts: initialShifts, week, year, filter, refetchTrigger 
                                                                     backgroundColor: 'transparent',
                                                                 },
                                                             }}
-                                                            onClick={() => handleOpenDialog(null, date)}
+                                                            onClick={() => handleOpenDialog(null, formattedDate)}
                                                         >
                                                             <AddShiftCard />
                                                         </Button>

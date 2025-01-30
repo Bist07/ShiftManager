@@ -1,14 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Box, Toolbar, Button, MenuItem, IconButton, MenuList, Popover
+    Box, Toolbar, IconButton, ButtonGroup
 } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { formatWeek, generateWeeks } from '../../../utils';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import ViewWeekIcon from '@mui/icons-material/ViewWeek';
 import ViewModuleRoundedIcon from '@mui/icons-material/ViewModuleRounded';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,87 +9,24 @@ import { ShiftDialog } from '../Dialogs';
 import dayjs from 'dayjs';
 import { AutoAssignButton } from './Buttons/AutoAssign';
 import { useSchedule } from '../../../context/ScheduleContext';
+import WeekPicker from './Buttons/WeekPicker/WeekPicker';
+import NavButtons from './Buttons/NavButtons';
 
 const ScheduleToolbar = () => {
     const {
         viewMode, setViewMode,
-        selectedWeek, setSelectedWeek,
-        selectedMonth, setSelectedMonth,
-        selectedYear, setSelectedYear,
+        selectedWeek,
+        selectedMonth,
+        selectedYear,
         setRefetchTrigger
     } = useSchedule();
     const [weeks, setWeeks] = useState([]);
-    const [weekAnchorEl, setWeekAnchorEl] = useState(null);
     const [currentShift, setCurrentShift] = useState(null);
 
-    const openWeekMenu = Boolean(weekAnchorEl);
-
     useEffect(() => {
-        const generatedWeeks = generateWeeks(selectedMonth, selectedYear);
-        setWeeks(generatedWeeks)
-        setSelectedWeek(generatedWeeks[0])
+        setWeeks(selectedWeek)
+
     }, [selectedMonth, selectedYear]);
-
-
-    const handleSelectWeek = (week) => {
-        setSelectedWeek(week);
-        setWeekAnchorEl(null);
-    };
-
-
-    const handlePrev = () => {
-        if (viewMode !== 'month') {
-            const currentIndex = weeks.findIndex((week) => week === selectedWeek);
-            if (currentIndex > 0) {
-                setSelectedWeek(weeks[currentIndex - 1]);
-            } else {
-                // Handle going to the previous month if needed
-                if (selectedMonth === 0) {
-                    setSelectedMonth(11);
-                    setSelectedWeek(weeks[0])
-                    setSelectedYear((prevYear) => prevYear - 1);
-                } else {
-                    setSelectedWeek(weeks[0])
-                    setSelectedMonth((prevMonth) => prevMonth - 1);
-                }
-            }
-        } else {
-
-            if (selectedMonth === 0) {
-                setSelectedMonth(11)
-                setSelectedYear((prevYear) => prevYear - 1);
-            } else {
-                setSelectedMonth((prevMonth) => prevMonth - 1);
-            }
-        }
-    };
-
-    const handleNext = () => {
-        if (viewMode !== 'month') {
-            const currentIndex = weeks.findIndex((week) => week === selectedWeek);
-            if (currentIndex < weeks.length - 1) {
-                setSelectedWeek(weeks[currentIndex + 1]);
-            } else {
-                // Handle going to the next month if needed
-                if (selectedMonth === 11) {
-                    setSelectedMonth(0);
-                    setSelectedWeek(weeks[0])
-                    setSelectedYear((prevYear) => prevYear + 1);
-                } else {
-                    setSelectedWeek(weeks[0])
-                    setSelectedMonth((prevMonth) => prevMonth + 1);
-                }
-            }
-        } else {
-            if (selectedMonth === 11) {
-                setSelectedMonth(0)
-                setSelectedYear((prevYear) => prevYear + 1);
-            } else {
-                setSelectedMonth((prevMonth) => prevMonth + 1);
-            }
-
-        }
-    };
 
     const handleOpenDialog = () => {
         setCurrentShift({
@@ -134,159 +64,11 @@ const ScheduleToolbar = () => {
                         )}
 
                     </IconButton>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            height: '40px',
-                        }}>
-
-                        <IconButton
-                            varient="contained"
-                            onClick={handlePrev}
-                            sx={{
-                                borderTopRightRadius: '0px',
-                                borderBottomRightRadius: '0px',
-                            }}
-                        >
-                            <ArrowLeftIcon />
-                        </IconButton>
-
-                        <IconButton
-                            varient="contained"
-                            onClick={handleNext}
-                            sx={{
-                                borderTopLeftRadius: '0px',
-                                borderBottomLeftRadius: '0px',
-                            }}
-                        >
-                            <ArrowRightIcon />
-                        </IconButton>
-                    </Box>
-
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            views={['year', 'month']}
-                            value={dayjs(new Date(selectedYear, selectedMonth))}
-                            onChange={(newDate) => {
-                                if (newDate) {
-                                    setSelectedMonth(newDate.month());
-                                    setSelectedYear(newDate.year());
-                                }
-                            }}
-                            slotProps={{
-                                textField: {
-                                    size: 'small', sx: {
-                                        borderRadius: '5px',
-                                        bgcolor: '#15181b', '& input': {
-                                            fontSize: '14px',
-                                            color: 'secondary.main',
-                                            '&:hover': {
-                                                color: '#ebf5ff',
-                                            },
-                                        },
-                                        svg: {
-                                            color: '#3399ff',
-                                        },
-                                        '& .MuiOutlinedInput-root': {
-                                            '& fieldset': {
-
-                                                borderColor: '#20242a', // Change the border color
-                                                borderRadius: '4px',
-                                                width: '100%',
-                                                height: '120%',
-                                            },
-                                            '&:hover fieldset': {
-                                                borderColor: '#303840', // Border color when hovering
-                                            },
-
-                                        },
-                                        '& .MuiInputAdornment-positionEnd .MuiIconButton-root': {
-                                            // Target the icon button inside the adornment
-                                            '&:hover': {
-                                                borderColor: 'transparent',
-                                                backgroundColor: 'transparent', // Ensure no background color changes if you only want border effect
-                                            },
-                                        },
-                                    }
-                                }
-                            }
-                            }
-                        />
-                    </LocalizationProvider>
-
-                    {/* Render Select Week button only when viewMode is 'week' */}
-                    {viewMode === 'week' && (
-                        <Button
-                            aria-controls={openWeekMenu ? 'week-menu' : undefined}
-                            aria-haspopup="true"
-                            onClick={(e) => setWeekAnchorEl(e.currentTarget)}
-                            sx={{
-                                fontSize: '17px',
-                                color: 'primary.main',
-                                padding: '8px 16px',
-                            }}
-                        >
-                            {selectedWeek
-                                ? `${formatWeek(selectedWeek[0])} - ${formatWeek(selectedWeek[selectedWeek.length - 1])}`
-                                : 'Select Week'}
-                            <ArrowDropDownIcon sx={{ fontSize: '20px', color: 'secondary.main' }} />
-                        </Button>
-                    )}
-
-
-                    <Popover
-                        id="week-menu"
-                        anchorEl={weekAnchorEl}
-                        open={openWeekMenu}
-                        onClose={() => setWeekAnchorEl(null)}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                        sx={{
-                            boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
-                            padding: "0",
-                            marginTop: "6px",
-                            width: "auto",
-                        }}
-                    > <Box
-                        sx={{
-                            display: "flex",
-                            gap: 0,
-                            padding: 0,
-                            border: "1px solid #101010",
-                            borderRadius: "4px",
-                            backgroundColor: '#15181b',
-                        }}
-                    >
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    gap: 0,
-                                    mt: 0.5,
-                                    mb: 0.5,
-                                }}
-                            >
-                                <MenuList
-                                    sx={{
-                                        maxHeight: 300,
-                                        overflowY: "auto",
-                                        padding: "0",
-                                    }}
-                                >
-                                    {weeks.map((week, index) => (
-                                        <MenuItem key={index} onClick={() => handleSelectWeek(week)}>
-                                            {`${formatWeek(week[0])} - ${formatWeek(week[week.length - 1])}`}
-                                        </MenuItem>
-                                    ))}
-                                </MenuList>
-                            </Box>
-                        </Box>
-                    </Popover>
+                    <ButtonGroup>
+                        <NavButtons type={'Prev'} />
+                        <WeekPicker />
+                        <NavButtons type={'Next'} />
+                    </ButtonGroup>
                 </Box>
 
                 {/* Box with flexGrow to push Tune button to the right */}

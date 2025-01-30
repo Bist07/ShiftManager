@@ -12,7 +12,7 @@ const Schedule = () => {
             <Box sx={{ width: '100%' }}>
                 {(
                     viewMode === 'week' ? (
-                        <ShiftTable week={selectedWeek} month={selectedMonth} year={selectedYear} filter={currentFilters} refetchTrigger={refetchTrigger} />
+                        <ShiftTable selectedWeek={selectedWeek} month={selectedMonth} year={selectedYear} filter={currentFilters} refetchTrigger={refetchTrigger} />
                     ) : viewMode === 'month' ? (
                         <MonthlyShiftTable month={selectedMonth} year={selectedYear} filter={currentFilters} refetchTrigger={refetchTrigger} />
                     ) : (

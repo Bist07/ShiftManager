@@ -1,13 +1,20 @@
 import dayjs from 'dayjs';
 
-export const formatTime = (time) => {
-    if (!time) return 'N/A';
-    const date = new Date(`1970-01-01T${time}`);
-    let formattedTime = date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
+export const isInSameWeek = (dayA, dayB) => {
+    if (dayB == null) {
+        return false;
+    }
 
-    // Replace lowercase 'a.m.'/'p.m.' with uppercase 'AM'/'PM' and remove the period.
-    formattedTime = formattedTime.replace(/(a.m.|p.m.)/, (match) => match.toUpperCase().replace('.', '').replace('.', ''));
-    return formattedTime;
+    return dayA.isSame(dayB, 'week');
+};
+
+export const generateWeekDates = (date) => {
+    const startOfWeek = date.startOf('week');
+    const weekDates = [];
+    for (let i = 0; i < 7; i++) {
+        weekDates.push((startOfWeek.add(i, 'day')));
+    }
+    return weekDates;
 };
 
 export const formatDate = (isoString) => {
@@ -18,61 +25,12 @@ export const formatDate = (isoString) => {
     return `${year}-${month}-${day}`;
 };
 
-export const formatWeek = (isoString) => {
-    const date = getLocalDate(isoString);
-    const formattedDate = `${date.getDate()} ${date.toLocaleString('default', { month: 'short' })}`;
-    return formattedDate;
-};
-
-export const generateWeeks = (month, year) => {
-    const newWeeks = [];
-    let week = [];
-
-    // Get the first day of the month
-    const days = getDaysInMonth(month, year);
-
-    // Iterate through all days of the month
-    for (let i = 0; i <= days.length - 1; i++) {
-        // Add the current date to the current week
-        week.push(days[i]);
-
-        // Check if it's the last day of the week (Saturday or 7th, 14th, 21st, etc.)
-        if (dayjs(days[i]).day() === 6) {  // dayjs().day() returns 6 for Saturday
-            newWeeks.push(week);  // Push the current week to the newWeeks array
-            week = [];  // Reset the week for the next set of dates
-        }
-    }
-
-    // If there are remaining days in the last week, add it to the newWeeks array
-    if (week.length > 0) {
-        newWeeks.push(week);
-    }
-
-    return newWeeks;
-};
-
 export const getLocalDate = (date) => {
     const [year, month, day] = date.split('-');
 
     // Subtract 1 from the month to adjust for zero-indexing
     const localDate = new Date(year, month - 1, day);
     return localDate;
-};
-
-export const mapWeekToDays = (week) => {
-    if (!week || week.length === 0) {
-        return {}; // Return an empty object if the week is null or an empty array
-    }
-    const mappedWeek = {};
-    week.forEach((date) => {
-
-        const localDate = getLocalDate(date);
-        const dayName = new Date(localDate).toLocaleString('en-us', { weekday: 'short' }); // Get day name (e.g., "Sunday")
-
-        // Directly store the date, no need for an array
-        mappedWeek[dayName] = date;
-    });
-    return mappedWeek;
 };
 
 export const getDaysInMonth = (month, year) => {
@@ -104,25 +62,7 @@ export const getDaysInMonth = (month, year) => {
     return days;
 };
 
-export const getHours = (startTime, endTime) => {
-    const date1 = new Date(`1970-01-01T${startTime}Z`);
-    const date2 = new Date(`1970-01-01T${endTime}Z`);
-    const diffInMilliseconds = date2 - date1;
-    const diffInMinutes = diffInMilliseconds / (1000 * 60);
-    const diffHours = Math.floor(diffInMinutes / 60);
-    const diffRemainingMinutes = diffInMinutes % 60;
 
-    // Return the values for use in other functions as well as the formatted string
-    return {
-        diffHours,
-        diffRemainingMinutes,
-        formatted: diffHours === 0
-            ? `${diffRemainingMinutes}min`
-            : diffRemainingMinutes === 0
-                ? `${diffHours}h`
-                : `${diffHours}h ${diffRemainingMinutes}min`
-    };
-};
 
 // Utility function to get all dates between two dates based on frequency and valid days
 export const getDatesBetween = (startDate, endDate, frequency, days) => {
