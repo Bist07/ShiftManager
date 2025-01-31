@@ -169,7 +169,6 @@ const TimePicker = ({ formData, handleChange, type, errors, setErrors }) => {
                 transformOrigin={{ vertical: "top", horizontal: "left" }}
                 sx={{
                     boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
-                    padding: "0",
                     marginTop: "6px",
                     width: "auto",
                 }}
@@ -178,8 +177,11 @@ const TimePicker = ({ formData, handleChange, type, errors, setErrors }) => {
                     sx={{
                         display: "flex",
                         border: "1px solid #20242a",
+                        borderColor: "field.border",
                         borderRadius: "4px",
-                        backgroundColor: "#15181b",
+                        backgroundColor: "menu.bg",
+                        paddingTop: 0.5,
+                        paddingBottom: 0.5
                     }}
                 >
                     <TimeDropdown

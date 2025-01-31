@@ -132,12 +132,12 @@ const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type,
                 <Box
                     sx={{
                         display: "flex",
-                        gap: 0,
-                        padding: 0,
-                        border: "1px solid #1d2126",
+                        border: "1px solid #20242a",
+                        borderColor: "field.border",
                         borderRadius: "4px",
-                        backgroundColor: "#15181b",
-                        width: "auto",
+                        backgroundColor: "menu.bg",
+                        paddingTop: 0.5,
+                        paddingBottom: 0.5
                     }}
                 >
                     <Box
@@ -163,20 +163,6 @@ const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type,
                                     key={option}
                                     onClick={() => handleSelect(option)}
                                     selected={breakDuration === option}
-                                    sx={{
-                                        fontSize: "14px",
-                                        color: "secondary.main",
-                                        "&:hover": {
-                                            backgroundColor: "#303840",
-                                        },
-                                        "&.Mui-selected": {
-                                            backgroundColor: "#2684ff",
-                                            color: "#fff",
-                                        },
-                                        "&.Mui-selected:hover": {
-                                            bgcolor: "#0077e5",
-                                        },
-                                    }}
                                 >
                                     {option}
                                 </MenuItem>
