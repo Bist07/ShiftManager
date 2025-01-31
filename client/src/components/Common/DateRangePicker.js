@@ -25,37 +25,7 @@ const DatePicker = ({ value, onChange, label, isDisabled, minDate, name }) => {
                 format="DD MMM YYYY"
                 slotProps={{
                     textField: {
-                        size: 'small', sx: {
-                            borderRadius: '4px',
-                            bgcolor: '#15181b', '& input': {
-                                fontSize: '14px',
-                                color: '.main',
-                            },
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: '#20242a', // Change the border color
-                                    borderRadius: '4px',
-                                    width: '100%',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: '#303840', // Border color when hovering
-                                },
-                                '&.Mui-disabled': {
-                                    backgroundColor: '#15181b',
-                                    '& input': {
-                                        fontSize: '14px',
-                                    },
-                                    '& fieldset': {
-                                        borderColor: '#20242a',
-                                        borderRadius: '4px',
-                                    },
-                                },
-                                '& .MuiInputAdornment-root .MuiTypography-root': {
-                                    fontSize: '12px',
-                                    color: '#5f7183',
-                                },
-                            },
-                        },
+                        size: 'small',
                         InputProps: {
                             startAdornment: (
                                 <InputAdornment position="start">

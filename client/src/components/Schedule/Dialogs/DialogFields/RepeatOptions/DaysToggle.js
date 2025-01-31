@@ -46,7 +46,7 @@ const DaysToggle = ({ formData, handleChange }) => {
                         sx={{
                             fontSize: '15px',
                             fontWeight: 600,
-                            color: '#738190',
+                            color: 'dialog.text',
                             textAlign: 'right',
                             width: '50%',
                         }}
@@ -55,11 +55,11 @@ const DaysToggle = ({ formData, handleChange }) => {
                     </Typography>
                     <AddIcon
                         sx={{
-                            color: 'secondary.main',
+                            color: 'dialog.icon',
                             fontSize: '36px',
                             borderRadius: '50px',
                             border: '2px solid #bcbcbc',
-                            borderColor: 'secondary.main',
+                            borderColor: 'dialog.icon',
                             padding: 0.5,
                         }}
                     />
@@ -83,21 +83,21 @@ const DaysToggle = ({ formData, handleChange }) => {
                                     value={dayMapping[day]}
                                     aria-label={day}
                                     sx={{
-                                        borderColor: '#20242a',
-                                        color: '#b6bec9',
+                                        borderColor: 'field.border',
+                                        color: 'secondary.main',
                                         '&:hover': {
-                                            borderColor: '#303840',
-                                            color: '#ebf5ff',
+                                            borderColor: 'menu.bgHover',
+                                            color: 'secondary.hover',
                                         },
                                         '&.Mui-selected': {
-                                            backgroundColor: '#2684ff',
-                                            borderColor: '#20242a',
-                                            color: '#ebf5ff',
+                                            backgroundColor: 'menu.bgSelected',
+                                            borderColor: 'field.border',
+                                            color: 'white',
                                         },
                                         '&.Mui-selected:hover': {
-                                            bgcolor: '#0077e5',
-                                            borderColor: '#303840',
-                                            color: '#ebf5ff',
+                                            bgcolor: 'primary.hover',
+                                            borderColor: 'menu.bgHover',
+                                            color: 'white',
                                         },
                                     }}
                                 >

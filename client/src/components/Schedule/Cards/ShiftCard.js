@@ -22,7 +22,7 @@ const ShiftDetails = ({ shift, date, displayName, onClick }) => {
             <CardActionArea disableRipple disableFocusRipple sx={{ display: 'flex' }}>
                 <CardContent sx={{ display: 'flex', flexDirection: 'column', padding: 0.5, paddingLeft: 1, width: '100%' }}>
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: 0.5 }}>
-                        <Typography variant="body1" sx={{ fontWeight: 600, color: shift?.e_id ? 'primary.green' : 'primary.main', fontSize: '11px', textAlign: 'left' }} >
+                        <Typography variant="body1" sx={{ fontWeight: 600, color: shift?.e_id ? 'green.main' : 'primary.main', fontSize: '11px', textAlign: 'left' }} >
                             {formatTime(startTime)} - {formatTime(endTime)}
                         </Typography>
                         <Typography variant="body1" sx={{ color: 'text.secondary', fontSize: '11px', textAlign: 'left' }}>

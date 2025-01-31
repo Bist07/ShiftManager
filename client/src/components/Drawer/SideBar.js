@@ -82,7 +82,7 @@ export default function MiniDrawer() {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant="permanent" open={open} >
                 <DrawerHeader sx={{ justifyContent: open ? 'flex-end' : 'center' }}>
                     <IconButton
                         onClick={open ? handleDrawerClose : handleDrawerOpen}>

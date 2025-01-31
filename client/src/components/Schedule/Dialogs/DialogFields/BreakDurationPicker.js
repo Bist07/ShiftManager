@@ -84,48 +84,13 @@ const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type,
                 size="small"
                 disabled={Object.keys(errors).some(key => key !== type && errors[key]) ? true : false}
                 sx={{
-                    borderRadius: "4px",
+
                     width: errors[type]
                         ? '40%'
                         : Object.keys(errors).some(key => key !== type && errors[key])
                             ? '25%'
                             : '32.5%',
-                    backgroundColor: "#15181b",
-                    "& input": {
-                        borderRadius: "4px",
-                        fontSize: "14px",
-                        color: "secondary.main",
-                        "&:hover": {
-                            color: "#ebf5ff",
-                        },
-                    },
-                    "& .MuiInputAdornment-root": {
-                        "& .MuiTypography-root": {
-                            fontSize: "12px",
-                            color: "#5f7183",
-                        },
-                    },
-                    "& .MuiInputAdornment-positionEnd": {
-                        mr: -2,
-                    },
-                    "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                            borderColor: "#20242a",
-                        },
-                        "&:hover fieldset": {
-                            borderColor: errors[type] ? theme => theme.palette.error.main : '#303840',
-                        },
-                        "&.Mui-disabled": {
-                            backgroundColor: "#15181b",
-                            "& input": {
-                                fontSize: "14px",
-                            },
-                            "& fieldset": {
-                                borderColor: "#20242a",
-                                borderRadius: "4px",
-                            },
-                        },
-                    },
+
                 }}
                 InputProps={{
                     startAdornment: <InputAdornment position="start">Break</InputAdornment>,

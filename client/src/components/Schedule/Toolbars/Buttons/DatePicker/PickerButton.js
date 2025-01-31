@@ -42,10 +42,10 @@ function PickerButton(props) {
                 width: viewMode === 'week' ? '300px' : '200px',
                 fontSize: '14px',
                 color: 'primary.main',
-                bgcolor: '#15181b',
+                bgcolor: 'transparent',
                 '&:hover': {
                     borderColor: 'transparent',
-                    color: '#0077e5',
+                    color: 'primary.hover',
                 },
             }}
         >

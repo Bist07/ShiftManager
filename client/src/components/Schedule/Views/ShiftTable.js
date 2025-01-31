@@ -120,6 +120,7 @@ const ShiftTable = ({ shifts: initialShifts, selectedWeek, filter, refetchTrigge
                                                         disableFocusRipple
                                                         key={shift.shift_id}
                                                         sx={{
+                                                            border: 0,
                                                             padding: 0,
                                                             margin: 0.5,
                                                             width: '100%',
@@ -134,11 +135,13 @@ const ShiftTable = ({ shifts: initialShifts, selectedWeek, filter, refetchTrigge
                                                     disableRipple
                                                     disableFocusRipple
                                                     sx={{
+                                                        bgcolor: 'transparent',
+                                                        border: 0,
                                                         padding: 0,
                                                         margin: 0.5,
                                                         width: '100%',
                                                         '&:hover': {
-                                                            backgroundColor: 'transparent',
+                                                            bgcolor: 'transparent',
                                                         },
                                                     }}
                                                     onClick={() => handleOpenDialog(null, formattedDate)}
@@ -156,11 +159,11 @@ const ShiftTable = ({ shifts: initialShifts, selectedWeek, filter, refetchTrigge
                             <TableCell
                                 variant='header'
                                 colSpan={8}
-                                sx={{ borderBottomColor: "primary.green" }}
+                                sx={{ borderBottomColor: "green.main" }}
                             >
                                 <Typography
                                     variant='header'
-                                    sx={{ color: "primary.green" }}>
+                                    sx={{ color: "green.main" }}>
                                     <strong>SCHEDULED SHIFTS</strong></Typography>
 
                             </TableCell>
@@ -184,6 +187,7 @@ const ShiftTable = ({ shifts: initialShifts, selectedWeek, filter, refetchTrigge
                                                         disableFocusRipple
                                                         key={shiftForDay.shift_id}
                                                         sx={{
+                                                            border: 0,
                                                             padding: 0,
                                                             margin: 0.5,
                                                             width: '100%',
@@ -199,6 +203,8 @@ const ShiftTable = ({ shifts: initialShifts, selectedWeek, filter, refetchTrigge
                                                             disableRipple
                                                             disableFocusRipple
                                                             sx={{
+                                                                backgroundColor: 'transparent',
+                                                                border: 0,
                                                                 padding: 0,
                                                                 margin: 0.5,
                                                                 width: '100%',

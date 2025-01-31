@@ -154,7 +154,7 @@ const FilterList = ({ onFiltersChange, filterList, handleDrawerOpen, drawerState
 
             {/* Nested Child Items */}
             <Collapse in={open} timeout="auto" unmountOnExit>
-                <Box sx={{ bgcolor: '#181818' }}>
+                <Box sx={{ bgcolor: (theme) => theme.palette.background.light }}>
                     <List component="div" disablePadding>
                         {filteredData.map(({ name, data, optionIdKey }) => (
                             <ListItem>
@@ -171,7 +171,7 @@ const FilterList = ({ onFiltersChange, filterList, handleDrawerOpen, drawerState
                 </Box>
             </Collapse>
 
-        </List>
+        </List >
     );
 };
 

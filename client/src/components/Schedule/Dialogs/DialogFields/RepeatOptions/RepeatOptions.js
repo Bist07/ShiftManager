@@ -41,7 +41,7 @@ const RepeatOptions = ({ formData, handleChange }) => {
     };
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: '#181818', width: '100%' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', bgcolor: 'background.paper', width: '100%' }}>
             <DialogRow iconName={'Repeat'}
                 field={<Selector
                     name="Repeat"

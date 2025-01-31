@@ -32,7 +32,6 @@ const TimeDropdown = ({ options, selected, onSelect, label }) => (
             maxHeight: 300,
             overflowY: "auto",
             padding: "0",
-            backgroundColor: "#15181b",
             flex: 1,
         }}
     >
@@ -41,20 +40,6 @@ const TimeDropdown = ({ options, selected, onSelect, label }) => (
                 key={option}
                 onClick={() => onSelect(option)}
                 selected={selected === option}
-                sx={{
-                    fontSize: "14px",
-                    color: "secondary.main",
-                    "&:hover": {
-                        backgroundColor: "#303840",
-                    },
-                    "&.Mui-selected": {
-                        backgroundColor: "#2684ff",
-                        color: "#fff",
-                    },
-                    "&.Mui-selected:hover": {
-                        bgcolor: "#0077e5",
-                    },
-                }}
             >
                 {option}
             </MenuItem>
@@ -161,52 +146,6 @@ const TimePicker = ({ formData, handleChange, type, errors, setErrors }) => {
                 error={errors[type]}
                 disabled={Object.keys(errors).some(key => key !== type && errors[key]) ? true : false}
                 size="small"
-                sx={{
-                    borderRadius: '4px',
-                    width: errors[type]
-                        ? '50%'
-                        : Object.keys(errors).some(key => key !== type && errors[key])
-                            ? '25%'
-                            : '40%',
-                    backgroundColor: '#15181b',
-                    '& input': {
-                        borderRadius: '4px',
-                        fontSize: '14px',
-                        color: 'secondary.main',
-                        '&:hover ': {
-                            color: '#ebf5ff',
-                        },
-                    },
-                    '& .MuiInputAdornment-root': {
-                        '& .MuiTypography-root': {
-                            fontSize: '12px',
-                            color: '#5f7183'
-                        }
-                    },
-                    '& .MuiInputAdornment-positionEnd': {
-                        mr: -2,
-
-                    },
-                    '& .MuiOutlinedInput-root': {
-                        '& fieldset': {
-                            borderColor: '#20242a',
-                        },
-                        '&:hover fieldset': {
-                            borderColor: errors[type] ? theme => theme.palette.error.main : '#303840',
-                        },
-                        '&.Mui-disabled': {
-                            backgroundColor: '#15181b',
-                            '& input': {
-                                fontSize: '14px',
-                            },
-                            '& fieldset': {
-                                borderColor: '#20242a',
-                                borderRadius: '4px',
-                            },
-                        },
-                    },
-
-                }}
                 InputProps={{
                     startAdornment: <InputAdornment sx={{ fontSize: '14px' }} position="start">{formatType(type)}</InputAdornment>,
                     endAdornment: errors[type] ? (

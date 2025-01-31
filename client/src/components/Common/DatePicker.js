@@ -8,12 +8,12 @@ const DatePickerComponent = ({ formData, handleChange }) => {
     const [selectedDate, setSelectedDate] = useState(formData ? dayjs(formData) : null);
 
     useEffect(() => {
-        setSelectedDate(formData ? dayjs(formData) : null); // Update selected date when formData changes
+        setSelectedDate(formData ? dayjs(formData) : null);
     }, [formData]);
 
     const handleDateChange = (newValue) => {
         setSelectedDate(newValue);
-        handleChange("date", newValue ? newValue.format('YYYY-MM-DD') : ''); // Format date for the parent handler
+        handleChange("date", newValue ? newValue.format('YYYY-MM-DD') : '');
     };
 
     return (
@@ -24,31 +24,7 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                 format="DD MMMM YYYY"
                 slotProps={{
                     textField: {
-                        size: 'small', sx: {
-                            borderRadius: '4px',
-                            bgcolor: '#15181b', '& input': {
-                                fontSize: '14px',
-                                color: 'secondary.main',
-                                '&:hover': {
-                                    color: '#ebf5ff',
-                                }
-                            },
-                            svg: {
-                                color: '#3399ff',
-                            },
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-                                    borderColor: '#20242a', // Change the border color
-                                    borderRadius: '4px',
-                                    width: '100%',
-                                    height: '112%',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: '#303840', // Border color when hovering
-                                },
-
-                            },
-                        }
+                        size: 'small'
                     }
                 }
                 }

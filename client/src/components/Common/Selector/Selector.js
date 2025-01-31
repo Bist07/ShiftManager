@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CreatableSelect from 'react-select/creatable';
-import { CreatableSelectStyle } from './Styles';
+import CustomCreatableSelect from './CustomCreatableSelect';
 
 const Selector = ({ name, formData, handleChange, loading, optionIdKey, options, placeHolderText, isMulti }) => {
     const [selectedOption, setSelectedOption] = useState('');
@@ -35,7 +34,7 @@ const Selector = ({ name, formData, handleChange, loading, optionIdKey, options,
             const selectedIds = selectedOption ? selectedOption.map((opt) => opt.value) : [];
             handleChange(optionIdKey, selectedIds);
         } else {
-            const selectedId = selectedOption ? selectedOption.value : null;
+            const selectedId = selectedOption ? selectedOption.value : '';
             handleChange(optionIdKey, selectedId);
         }
     };
@@ -47,7 +46,7 @@ const Selector = ({ name, formData, handleChange, loading, optionIdKey, options,
 
     return (
         <div>
-            <CreatableSelect
+            <CustomCreatableSelect
                 isMulti={isMulti}
                 isClearable
                 isLoading={loading}
@@ -56,7 +55,6 @@ const Selector = ({ name, formData, handleChange, loading, optionIdKey, options,
                 onChange={handleSelectionChange}
                 placeholder={placeHolderText}
                 menuPortalTarget={document.body}
-                styles={CreatableSelectStyle}
             />
         </div >
     );

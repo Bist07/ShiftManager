@@ -65,16 +65,7 @@ const ScheduleToolbar = () => {
                         )}
 
                     </IconButton>
-                    <ButtonGroup sx={{
-                        bgcolor: '#15181b',
-                        borderRadius: '16px',
-                        borderColor: '#20242a',
-                        '&:hover': {
-                            borderRadius: '16px',
-                            borderColor: '#303840',
-                            color: '#0077e5',
-                        },
-                    }}>
+                    <ButtonGroup>
                         <NavButtons type={'Prev'} />
                         {viewMode === 'week' ? <WeekPicker /> : <MonthPicker />}
                         <NavButtons type={'Next'} />
@@ -86,12 +77,8 @@ const ScheduleToolbar = () => {
                 <Box sx={{ display: 'flex', gap: '16px' }}>
                     <AutoAssignButton onClick={handleAutoAssign} />
                     <IconButton
+                        variant={'add'}
                         onClick={handleOpenDialog}
-                        sx={{
-                            bgcolor: 'primary.main',
-                            color: 'white',
-                            '&:hover': { bgcolor: '#0077e5', borderColor: '#0077e5' },
-                        }}
                     >
                         <AddIcon />
                     </IconButton>

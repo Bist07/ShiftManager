@@ -82,7 +82,8 @@ const MonthlyShiftTable = ({ month, year, filter, refetchTrigger }) => {
                     align="left"
                     sx={{
                         borderTop: 0,
-                        borderBottom: '1px solid #1d2126',
+                        borderBottom: '1px solid #cccc',
+                        borderColor: (theme) => theme.palette.border.hover,
                         padding: '8px',
                         verticalAlign: 'top',
                         position: 'relative',

@@ -60,41 +60,6 @@ export default function WeekPicker(props) {
                         onPointerEnter: () => setHoveredDay(ownerState.day),
                         onPointerLeave: () => setHoveredDay(null),
                     }),
-                    textField: {
-                        size: 'small', sx: {
-                            borderRadius: '5px',
-                            bgcolor: '#15181b', '& input': {
-                                fontSize: '14px',
-                                color: 'secondary.main',
-                                '&:hover': {
-                                    color: '#ebf5ff',
-                                },
-                            },
-                            svg: {
-                                color: '#3399ff',
-                            },
-                            '& .MuiOutlinedInput-root': {
-                                '& fieldset': {
-
-                                    borderColor: '#20242a', // Change the border color
-                                    borderRadius: '4px',
-                                    width: '100%',
-                                    height: '120%',
-                                },
-                                '&:hover fieldset': {
-                                    borderColor: '#303840', // Border color when hovering
-                                },
-
-                            },
-                            '& .MuiInputAdornment-positionEnd .MuiIconButton-root': {
-                                // Target the icon button inside the adornment
-                                '&:hover': {
-                                    borderColor: 'transparent',
-                                    backgroundColor: 'transparent', // Ensure no background color changes if you only want border effect
-                                },
-                            },
-                        }
-                    }
                 }
                 }
             />

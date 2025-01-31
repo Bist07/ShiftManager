@@ -26,12 +26,13 @@ const DialogRow = ({ iconName, field }) => {
                 <Box sx={{ display: 'flex', alignItems: "center", width: "25%", gap: 2 }}>
                     {iconName &&
                         <>
-                            <Typography sx={{ fontSize: '15px', fontWeight: 600, color: '#738190', textAlign: 'right', width: '50%' }}>{iconName}</Typography>
+                            <Typography sx={{ fontSize: '15px', fontWeight: 600, color: 'dialog.text', textAlign: 'right', width: '50%' }}>{iconName}</Typography>
                             <IconComponent sx={{
-                                color: '#9ca6b0',
+                                color: 'dialog.icon',
                                 fontSize: '36px',
                                 borderRadius: '50px',
                                 border: '2px solid #9ca6b0',
+                                borderColor: 'dialog.icon',
                                 padding: 0.5,
 
                             }} />
