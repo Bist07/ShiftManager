@@ -9,6 +9,7 @@ import {
     Alert
 } from "@mui/material";
 import dayjs from "dayjs";
+import MenuWrapper from "./MenuWrapper";
 
 // Utility function for validating and formatting time
 const validateAndFormatTime = (input) => {
@@ -146,6 +147,8 @@ const TimePicker = ({ formData, handleChange, type, errors, setErrors }) => {
                 error={errors[type]}
                 disabled={Object.keys(errors).some(key => key !== type && errors[key]) ? true : false}
                 size="small"
+                type={type}
+                errors={errors}
                 InputProps={{
                     startAdornment: <InputAdornment sx={{ fontSize: '14px' }} position="start">{formatType(type)}</InputAdornment>,
                     endAdornment: errors[type] ? (
@@ -161,46 +164,23 @@ const TimePicker = ({ formData, handleChange, type, errors, setErrors }) => {
                 }}
             />
 
-            <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleDropdownClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-                transformOrigin={{ vertical: "top", horizontal: "left" }}
-                sx={{
-                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
-                    marginTop: "6px",
-                    width: "auto",
-                }}
-            >
-                <Box
-                    sx={{
-                        display: "flex",
-                        border: "1px solid #20242a",
-                        borderColor: "field.border",
-                        borderRadius: "4px",
-                        backgroundColor: "menu.bg",
-                        paddingTop: 0.5,
-                        paddingBottom: 0.5
-                    }}
-                >
-                    <TimeDropdown
-                        options={hours}
-                        selected={tempSelection.hours}
-                        onSelect={(value) => handleSelect("hours", value)}
-                    />
-                    <TimeDropdown
-                        options={minutes}
-                        selected={tempSelection.minutes}
-                        onSelect={(value) => handleSelect("minutes", value)}
-                    />
-                    <TimeDropdown
-                        options={periods}
-                        selected={tempSelection.period}
-                        onSelect={(value) => handleSelect("period", value)}
-                    />
-                </Box>
-            </Popover>
+            <MenuWrapper anchorEl={anchorEl} setAnchorEl={setAnchorEl} >
+                <TimeDropdown
+                    options={hours}
+                    selected={tempSelection.hours}
+                    onSelect={(value) => handleSelect("hours", value)}
+                />
+                <TimeDropdown
+                    options={minutes}
+                    selected={tempSelection.minutes}
+                    onSelect={(value) => handleSelect("minutes", value)}
+                />
+                <TimeDropdown
+                    options={periods}
+                    selected={tempSelection.period}
+                    onSelect={(value) => handleSelect("period", value)}
+                />
+            </MenuWrapper>
         </>
     );
 };

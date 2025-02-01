@@ -22,6 +22,7 @@ const DatePickerComponent = ({ formData, handleChange }) => {
                 value={selectedDate}
                 onChange={handleDateChange}
                 format="DD MMMM YYYY"
+                type='full'
                 slotProps={{
                     textField: {
                         size: 'small'

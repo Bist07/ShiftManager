@@ -1,9 +1,21 @@
 const MuiTextField = {
     styleOverrides: {
         root: ({ theme, ownerState }) => {
-            const { errors, type } = ownerState || {};  // Safely access ownerState
-
+            const { error = false, errors = [], type = 'default' } = ownerState || {};
             return {
+                width: type === "break_duration"
+                    ? errors[type]
+                        ? "45%"
+                        : Object.keys(errors).some(key => key !== type && errors[key])
+                            ? "25%"
+                            : "32.5%"
+                    : type === "start_time" || type === "end_time"
+                        ? errors[type]
+                            ? "50%"
+                            : Object.keys(errors).some(key => key !== type && errors[key])
+                                ? "25%"
+                                : "40%"
+                        : "100%",
                 borderRadius: '4px',
                 backgroundColor: theme.palette.menu.bg,
                 '& input': {
@@ -28,7 +40,7 @@ const MuiTextField = {
                         borderColor: theme.palette.field.border,
                     },
                     '&:hover fieldset': {
-                        borderColor: errors && errors[type]
+                        borderColor: error
                             ? theme.palette.error.main
                             : theme.palette.menu.bgHover,
                     },

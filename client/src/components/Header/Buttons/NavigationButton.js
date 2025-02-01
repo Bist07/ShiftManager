@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button, MenuList, MenuItem } from '@mui/material';
 import { useNavigate, useLocation } from 'react-router-dom';
+import MenuWrapper from '../../Common/MenuWrapper';
 
 const NavigationButton = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Map routes to display names
+
     const routes = [
         { path: '/schedule', name: 'Schedule' },
         { path: '/employee', name: 'Employee' },
     ];
 
-    // Find the current route name
+
     const currentRoute = routes.find((route) => route.path === location.pathname)?.name || 'Navigate';
 
     const handleOpen = (event) => {
-        // Open the menu only if it's not already open
         if (!anchorEl) {
             setAnchorEl(event.currentTarget);
         }
@@ -40,21 +40,23 @@ const NavigationButton = () => {
             >
                 {currentRoute}
             </Button>
-            <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                MenuListProps={{
-                    onMouseEnter: handleOpen,
-                }}
-            >
-                {routes.map((route) => (
-                    <MenuItem key={route.path} onClick={() => handleRoute(route.path)}>
-                        {route.name}
-                    </MenuItem>
-                ))}
-            </Menu>
-        </div>
+            <MenuWrapper anchorEl={anchorEl} setAnchorEl={setAnchorEl} >
+                <MenuList
+                    sx={{
+                        maxHeight: 300,
+                        overflowY: "auto",
+                        padding: "0",
+                        flex: 1,
+                    }}
+                >
+                    {routes.map((route) => (
+                        <MenuItem key={route.path} onClick={() => handleRoute(route.path)}>
+                            {route.name}
+                        </MenuItem>
+                    ))}
+                </MenuList>
+            </MenuWrapper>
+        </div >
     );
 };
 

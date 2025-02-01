@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
     TextField,
-    Box,
     InputAdornment,
-    Popover,
     MenuList,
     MenuItem,
     Alert,
 } from "@mui/material";
+import MenuWrapper from "../../../Common/MenuWrapper";
 
 const validateBreakDuration = (value) => {
     const breakPattern = /^(?:None|\d+\s?(?:min)?)$/;
@@ -81,17 +80,10 @@ const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type,
                 onChange={handleTextFieldChange}
                 onBlur={handleTextFieldBlur}
                 error={errors[type]}
+                errors={errors}
+                type={type}
                 size="small"
                 disabled={Object.keys(errors).some(key => key !== type && errors[key]) ? true : false}
-                sx={{
-
-                    width: errors[type]
-                        ? '40%'
-                        : Object.keys(errors).some(key => key !== type && errors[key])
-                            ? '25%'
-                            : '32.5%',
-
-                }}
                 InputProps={{
                     startAdornment: <InputAdornment position="start">Break</InputAdornment>,
                     endAdornment: errors.break_duration ? (
@@ -110,67 +102,26 @@ const BreakDurationPicker = ({ formData, handleChange = () => { }, errors, type,
                 }}
             />
 
-            <Popover
-                open={Boolean(anchorEl)}
-                anchorEl={anchorEl}
-                onClose={handleDropdownClose}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right",
-                }}
-                sx={{
-                    boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1), 0px -3px 6px rgba(0, 0, 0, 0.1)",
-                    padding: "0",
-                    marginTop: "6px",
-                    width: "auto",
-                }}
-            >
-                <Box
+            <MenuWrapper anchorEl={anchorEl} setAnchorEl={setAnchorEl} >
+                <MenuList
                     sx={{
-                        display: "flex",
-                        border: "1px solid #20242a",
-                        borderColor: "field.border",
-                        borderRadius: "4px",
-                        backgroundColor: "menu.bg",
-                        paddingTop: 0.5,
-                        paddingBottom: 0.5
+                        maxHeight: 300,
+                        overflowY: "auto",
+                        padding: "0",
+                        flex: 1,
                     }}
                 >
-                    <Box
-                        sx={{
-                            display: "flex",
-                            gap: 0,
-                            mt: 0.5,
-                            mb: 0.5,
-                            width: "100%",
-                        }}
-                    >
-                        <MenuList
-                            sx={{
-                                maxHeight: 300,
-                                overflowY: "auto",
-                                padding: "0",
-                                flex: 1,
-                                backgroundColor: "#15181b",
-                            }}
+                    {breakDurationOptions.map((option) => (
+                        <MenuItem
+                            key={option}
+                            onClick={() => handleSelect(option)}
+                            selected={breakDuration === option}
                         >
-                            {breakDurationOptions.map((option) => (
-                                <MenuItem
-                                    key={option}
-                                    onClick={() => handleSelect(option)}
-                                    selected={breakDuration === option}
-                                >
-                                    {option}
-                                </MenuItem>
-                            ))}
-                        </MenuList>
-                    </Box>
-                </Box>
-            </Popover>
+                            {option}
+                        </MenuItem>
+                    ))}
+                </MenuList>
+            </MenuWrapper>
         </>
     );
 };
